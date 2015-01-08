@@ -2,7 +2,7 @@
  
  Program: PETTumorSegmentation
  
- Portions (c) Copyright University of Iowa All Rights Reserved.
+ (c) Copyright University of Iowa All Rights Reserved.
  
  See COPYRIGHT.txt
  or http://www.slicer.org/copyright/copyright.txt for details.
@@ -25,7 +25,7 @@ namespace itk
 /**\class Workers
  * \brief Runs functions in a multithreaded manner.
  * \date	12/9/2014
- * \author	Christian Bauer (I assume)
+ * \author	Christian Bauer
  * Runs functions in a multithreaded manner. CONTINUE
  */
 class Workers

@@ -2,7 +2,7 @@
 
 Program: PETTumorSegmentation
 
-Portions (c) Copyright University of Iowa All Rights Reserved.
+(c) Copyright University of Iowa All Rights Reserved.
 
 See COPYRIGHT.txt
 or http://www.slicer.org/copyright/copyright.txt for details.

@@ -774,7 +774,6 @@ class PETTumorSegmentationEffect:
     and was partially funded by NIH grants U01CA140206, U24CA180918 and 3P41RR013218.
     """
 
-    # TODO:
     # don't show this module - it only appears in the Editor module
     parent.hidden = True
 

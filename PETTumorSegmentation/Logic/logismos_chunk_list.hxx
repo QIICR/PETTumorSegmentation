@@ -2,7 +2,7 @@
  
  Program: PETTumorSegmentation
  
- Portions (c) Copyright University of Iowa All Rights Reserved.
+ (c) Copyright University of Iowa All Rights Reserved.
  
  See COPYRIGHT.txt
  or http://www.slicer.org/copyright/copyright.txt for details.
@@ -30,6 +30,8 @@ namespace LOGISMOS{
 /// It emulates a std::vector<_T> with fixed capacity of _N that can never grow.
 /// \note Only a small subset of member functions of std::vector is provided
 /// because we assume this class is only directly used by chunk_list class.
+///
+/// \author Honghai Zhang
 template <typename _T, std::size_t _N>
 class chunk
 {

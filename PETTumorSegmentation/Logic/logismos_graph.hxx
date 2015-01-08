@@ -2,7 +2,7 @@
  
  Program: PETTumorSegmentation
  
- Portions (c) Copyright University of Iowa All Rights Reserved.
+ (c) Copyright University of Iowa All Rights Reserved.
  
  See COPYRIGHT.txt
  or http://www.slicer.org/copyright/copyright.txt for details.
@@ -31,6 +31,8 @@ namespace LOGISMOS{
 /// graph nodes or edges, using large value for large graph can improve the performance.
 /// _PtrChunkSize is the size of a chunk used to store pointers to edges associated with
 /// a node, should be similar to the number of such edges.
+///
+/// \author Honghai Zhang
 template <typename _Cap, std::size_t _DataChunkSize=1024, std::size_t _PtrChunkSize=32>
 class graph
 {

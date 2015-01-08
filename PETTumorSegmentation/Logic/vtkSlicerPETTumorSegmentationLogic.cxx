@@ -119,7 +119,6 @@ vtkSlicerPETTumorSegmentationLogic::~vtkSlicerPETTumorSegmentationLogic()
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData)
 {
-  std::cout << "vtkSlicerPETTumorSegmentationLogic::Apply" << std::endl;
   if (!ValidInput(node))  //check for validity
     return;
   
@@ -129,33 +128,17 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
   //If from a click, there will be a new finger print.  If not, update the finger print.
   if (!this->CheckFingerPrint(node))
   { this->UpdateFingerPrint(node);  }
-  itk::TimeProbe timer, timer2;
-  timer.Start(); timer2.Start();
   
   //Try to initialize graph with standard costs.  It fails if there's no center point or if the center point is misplaced (off the PET volume).
   bool initializeSuccess = InitializeOSFSegmentation(node, petVolume, initialLabelMap);
-  timer.Stop(); std::cout << "time for InitializeOSFSegmentation: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
   if (initializeSuccess)
   {
     UpdateGraphCostsGlobally(node, petVolume, initialLabelMap); //Reapply global refinement, in case apply is from button.  If from click, then there won't be a point anyway.
-    timer.Stop(); std::cout << "time for UpdateGraphCostsGlobally: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
     UpdateGraphCostsLocally(node, petVolume, true); //Reapply all local refinement, in case apply is from button.  If from click, then there aren't any points anyway.
 
-    timer.Stop(); std::cout << "time for UpdateGraphCostsLocally: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
     //Create the segmentation and apply it to the label map.
     FinalizeOSFSegmentation(node, petVolume, initialLabelMap);
-    timer.Stop(); std::cout << "time for FinalizeOSFSegmentation: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
-    
-    timer2.Stop();
-    std::cout << "time for Apply: " << timer2.GetTotal() << " " << timer2.GetUnit() << std::endl;
   }
-  else
-  {
-    timer.Stop();
-    timer2.Stop();
-    std::cout << "time for failed Apply: " << timer2.GetTotal() << " " << timer2.GetUnit() << std::endl;
-  }
-
 }
 
 
@@ -163,49 +146,34 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData)
 {
-  std::cout << "vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement" << std::endl;
   if (!ValidInput(node) || node->GetOSFGraph().IsNull())  //check for validity and graph existence
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
   LabelImageType::Pointer initialLabelMap = ConvertLabelImageToITK(node, labelImageData); //convert initial label volume to ITK for processing
-  itk::TimeProbe timer, timer2;
-  
-  timer.Start(); timer2.Start();
   
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsGlobally(node, petVolume, initialLabelMap); //Sets the cost for all nodes by threshold.  New threshold is determined inside.
-  timer.Stop(); std::cout << "time for UpdateGraphCostsGlobally: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
   
   UpdateGraphCostsLocally(node, petVolume, true); //Reapplies all local refinement, since older points' effects are lost when global update changes base cost.
-  timer.Stop(); std::cout << "time for UpdateGraphCostsLocally: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
   FinalizeOSFSegmentation(node, petVolume, initialLabelMap);  //Applies the changed label map
-  timer.Stop(); std::cout << "time for FinalizeOSFSegmentation: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
   
-  timer2.Stop();
-  std::cout << "time for ApplyGlobalRefinement: " << timer2.GetTotal() << " " << timer2.GetUnit() << std::endl;
 }
 
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::ApplyLocalRefinement(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData)
 {
-  std::cout << "vtkSlicerPETTumorSegmentationLogic::ApplyLocalRefinement" << std::endl;
   if (!ValidInput(node) || node->GetOSFGraph().IsNull())  //check for validity and graph existence
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
   LabelImageType::Pointer initialLabelMap = ConvertLabelImageToITK(node, labelImageData); //convert initial label volume to ITK for processing
-  itk::TimeProbe timer, timer2;
-  timer.Start(); timer2.Start();
   
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsLocally(node, petVolume); //Add effect of most recent refinement point only
-  timer.Stop(); std::cout << "time for UpdateGraphCostsLocally: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
+
   FinalizeOSFSegmentation(node, petVolume, initialLabelMap);  //Applies the changed label map
-  timer.Stop(); std::cout << "time for FinalizeOSFSegmentation: " << timer.GetTotal() << " " << timer.GetUnit() << std::endl; timer.Reset(); timer.Start();
-  
-  timer2.Stop();
-  std::cout << "time for ApplyLocalRefinement: " << timer2.GetTotal() << " " << timer2.GetUnit() << std::endl;
+
 }
 
 //----------------------------------------------------------------------------
@@ -305,7 +273,6 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateGraphCostsGlobally(vtkMRMLPETTumo
     CalculateThresholdHistogramBased(node, petVolume);
   else //Otherwise, get it by the point
     CalculateThresholdPointLocationBased(node, petVolume);
-  std::cout << "threshold == " << node->GetThreshold() << std::endl;
   
   //Create the interpolators for the volumes here to avoid instantiating new ones for every thread.
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
@@ -812,9 +779,6 @@ void vtkSlicerPETTumorSegmentationLogic::AddLocalRefinementCosts(vtkMRMLPETTumor
   int numMarkedSealed = 0;
   for (size_t i=0; i<vertexMarkedSealed.size(); ++i)
     numMarkedSealed += vertexMarkedSealed[i] ? 1 : 0;
-  std::cout << "number of tested vertices = " << vertexMarked.size() << std::endl;
-  std::cout << "number of marked vertices = " << numMarked << std::endl;
-  std::cout << "number of marked vertices after sealing = " << numMarkedSealed << std::endl;
   }
 }
 
@@ -1026,7 +990,6 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   // calculated target spacing and image size for isotropic image
   // margin of error on the base subvolume is useful here
   // base subvolume also makes resampling much faster
-  itk::TimeProbe timer; timer.Start();
   ScalarImageType::SpacingType spacing = petSubVolume->GetSpacing();
   ScalarImageType::SpacingType origSpacing = petSubVolume->GetSpacing();
   float minSpacing = std::min( std::min(origSpacing[0], origSpacing[1]), origSpacing[2]);
@@ -1059,8 +1022,6 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
 {
   typedef itk::Image<double, 3> DoubleImageType;
   PointType centerPoint = node->GetCenterpoint();
-
-  itk::TimeProbe timer; timer.Start();
 
   //Must create an inverted copy of the image.
   DoubleImageType::Pointer invertedImage = DoubleImageType::New();
