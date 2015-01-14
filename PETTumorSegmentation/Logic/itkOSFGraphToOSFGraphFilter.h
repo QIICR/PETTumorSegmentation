@@ -52,7 +52,8 @@ public:
   
   typedef TOutputOSFGraph OutputOSFGraphType;
   typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
-    
+  
+  using Superclass::SetInput;
   virtual void SetInput(unsigned int idx, const InputOSFGraphType* input); // Set the input image of this process object.
   virtual const InputOSFGraphType* GetInput(unsigned int idx) const; // Get the input image of this process object.
   virtual void SetInput( const InputOSFGraphType* input) {this->SetInput(0, input);}; // Set the input image of this process object.

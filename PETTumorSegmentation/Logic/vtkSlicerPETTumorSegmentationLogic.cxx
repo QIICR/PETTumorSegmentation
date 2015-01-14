@@ -434,7 +434,7 @@ Requirements:
   {
     int j = 0;
     //search for where the uptake first rises above the threshold
-    while (j < uptakeValues.size() && uptakeValues[j] < threshold)
+    while (j < int(uptakeValues.size()) && uptakeValues[j] < threshold)
     { j++;  }
     //mark the proper node 
     if (firstCheckedNode < j) //firstCheckedNode == j_{Th_{i}} in the thesis.
@@ -447,7 +447,7 @@ Requirements:
       if (labelValues[i] == 0)
       {
         //if i is in proper region to leave necrotic mode, done trying to seal on this column
-        if (i-1 > firstCheckedNode && uptakeValues[i] < uptakeValues[i-1])  //i-1 = j', i = j'' in the thesis.  This checks the case to cancel the necrotic sealing condition.
+        if (int(i)-1 > firstCheckedNode && uptakeValues[i] < uptakeValues[i-1])  //i-1 = j', i = j'' in the thesis.  This checks the case to cancel the necrotic sealing condition.
         { i = costs.size()-1; }
         else if (labelValues[i+1] == label) //otherwise, if next node is the sought label, seal to it and end the search
         {
@@ -467,17 +467,17 @@ Requirements:
   {   
     for (size_t i=vtkSlicerPETTumorSegmentationLogic::minNodeRejections; i<size_t(costs.size()) && nodeToSeal < 0 && doNotSeal == false; i++)
     {
-      if (labelValues[i]!=0 && labelValues[i]!=label && (i < firstCheckedNode || i < minNodeRejections)) // Prevents sealing if earlier labels occur before leaving the close rejected region or, in necrotic mode, the necrotic region
+      if (labelValues[i]!=0 && labelValues[i]!=label && (int(i) < firstCheckedNode || int(i) < minNodeRejections)) // Prevents sealing if earlier labels occur before leaving the close rejected region or, in necrotic mode, the necrotic region
       { doNotSeal = true; }
 
       //continues incrementing the node to seal if there is no decrease yet.
       //If there's another label on current node, then seal here; the previous i value (at minNodeRejections or higher) has already been checked by the next if statement, as verified by doNotSeal being false.
-      if (i > minNodeRejections && i >= firstCheckedNode && labelValues[i]!=0 && labelValues[i]!=label)
+      if (int(i) > minNodeRejections && int(i) >= firstCheckedNode && labelValues[i]!=0 && labelValues[i]!=label)
       {
         if (doNotSeal == false)
         { nodeToSeal = i-1; }      
       }
-      if (i > firstCheckedNode && uptakeValues[i] < uptakeValues[i-1] && labelChanged == false)  //for necrotic mode, do not check until node and previous are both after the first node above the threshold; j_Th < j' < j'' < j
+      if (int(i) > firstCheckedNode && uptakeValues[i] < uptakeValues[i-1] && labelChanged == false)  //for necrotic mode, do not check until node and previous are both after the first node above the threshold; j_Th < j' < j'' < j
       { doNotSeal = true; }
     }
   }

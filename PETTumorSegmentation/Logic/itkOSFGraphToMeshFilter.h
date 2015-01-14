@@ -59,7 +59,9 @@ public:
   itkGetMacro( SurfaceType, SurfaceType );
 
   /** Create a valid output. */
-  DataObject::Pointer MakeOutput(unsigned int idx);
+  typedef typename Superclass::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  using Superclass::MakeOutput;
+  DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
 
   /** Some Image related typedefs. */
   typedef TInputOSFGraph InputOSFGraphType;
@@ -70,6 +72,7 @@ public:
   typedef typename OutputMeshType::Pointer OutputMeshPointer;
 
   /** Set the input image of this process object.  */
+  using Superclass::SetInput;
   void SetInput(const InputOSFGraphType* input);
 
   /** Get the input image of this process object.  */

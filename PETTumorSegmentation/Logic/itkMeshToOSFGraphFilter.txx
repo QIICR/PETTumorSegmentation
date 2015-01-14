@@ -80,7 +80,7 @@ MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
 template <class TInputMesh, class TOutputOSFGraph>
 DataObject::Pointer
 MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   OutputOSFGraphPointer outputOSFGraph = OutputOSFGraphType::New();
   return dynamic_cast< DataObject *>( outputOSFGraph.GetPointer() );

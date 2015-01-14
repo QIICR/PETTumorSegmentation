@@ -1,4 +1,3 @@
-
 #-----------------------------------------------------------------------------
 set(MODULE_NAME PETTumorSegmentation)
 set(MODULE_TITLE ${MODULE_NAME})

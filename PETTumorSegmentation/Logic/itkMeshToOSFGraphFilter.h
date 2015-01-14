@@ -49,15 +49,18 @@ public:
   
   typedef TOutputOSFGraph OutputOSFGraphType;
   typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
-    
+  
+  using Superclass::SetInput;
   virtual void SetInput(unsigned int idx, const InputMeshType* input); // Set the input image of this process object.
   virtual const InputMeshType* GetInput(unsigned int idx); // Get the input image of this process object.
-  virtual void SetInput( const InputMeshType* input) {this->SetInput(0, input);}; // Set the input image of this process object.
+  virtual void SetInput(const InputMeshType* input) {this->SetInput(0, input);}; // Set the input image of this process object.
   virtual const InputMeshType* GetInput() {return this->GetInput(0);}; // Get the input image of this process object.
   
   OutputOSFGraphType* GetOutput(void); // Get the mesh output of this process object.
   virtual void GenerateOutputInformation(void); // Prepare the output
-  virtual DataObject::Pointer MakeOutput(unsigned int idx); // create a valid output
+  typedef typename Superclass::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  using Superclass::MakeOutput;
+  virtual DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx); // create a valid output
 
 protected:
   /** Constructor for use by New() method. */

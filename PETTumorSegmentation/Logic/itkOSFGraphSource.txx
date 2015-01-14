@@ -41,7 +41,7 @@ OSFGraphSource<TOutputOSFGraph>
 template <class TOutputOSFGraph>
 typename OSFGraphSource<TOutputOSFGraph>::DataObjectPointer
 OSFGraphSource<TOutputOSFGraph>
-::MakeOutput(unsigned int)
+::MakeOutput(DataObjectPointerArraySizeType)
 {
   return static_cast<DataObject*>(TOutputOSFGraph::New().GetPointer());
 }

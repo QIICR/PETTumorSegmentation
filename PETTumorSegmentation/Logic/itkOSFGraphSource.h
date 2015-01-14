@@ -47,7 +47,7 @@ public:
   itkTypeMacro( OSFGraphSource, ProcessObject );
   
   /** Some convenient typedefs. */
-  typedef DataObject::Pointer DataObjectPointer;
+  //typedef DataObject::Pointer DataObjectPointer;
   typedef TOutputOSFGraph OutputOSFGraphType;
   typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
   
@@ -58,10 +58,12 @@ public:
   /** Set the OSF graph output of this process object. This call is slated
    * to be removed from ITK. You should GraftOutput() and possible
    * DataObject::DisconnectPipeline() to properly change the output. */
+  using Superclass::SetOutput;
   void SetOutput(TOutputOSFGraph *output);
   virtual void GraftOutput(DataObject *output);
   virtual void GraftNthOutput(unsigned int idx, DataObject *output);
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  using Superclass::MakeOutput;
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
   
   //virtual void Update();
 

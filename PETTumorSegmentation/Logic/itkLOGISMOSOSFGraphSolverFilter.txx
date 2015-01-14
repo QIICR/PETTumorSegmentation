@@ -55,14 +55,10 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   InputOSFGraphConstPointer input = this->GetInput();
   
   // build graph
-  //typename InputOSFGraphType::GraphNodeIdentifier numNodes = input->GetNumberOfNodes();
-  //typename InputOSFGraphType::GraphEdgeIdentifier numEdges = input->GetNumberOfEdges();
-  //m_MaxFlowGraph = new MaxFlowGraphType(numNodes, numEdges);
   m_MaxFlowGraph = new MaxFlowGraphType();
   
   this->BuildMaxFlowGraphGraph();
   // solve max flow
-  //m_FlowValue = m_MaxFlowGraph->maxflow();
   m_FlowValue = m_MaxFlowGraph->solve();
   
   // store result
@@ -77,37 +73,21 @@ void
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::BuildMaxFlowGraphGraph()
 {
-  // note: we assume Boykov's max flow lib procudes the same node_id's we use
-
   // add nodes with terminal weights
   typedef typename InputOSFGraphType::GraphNodesContainer GraphNodeContainer;
   typename GraphNodeContainer::ConstPointer graphNodes = this->GetInput()->GetNodes();
   typename GraphNodeContainer::ConstIterator graphNodesItr = graphNodes->Begin();
   typename GraphNodeContainer::ConstIterator graphNodesEnd = graphNodes->End();
   
-  //m_MaxFlowGraph->add_node( graphNodes->Size() );
-  std::size_t id = m_MaxFlowGraph->add_nodes( graphNodes->Size() );
+  m_MaxFlowGraph->add_nodes( graphNodes->Size() );
 
   while ( graphNodesItr!=graphNodesEnd )
   {
     typename InputOSFGraphType::GraphNodeIdentifier nodeId = graphNodesItr.Index();
     const typename InputOSFGraphType::GraphNode& node = graphNodesItr.Value();
-    //m_MaxFlowGraph->add_tweights( nodeId, node.cap_source, node.cap_sink );
     m_MaxFlowGraph->add_st_edge( nodeId, node.cap_source, node.cap_sink );    
     ++graphNodesItr;
   }
-  
-  // alternative to above node creation for checking if nodeIds of boykovs and our library match
-  //while ( graphNodesItr!=graphNodesEnd )
-  //{
-  //  unsigned int boykovNodeId = m_MaxFlowGraph->add_node( );
-  //  typename InputOSFGraphType::GraphNodeIdentifier nodeId = graphNodesItr.Index();
-  //  if (boykovNodeId!=nodeId)
-  //    std::cout << "nodes do not match!" << std::endl;
-  //  const typename InputOSFGraphType::GraphNode& node = graphNodesItr.Value();
-  //  m_MaxFlowGraph->add_tweights( nodeId, node.cap_source, node.cap_sink );
-  //  ++graphNodesItr;
-  //}
   
   // add edges
   typedef typename InputOSFGraphType::GraphEdgesContainer GraphEdgesContainer;
@@ -117,9 +97,6 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   while ( graphEdgesItr!=graphEdgesEnd )
   {
     const typename InputOSFGraphType::GraphEdge& edge = graphEdgesItr.Value();
-    //m_MaxFlowGraph->add_edge( edge.startNodeId, edge.endNodeId, edge.cap, edge.rev_cap );
-    //m_MaxFlowGraph->add_edge( edge.startNodeId, edge.endNodeId, edge.cap );
-    //m_MaxFlowGraph->add_edge( edge.endNodeId, edge.startNodeId, edge.rev_cap );
     m_MaxFlowGraph->add_edge( edge.startNodeId, edge.endNodeId, edge.cap, edge.rev_cap );
     ++graphEdgesItr;
   }
@@ -155,8 +132,6 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   std::size_t numNodes = m_MaxFlowGraph->get_node_cnt();
   for (std::size_t nodeId=0; nodeId<numNodes; nodeId++)
   {
-    //typename MaxFlowGraphType::termtype terminal = m_MaxFlowGraph->what_segment(nodeId);
-    //if (terminal==MaxFlowGraphType::SOURCE) // node included in the segmentation
     if (m_MaxFlowGraph->in_source_set(nodeId))
     {
       // update mesh position
