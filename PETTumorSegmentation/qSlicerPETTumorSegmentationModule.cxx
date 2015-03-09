@@ -62,13 +62,13 @@ qSlicerPETTumorSegmentationModule::~qSlicerPETTumorSegmentationModule()
 //-----------------------------------------------------------------------------
 QString qSlicerPETTumorSegmentationModule::helpText() const
 {
-  return "This is a loadable module that can be bundled in an extension";
+  return "This is a loadable module for tumor and lymph node segmentation in PET scans.";
 }
 
 //-----------------------------------------------------------------------------
 QString qSlicerPETTumorSegmentationModule::acknowledgementText() const
 {
-  return "This work was partially funded by NIH grant NXNNXXNNNNNN-NNXN";
+  return "This work was funded by NIH grants U01CA140206 and U24CA180918.";
 }
 
 //-----------------------------------------------------------------------------

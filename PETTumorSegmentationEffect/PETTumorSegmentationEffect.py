@@ -58,16 +58,16 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
     self.frame.layout().addWidget(self.refinementBoxesFrame)
     
     #default is global refinement (threshold refinement)
-    self.noRefinementRadioButton = qt.QRadioButton("None", self.refinementBoxesFrame)
+    self.noRefinementRadioButton = qt.QRadioButton("Create new", self.refinementBoxesFrame)
     self.noRefinementRadioButton.setToolTip("On click, always segment a new object.")
-    self.globalRefinementRadioButton = qt.QRadioButton("Global", self.refinementBoxesFrame)
+    self.globalRefinementRadioButton = qt.QRadioButton("Global refinement", self.refinementBoxesFrame)
     self.globalRefinementRadioButton.setToolTip("On click, refine globally (adjusting then entire boundary) if no center point for the label, otherwise segment a new object.")
-    self.localRefinementRadioButton = qt.QRadioButton("Local", self.refinementBoxesFrame)
+    self.localRefinementRadioButton = qt.QRadioButton("Local refinement", self.refinementBoxesFrame)
     self.localRefinementRadioButton.setToolTip("On click, refine locally (adjusting part of the boundary) if no center point for the label, otherwise segment a new object.")
     self.globalRefinementRadioButton.setChecked(True)
     
     #radio button so only one can be applied
-    self.refinementBoxesFrame.layout().addWidget(qt.QLabel("Refinement style: ", self.refinementBoxesFrame))
+    self.refinementBoxesFrame.layout().addWidget(qt.QLabel("Interaction style: ", self.refinementBoxesFrame))
     self.refinementBoxesFrame.layout().addWidget(self.noRefinementRadioButton)
     self.refinementBoxesFrame.layout().addWidget(self.globalRefinementRadioButton)
     self.refinementBoxesFrame.layout().addWidget(self.localRefinementRadioButton)
@@ -190,7 +190,7 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
 
     self.frame.layout().addWidget(self.optFrame);     
 
-    EditorLib.HelpButton(self.frame, "Click on a lesion in a PET scan to segment it.  Depending on refinement settings, click again to refine globally and/or locally.  Options may help deal with cases such as segmenting individual lesions in a chain.")
+    EditorLib.HelpButton(self.frame, "Click on a lesion in a PET scan to segment it. Depending on refinement settings, click again to refine globally and/or locally. Options may help deal with cases such as segmenting individual lesions in a chain. For more information: http://www.slicer.org/slicerWiki/index.php/Documentation/4.4/Modules/PETTumorSegmentationEffect")
     
     # Add vertical spacer
     self.frame.layout().addStretch(1)
