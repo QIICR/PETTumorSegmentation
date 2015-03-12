@@ -957,9 +957,9 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   
   //Set size and location based on these points
   ScalarImageType::SizeType ROISize;
-  ROISize[0] = abs(idxA[0]-idxB[0])+1;
-  ROISize[1] = abs(idxA[1]-idxB[1])+1;
-  ROISize[2] = abs(idxA[2]-idxB[2])+1;
+  ROISize[0] = abs( int(idxA[0])-int(idxB[0]) )+1;
+  ROISize[1] = abs( int(idxA[1])-int(idxB[1]) )+1;
+  ROISize[2] = abs( int(idxA[2])-int(idxB[2]) )+1;
   ScalarImageType::IndexType ROIStart;
   ROIStart[0] = std::min(idxA[0], idxB[0]);
   ROIStart[1] = std::min(idxA[1], idxB[1]);
@@ -1086,7 +1086,7 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   strongWatershedFilter->SetLevel(0.20); //Level is the peak to barrier difference.  Higher level is more likely to reject more walls
   strongWatershedFilter->SetThreshold(0.00); //Also helps reject walls
   strongWatershedFilter->Update();
-  WatershedImageType::Pointer strongWatershedImage = strongWatershedFilter->GetOutput();
+  WatershedImageType::Pointer strongWatershedImage(strongWatershedFilter->GetOutput());
   strongWatershedImage->DisconnectPipeline();
   StrongWatershedVolume_saved = strongWatershedImage;
   
@@ -1095,7 +1095,7 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   weakWatershedFilter->SetLevel(0.00); //Level is the peak to barrier difference.  Higher level is more likely to reject more walls
   weakWatershedFilter->SetThreshold(0.00); //Also helps reject walls
   weakWatershedFilter->Update();
-  WatershedImageType::Pointer weakWatershedImage = weakWatershedFilter->GetOutput();
+  WatershedImageType::Pointer weakWatershedImage(weakWatershedFilter->GetOutput());
   weakWatershedImage->DisconnectPipeline();
   WeakWatershedVolume_saved = weakWatershedImage;
 
