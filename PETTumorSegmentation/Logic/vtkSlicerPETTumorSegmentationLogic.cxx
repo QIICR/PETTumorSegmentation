@@ -59,7 +59,6 @@
 #include <itkMeshFileWriter.h>
 #include <itkConnectedThresholdImageFilter.h>
 #include <itkTimeProbe.h>
-#include <itkWatershedImageFilter.h>
 #include <itkMedianImageFilter.h>
 
 // Optimal Surface Finding includes
@@ -548,8 +547,8 @@ void vtkSlicerPETTumorSegmentationLogic::AddSplittingCostsForVertex(int vertexId
   */
 
   float threshold = node->GetThreshold();
-  const std::vector<unsigned long> strongWatershedValues = SampleColumnPoints<unsigned long, WatershedInterpolatorType>(vertexId, node, strongWatershedInterpolator);
-  const std::vector<unsigned long> weakWatershedValues = SampleColumnPoints<unsigned long, WatershedInterpolatorType>(vertexId, node, weakWatershedInterpolator);
+  const std::vector<WatershedPixelType> strongWatershedValues = SampleColumnPoints<WatershedPixelType, WatershedInterpolatorType>(vertexId, node, strongWatershedInterpolator);
+  const std::vector<WatershedPixelType> weakWatershedValues = SampleColumnPoints<WatershedPixelType, WatershedInterpolatorType>(vertexId, node, weakWatershedInterpolator);
   std::vector<float>& costs = node->GetOSFGraph()->GetSurface()->GetColumnCosts( vertexId )->CastToSTLContainer();
 
   float sigma = 2.0;
@@ -1020,7 +1019,6 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petSubVolume)
 {
-  typedef itk::Image<double, 3> DoubleImageType;
   PointType centerPoint = node->GetCenterpoint();
 
   //Must create an inverted copy of the image.
@@ -1086,7 +1084,7 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   strongWatershedFilter->SetLevel(0.20); //Level is the peak to barrier difference.  Higher level is more likely to reject more walls
   strongWatershedFilter->SetThreshold(0.00); //Also helps reject walls
   strongWatershedFilter->Update();
-  WatershedImageType::Pointer strongWatershedImage(strongWatershedFilter->GetOutput());
+  WatershedImageType::Pointer strongWatershedImage = strongWatershedFilter->GetOutput();
   strongWatershedImage->DisconnectPipeline();
   StrongWatershedVolume_saved = strongWatershedImage;
   
@@ -1095,7 +1093,7 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   weakWatershedFilter->SetLevel(0.00); //Level is the peak to barrier difference.  Higher level is more likely to reject more walls
   weakWatershedFilter->SetThreshold(0.00); //Also helps reject walls
   weakWatershedFilter->Update();
-  WatershedImageType::Pointer weakWatershedImage(weakWatershedFilter->GetOutput());
+  WatershedImageType::Pointer weakWatershedImage = weakWatershedFilter->GetOutput() ;
   weakWatershedImage->DisconnectPipeline();
   WeakWatershedVolume_saved = weakWatershedImage;
 

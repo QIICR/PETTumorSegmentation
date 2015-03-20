@@ -33,6 +33,7 @@
 #include <itkMesh.h>
 #include <itkLinearInterpolateImageFunction.h>
 #include <itkNearestNeighborInterpolateImageFunction.h>
+#include <itkWatershedImageFilter.h>
 
 // OSF includes
 #include "itkOSFGraph.h"
@@ -94,8 +95,10 @@ protected:
   // typedef internally utilized data representation
   typedef itk::Image<short, 3> LabelImageType;
   typedef itk::Image<float, 3> ScalarImageType;
-  typedef unsigned long WatershedType;
-  typedef itk::Image<WatershedType, 3> WatershedImageType;
+  typedef itk::Image<double, 3> DoubleImageType;
+  typedef itk::WatershedImageFilter<DoubleImageType> WatershedImageFilterType;
+  typedef WatershedImageFilterType::OutputImageType WatershedImageType;
+  typedef WatershedImageType::PixelType WatershedPixelType;
   typedef ScalarImageType::IndexType IndexType;
   typedef ScalarImageType::PointType PointType;
   typedef ScalarImageType::RegionType RegionType;
