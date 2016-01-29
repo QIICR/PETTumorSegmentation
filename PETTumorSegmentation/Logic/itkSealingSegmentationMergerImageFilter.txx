@@ -67,7 +67,6 @@ SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
 {
   (void) threadId; // mute unused parameter warning; we use outputRegionForThread instead of threadId
   typedef itk::ConstNeighborhoodIterator<InputImageType> InputNeighborhoodIteratorType;
-  typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<UptakeImageType> UptakeIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   

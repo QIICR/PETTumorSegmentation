@@ -124,7 +124,6 @@ void
 OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 ::CopyInputOSFSurfaceToOutputMeshPoints(typename InputOSFGraphType::OSFSurface::ConstPointer osfSurface, OutputMeshPointer mesh)
 {
-  typedef typename OutputMeshType::PointType PointType;
   typename OutputMeshType::PointsContainerPointer points = OutputMeshType::PointsContainer::New();
   points->Reserve( osfSurface->GetNumberOfVertices() );
   typename OutputMeshType::PointsContainer::Iterator pointIterator = points->Begin();
