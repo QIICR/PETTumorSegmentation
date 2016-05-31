@@ -40,7 +40,7 @@ vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParameters
   this->DenoiseThreshold = false;
   this->LinearCost = false;
   this->NecroticRegion = false;
-  Reset();
+  this->OSFGraph = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -51,13 +51,6 @@ vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParameter
   this->SetGlobalRefinementIndicatorListReference ( NULL );
   this->SetLocalRefinementIndicatorListReference ( NULL );
   this->SetSegmentationVolumeReference ( NULL );
-}
-
-//----------------------------------------------------------------------------
-void vtkMRMLPETTumorSegmentationParametersNode::Reset()
-{
-  OSFGraph = NULL;
-  Histogram.clear();
 }
 
 //----------------------------------------------------------------------------
