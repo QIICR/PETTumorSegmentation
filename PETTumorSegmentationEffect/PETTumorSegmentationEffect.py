@@ -411,7 +411,7 @@ class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
 
     #set the helper logic if needed.  
     if not PETTumorSegmentationEffectLogic.vtkSegmentationLogic:
-      PETTumorSegmentationEffectLogic.vtkSegmentationLogic = slicer.modulelogic.vtkSlicerPETTumorSegmentationLogic()
+      PETTumorSegmentationEffectLogic.vtkSegmentationLogic = slicer.vtkSlicerPETTumorSegmentationLogic()
     if not PETTumorSegmentationEffectLogic.segmentationParameters:
       PETTumorSegmentationEffectLogic.segmentationParameters = self.getPETTumorSegmentationParameterNode()
       
@@ -445,7 +445,7 @@ class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
     This is used internally by getPETTumorSegmentationParameterNode - shouldn't really
     be called for any other reason.
     """
-    node = slicer.modulemrml.vtkMRMLPETTumorSegmentationParametersNode()
+    node = slicer.vtkMRMLPETTumorSegmentationParametersNode()
     self.scene.AddNode(node)
     # Since we are a singleton, the scene won't add our node into the scene,
     # but will instead insert a copy, so we find that and return it
