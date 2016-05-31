@@ -600,9 +600,6 @@ std::vector<valueType>
 vtkSlicerPETTumorSegmentationLogic::SampleColumnPoints(int vertexId, vtkMRMLPETTumorSegmentationParametersNode* node, typename ImageInterpolatorType::Pointer interpolator, valueType defaultValue)
 {
   //Copy all the uptake values interpolated on the column's nodes into a vector.
-  typedef OSFSurfaceType::CoordinateType Coordinate;
-  typedef OSFSurfaceType::VertexIdentifier VertexIdentifier;
-  typedef OSFSurfaceType::ColumnPositionIdentifier ColumnPositionIdentifier;
   typedef OSFSurfaceType::ColumnCoordinatesContainer ColumnCoordinatesContainer;
   
   ColumnCoordinatesContainer::ConstPointer columnCoordinates = node->GetOSFGraph()->GetSurface()->GetColumnCoordinates( vertexId );
@@ -1003,7 +1000,6 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   
   // resample image; default interpolation is linear, which is what we want here
   typedef itk::ResampleImageFilter<ScalarImageType, ScalarImageType> ResamplerType;
-  typedef itk::IdentityTransform< ScalarImageType::PixelType, 3> IdentityTransformType;
   ResamplerType::Pointer resampler = ResamplerType::New();
   resampler->SetInput( petSubVolume );
   resampler->SetSize(size);
@@ -1027,9 +1023,6 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   invertedImage->SetOrigin(petSubVolume->GetOrigin());
   invertedImage->SetSpacing(petSubVolume->GetSpacing());
   invertedImage->Allocate();
-
-  typedef itk::ImageRegionIterator<DoubleImageType> DataIteratorType;
-  typedef itk::ImageRegionIteratorWithIndex<DoubleImageType> DataIteratorTypeWithIndex;
   
   itk::ImageRegionIterator<ScalarImageType> datIt(petSubVolume, petSubVolume->GetLargestPossibleRegion());
   itk::ImageRegionIteratorWithIndex<DoubleImageType>  idatIt(invertedImage, invertedImage->GetLargestPossibleRegion());
@@ -1138,7 +1131,6 @@ void vtkSlicerPETTumorSegmentationLogic::BuildColumnForVertex(int vertexId, vtkM
   OSFSurfaceType::Pointer surface =  node->GetOSFGraph()->GetSurface();  
   typedef OSFSurfaceType::CoordinateType Coordinate;
   typedef OSFSurfaceType::ColumnCoordinatesContainer ColumnCoordinatesContainer;
-  typedef OSFSurfaceType::ColumnCostsContainer ColumnCostsContainer;
 
   //Create the new container of appropriate size
   int numberOfSteps = (int) std::ceil(meshSphereRadius); //TODO Should this be meshSphereRadius/columnStepSize? As it is, it assumes columnStepSize==1, which for now it does, but still might be worth modifying for future use.
