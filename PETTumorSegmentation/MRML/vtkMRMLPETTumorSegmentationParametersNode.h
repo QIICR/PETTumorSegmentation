@@ -52,6 +52,8 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   vtkTypeMacro(vtkMRMLPETTumorSegmentationParametersNode, vtkMRMLNode);
   void PrintSelf(ostream& os, vtkIndent indent);
 
+  void Reset();
+
   // Description:
   // Create instance
   virtual vtkMRMLNode* CreateNodeInstance();

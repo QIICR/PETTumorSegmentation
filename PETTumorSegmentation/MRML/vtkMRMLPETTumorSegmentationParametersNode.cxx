@@ -53,6 +53,12 @@ vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParameter
   this->SetSegmentationVolumeReference ( NULL );
 }
 
+void vtkMRMLPETTumorSegmentationParametersNode::Reset()
+{
+  this->OSFGraph = NULL;
+  Histogram.clear();
+}
+
 //----------------------------------------------------------------------------
 // Copy the node's attributes to this object.
 // Does NOT copy: ID, FilePrefix, Name, VolumeID

@@ -186,7 +186,7 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
   //Convert the image data from labelImageData, then set the spacing and origin directly, then return the ITK label image.
   LabelImageType::Pointer labelVolume = convert2ITK<LabelImageType>( labelImageData );
   labelVolume->SetSpacing( vtkLabelVolume->GetSpacing() );
-  float origin2[3] = {-vtkLabelVolume->GetOrigin()[0], -vtkLabelVolume->GetOrigin()[1], vtkLabelVolume->GetOrigin()[2]};
+  double origin2[3] = {-vtkLabelVolume->GetOrigin()[0], -vtkLabelVolume->GetOrigin()[1], vtkLabelVolume->GetOrigin()[2]};
   labelVolume->SetOrigin( origin2 );
   return labelVolume;
 }
@@ -1580,7 +1580,7 @@ vtkSlicerPETTumorSegmentationLogic::convert2ITK(vtkSmartPointer<vtkImageData> vt
   itkVolume->SetRegions( region );
   itkVolume->Allocate();
   itkVolume->SetSpacing( vtkVolume->GetSpacing() );
-  float origin[3] = {-itkVolume->GetOrigin()[0], -itkVolume->GetOrigin()[1], itkVolume->GetOrigin()[2]};
+  double origin[3] = {-itkVolume->GetOrigin()[0], -itkVolume->GetOrigin()[1], itkVolume->GetOrigin()[2]};
   itkVolume->SetOrigin( origin );
   unsigned long numVoxels = itkVolume->GetLargestPossibleRegion().GetNumberOfPixels();
   
@@ -1762,7 +1762,7 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   vtkMRMLScalarVolumeNode* vtkPetVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetPETVolumeReference() ));
   petVolume = convert2ITK<ScalarImageType>( vtkPetVolume->GetImageData() );
   petVolume->SetSpacing( vtkPetVolume->GetSpacing() );
-  float origin2[3] = {-vtkPetVolume->GetOrigin()[0], -vtkPetVolume->GetOrigin()[1], vtkPetVolume->GetOrigin()[2]};
+  double origin2[3] = {-vtkPetVolume->GetOrigin()[0], -vtkPetVolume->GetOrigin()[1], vtkPetVolume->GetOrigin()[2]};
   petVolume->SetOrigin( origin2 );
   
   return petVolume;
