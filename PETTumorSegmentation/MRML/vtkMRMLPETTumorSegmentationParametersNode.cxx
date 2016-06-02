@@ -53,7 +53,7 @@ vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParameter
   this->SetSegmentationVolumeReference ( NULL );
 }
 
-void vtkMRMLPETTumorSegmentationParametersNode::Reset()
+void vtkMRMLPETTumorSegmentationParametersNode::Clear()
 {
   this->OSFGraph = NULL;
   Histogram.clear();

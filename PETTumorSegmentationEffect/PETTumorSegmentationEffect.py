@@ -472,7 +472,7 @@ class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
     self.scene.ClearUndoStack()
     self.scene.ClearRedoStack()
     
-    self.segmentationParameters.Reset()
+    self.segmentationParameters.Clear()
     self.segmentationParameters.imageStashUndoQueue = []
     self.segmentationParameters.imageStashRedoQueue = []
 
