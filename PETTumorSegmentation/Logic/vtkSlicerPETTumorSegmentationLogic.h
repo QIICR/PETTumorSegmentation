@@ -35,6 +35,10 @@
 #include <itkNearestNeighborInterpolateImageFunction.h>
 #include <itkWatershedImageFilter.h>
 
+// VTK includes
+#include <vtkImageData.h>
+#include <vtkSmartPointer.h>
+
 // OSF includes
 #include "itkOSFGraph.h"
 
