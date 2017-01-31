@@ -17,7 +17,7 @@
  ==============================================================================*/
 
 /**
-\mainpage	SegmentAorta
+\mainpage	PETTumorSegmentation
 \date	12/1/2014
 \authors	Christian Bauer, Markus Van Tol
 \section detail_sec	Description
@@ -35,6 +35,7 @@
 #include <vtkMRMLScalarVolumeNode.h>
 #include <vtkMRMLMarkupsFiducialNode.h>
 #include <vtkMRMLFiducialListNode.h>
+#include <vtkMRMLSegmentationNode.h>
 
 // VTK includes
 #include <vtkIntArray.h>
@@ -45,6 +46,10 @@
 #include <vtkImageData.h>
 #include <vtkImageCast.h>
 #include <vtkTypeTraits.h>
+#include <vtkSegmentation.h>
+#include <vtkOrientedImageData.h>
+
+#include <vtkSlicerSegmentationsModuleLogic.h>
 
 // ITK includes
 #include <itkResampleImageFilter.h>
@@ -120,9 +125,17 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
 {
   if (!ValidInput(node))  //check for validity
     return;
-  
   ScalarImageType::Pointer petVolume = GetPETVolume(node);
-  LabelImageType::Pointer initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
+  LabelImageType::Pointer initialLabelMap(NULL);
+  if (labelImageData!=NULL) // for use with Segmentation Editor
+    initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
+  else // for use with Segment Editor
+  {
+    node->SetLabel( this->GetSegmentLabel(node) );
+    if (node->GetInitialLabelMap().IsNull())
+      node->SetInitialLabelMap(this->ConvertSegmentationToITK(node));
+    initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
+  }
   
   //If from a click, there will be a new finger print.  If not, update the finger print.
   if (!this->CheckFingerPrint(node))
@@ -140,8 +153,6 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
   }
 }
 
-
-
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData)
 {
@@ -149,7 +160,11 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSe
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
-  LabelImageType::Pointer initialLabelMap = ConvertLabelImageToITK(node, labelImageData); //convert initial label volume to ITK for processing
+  LabelImageType::Pointer initialLabelMap(NULL);
+  if (labelImageData!=NULL) // for use with Segmentation Editor
+    initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
+  else // for use with Segment Editor
+    initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
   
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsGlobally(node, petVolume, initialLabelMap); //Sets the cost for all nodes by threshold.  New threshold is determined inside.
@@ -166,7 +181,11 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyLocalRefinement(vtkMRMLPETTumorSeg
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
-  LabelImageType::Pointer initialLabelMap = ConvertLabelImageToITK(node, labelImageData); //convert initial label volume to ITK for processing
+  LabelImageType::Pointer initialLabelMap(NULL);
+  if (labelImageData!=NULL) // for use with Segmentation Editor
+    initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
+  else // for use with Segment Editor
+    initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
   
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsLocally(node, petVolume); //Add effect of most recent refinement point only
@@ -192,6 +211,44 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
 }
 
 //----------------------------------------------------------------------------
+vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSegmentationLogic::ConvertSegmentationToITK(vtkMRMLPETTumorSegmentationParametersNode* node)
+{
+  vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
+  vtkMRMLSegmentationNode* vtkSegmentation = static_cast<vtkMRMLSegmentationNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationReference() ));
+  vtkMRMLScalarVolumeNode* vtkPetVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetPETVolumeReference() ));
+  vtkSmartPointer<vtkOrientedImageData> referenceGeometry = 
+    vtkSlicerSegmentationsModuleLogic::CreateOrientedImageDataFromVolumeNode(vtkPetVolume);
+  
+  vtkSmartPointer<vtkOrientedImageData> vtkLabelVolume = vtkSmartPointer<vtkOrientedImageData>::New();
+  vtkSegmentation->GenerateMergedLabelmapForAllSegments(vtkLabelVolume, vtkSegmentation::EXTENT_UNION_OF_SEGMENTS_PADDED, referenceGeometry);
+  
+  LabelImageType::Pointer labelVolume = convert2ITK<LabelImageType>( vtkLabelVolume );
+  labelVolume->SetSpacing( vtkLabelVolume->GetSpacing() );
+  double origin2[3] = {-referenceGeometry->GetOrigin()[0], -referenceGeometry->GetOrigin()[1], referenceGeometry->GetOrigin()[2]};
+  labelVolume->SetOrigin( origin2 );
+
+  referenceGeometry->Delete();
+  
+  return labelVolume;
+}
+
+//----------------------------------------------------------------------------
+short vtkSlicerPETTumorSegmentationLogic::GetSegmentLabel(vtkMRMLPETTumorSegmentationParametersNode* node)
+{
+  vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
+  vtkMRMLSegmentationNode* vtkSegmentation = static_cast<vtkMRMLSegmentationNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationReference() ));
+  std::vector< std::string > segmentIds;
+  vtkSegmentation->GetSegmentation()->GetSegmentIDs(segmentIds);
+  short label = -1;
+  for (size_t i=0; i<segmentIds.size(); i++)
+    if (segmentIds[i]==node->GetSelectedSegmentID())
+      label = i;
+  if(label == -1)
+    std::cout << "Error: Failed to find " << node->GetSelectedSegmentID() << "in the segmentation" << std::endl;
+  return label+1;
+}
+
+//----------------------------------------------------------------------------
 bool vtkSlicerPETTumorSegmentationLogic::ValidInput(vtkMRMLPETTumorSegmentationParametersNode* node)
 {
   // verify centerpoint
@@ -205,15 +262,14 @@ bool vtkSlicerPETTumorSegmentationLogic::ValidInput(vtkMRMLPETTumorSegmentationP
   if ( petVolume==NULL )
     return false;
   
-  // verify existance of label map
+  // verify existance of label map or segmentation
   vtkMRMLScalarVolumeNode* segmentationVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationVolumeReference() ));
-  if ( segmentationVolume==NULL )
-    return false;
-    
+  vtkMRMLSegmentationNode* segmentation = static_cast<vtkMRMLSegmentationNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationReference() ));
+  if ( segmentation==NULL && segmentationVolume==NULL )
+    return false;    
     
   // verify validity of centerpoint
   //  done in a separate step, requires other input
-  
   
   return true;
 }
@@ -254,8 +310,8 @@ void vtkSlicerPETTumorSegmentationLogic::FinalizeOSFSegmentation(vtkMRMLPETTumor
   //Voxelize that boundary
   LabelImageType::Pointer segmentation = GetSegmentation(node, segmentationMesh, initialLabelMap); 
   
-  //Integrate that segmentation with the existing label map
-  UpdateLabelMap(node, petVolume, segmentation, initialLabelMap);
+  //Integrate that segmentation with the existing segmentation
+  UpdateOutput(node, petVolume, segmentation, initialLabelMap);
 
 }
 
@@ -677,7 +733,6 @@ void vtkSlicerPETTumorSegmentationLogic::AddLocalRefinementCosts(vtkMRMLPETTumor
 
   
   similarityThreshold *= similarityThresholdFactor;
-
 
   // find nearby columns within given range and store additionally obtained information
   const int maxDistance = 5;
@@ -1478,17 +1533,16 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
 }
 
 //----------------------------------------------------------------------------
-void vtkSlicerPETTumorSegmentationLogic::UpdateLabelMap(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer segmentation, LabelImageType::Pointer initialLabelMap)
+void vtkSlicerPETTumorSegmentationLogic::UpdateOutput(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer segmentation, LabelImageType::Pointer initialLabelMap)
 {
   vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
   
-  vtkMRMLScalarVolumeNode* segmentationNode = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationVolumeReference() ));
   short label = node->GetLabel();
   bool paintOver = node->GetPaintOver();
   bool sealing = node->GetSealing();
   bool necroticRegion = node->GetNecroticRegion();
   float threshold = node->GetThreshold();
-  if (segmentation.IsNull() || initialLabelMap.IsNull() || petVolume.IsNull() || segmentationNode==0)
+  if (segmentation.IsNull() || initialLabelMap.IsNull() || petVolume.IsNull())
     return;
   // merge segmentation and seal if requested
   typedef itk::SealingSegmentationMergerImageFilter<LabelImageType, ScalarImageType, LabelImageType> SegmentationMergerType;
@@ -1503,15 +1557,56 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateLabelMap(vtkMRMLPETTumorSegmentat
   segmentationMerger->SetNecroticRegion(necroticRegion);
   segmentationMerger->Update();
   LabelImageType::Pointer labelMap = segmentationMerger->GetOutput();
-
-
-  // convert itk label map to vtk label map and update label volume node in MRML scene
-  vtkSmartPointer<vtkImageData> vtkLabelMap = convert2VTK<LabelImageType>(labelMap, VTK_SHORT); 
   
-  // copy image data directly into existing volume, avoiding any chance for accidental memory leaks
-  segmentationNode->GetImageData()->DeepCopy( vtkLabelMap );
-  segmentationNode->Modified();
-  
+  vtkMRMLScalarVolumeNode* segmentationVolumeNode = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationVolumeReference() ));
+  if (segmentationVolumeNode!=NULL) // for use with segmentation editor (vtkLabelMap)
+  {
+    // convert itk label map to vtk label map and update label volume node in MRML scene
+    vtkSmartPointer<vtkImageData> vtkLabelMap = convert2VTK<LabelImageType>(labelMap, VTK_SHORT);
+    // copy image data directly into existing volume, avoiding any chance for accidental memory leaks
+    segmentationVolumeNode->GetImageData()->DeepCopy( vtkLabelMap );
+    segmentationVolumeNode->Modified();
+  }
+  else // for use with segment editor (vtkSegmentation)
+  {
+    vtkMRMLSegmentationNode* vtkSegmentationNode = static_cast<vtkMRMLSegmentationNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationReference() ));
+    vtkMRMLScalarVolumeNode* vtkPetVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetPETVolumeReference() ));
+    vtkSmartPointer<vtkOrientedImageData> referenceGeometry = 
+      vtkSlicerSegmentationsModuleLogic::CreateOrientedImageDataFromVolumeNode(vtkPetVolume); // todo: this seems to be expensive just to get the orientation information
+      
+    // iterate over all segments
+    std::vector< std::string > segmentIds;
+    vtkSegmentationNode->GetSegmentation()->GetSegmentIDs(segmentIds);
+    for (size_t i=0; i<segmentIds.size(); i++)
+    { 
+      if (!node->GetPaintOver() && segmentIds[i]!=node->GetSelectedSegmentID())
+        continue; // this segment doesn't need an update      
+      short label = i+1;  
+    
+      // get binary image of current segment
+      typedef itk::BinaryThresholdImageFilter<LabelImageType, LabelImageType> BinaryThresholdImageFilterType;
+      typename BinaryThresholdImageFilterType::Pointer binaryThresholdFilter = BinaryThresholdImageFilterType::New();
+      binaryThresholdFilter->SetInput( labelMap );
+      binaryThresholdFilter->SetLowerThreshold( label );
+      binaryThresholdFilter->SetUpperThreshold( label );
+      binaryThresholdFilter->SetInsideValue(1);
+      binaryThresholdFilter->SetOutsideValue(0);
+      binaryThresholdFilter->Update();
+      LabelImageType::Pointer segmentLabelMap = binaryThresholdFilter->GetOutput();
+    
+      // convert to vtk
+      vtkSmartPointer<vtkOrientedImageData> vtkLabelVolume = vtkSmartPointer<vtkOrientedImageData>::New();
+      vtkSmartPointer<vtkImageData> vtkLabelMap = convert2VTK<LabelImageType>(segmentLabelMap, VTK_SHORT);
+      vtkLabelMap->SetSpacing(segmentLabelMap->GetSpacing()[0], labelMap->GetSpacing()[1], segmentLabelMap->GetSpacing()[2]);
+      vtkLabelMap->SetOrigin(-segmentLabelMap->GetOrigin()[0], -labelMap->GetOrigin()[1], segmentLabelMap->GetOrigin()[2]);
+      vtkLabelVolume->ShallowCopy(vtkLabelMap);vtkLabelVolume->CopyDirections(referenceGeometry);
+    
+      // update segment in segmentation
+      vtkSlicerSegmentationsModuleLogic::SetBinaryLabelmapToSegment(vtkLabelVolume, vtkSegmentationNode, segmentIds[i], vtkSlicerSegmentationsModuleLogic::MODE_REPLACE);
+    }
+    
+    referenceGeometry->Delete();
+  }
 
 }
 
@@ -1580,7 +1675,7 @@ vtkSlicerPETTumorSegmentationLogic::convert2ITK(vtkSmartPointer<vtkImageData> vt
   itkVolume->SetRegions( region );
   itkVolume->Allocate();
   itkVolume->SetSpacing( vtkVolume->GetSpacing() );
-  double origin[3] = {-itkVolume->GetOrigin()[0], -itkVolume->GetOrigin()[1], itkVolume->GetOrigin()[2]};
+  double origin[3] = {-itkVolume->GetOrigin()[0], -itkVolume->GetOrigin()[1], itkVolume->GetOrigin()[2]}; // FIXXME: I think this should be vtkVolume instead!
   itkVolume->SetOrigin( origin );
   unsigned long numVoxels = itkVolume->GetLargestPossibleRegion().GetNumberOfPixels();
   
@@ -1665,6 +1760,22 @@ void vtkSlicerPETTumorSegmentationLogic::writeMesh(typename ITKMeshType::Pointer
   writer->SetInput( itkMesh );
   writer->SetFileName( filename );
   writer->Update();
+}
+
+
+//---------------------------------------------------------------------------
+// TODO: move into separate conversion utils file
+template <class ITKImageType, class ITKImage2Type>
+typename ITKImageType::Pointer vtkSlicerPETTumorSegmentationLogic::resampleNN(typename ITKImageType::Pointer image, typename ITKImage2Type::Pointer targetImage)
+{
+  typedef itk::ResampleImageFilter< ITKImageType, ITKImageType > ResampleFilterType;
+  typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+  resampler->SetInput( image );
+  resampler->SetOutputParametersFromImage( targetImage );
+  resampler->SetInterpolator( itk::NearestNeighborInterpolateImageFunction< ITKImageType, double >::New() );
+  resampler->SetDefaultPixelValue( 0 );
+  resampler->Update();
+  return resampler->GetOutput();
 }
 
 //---------------------------------------------------------------------------

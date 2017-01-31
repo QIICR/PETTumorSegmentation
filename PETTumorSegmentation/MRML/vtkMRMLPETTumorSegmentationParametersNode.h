@@ -103,6 +103,12 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   vtkGetStringMacro ( SegmentationVolumeReference );
   vtkSetStringMacro ( SegmentationVolumeReference );
   
+  vtkGetStringMacro ( SegmentationReference );
+  vtkSetStringMacro ( SegmentationReference );
+
+  vtkGetStringMacro(SelectedSegmentID);
+  vtkSetStringMacro(SelectedSegmentID);
+  
   vtkGetMacro ( AssistCentering, bool );
   vtkSetMacro ( AssistCentering, bool );
   
@@ -136,8 +142,7 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   PointType GetCenterpoint() {return Centerpoint;};
   float GetCenterpointX() { return Centerpoint[0];};
   float GetCenterpointY() { return Centerpoint[1];};
-  float GetCenterpointZ() { return Centerpoint[2];};
-    
+  float GetCenterpointZ() { return Centerpoint[2];};    
 
   void SetHistogram(HistogramType hist) {Histogram = hist;};
   const HistogramType& GetHistogram() {return Histogram;};
@@ -156,7 +161,10 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   
   void SetOSFGraph(GraphType::Pointer graph) {OSFGraph = graph;};
   GraphType::Pointer GetOSFGraph() {return OSFGraph;};
-
+  
+  void SetInitialLabelMap(LabelImageType::Pointer labelMap) {InitialLabelMap = labelMap;};
+  LabelImageType::Pointer GetInitialLabelMap() {return InitialLabelMap;};
+  void ClearInitialLabelMap() {InitialLabelMap = NULL;};
   
  protected:
 
@@ -191,7 +199,13 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   char *LocalRefinementIndicatorListReference;
   
   /** MRML node ID string for the segmentation label volume node.*/
-  char *SegmentationVolumeReference;  
+  char *SegmentationVolumeReference;
+  
+  /** MRML node ID string for the segmentation node.*/
+  char *SegmentationReference;
+  
+  /** ID string for the segment.*/
+  char* SelectedSegmentID;
   
   /** Whether or not the center point will be adjusted for the segmentation.*/
   bool AssistCentering;
@@ -214,6 +228,9 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   // intermediate processing results of each segmentation refinement step that will stored for undo-redo operations
   /** The center point after any recentering.*/
   PointType Centerpoint;
+  
+  /** The intial label map before starting a segmentation of the current lesion. */
+  LabelImageType::Pointer InitialLabelMap;
 
   /** The graph structure with all costs and edges.*/
   GraphType::Pointer OSFGraph;

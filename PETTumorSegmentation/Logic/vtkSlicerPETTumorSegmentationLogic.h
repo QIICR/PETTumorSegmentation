@@ -94,8 +94,6 @@ protected:
   virtual void OnMRMLSceneNodeAdded(vtkMRMLNode* node);
   virtual void OnMRMLSceneNodeRemoved(vtkMRMLNode* node);
   
-  
-  
   // typedef internally utilized data representation
   typedef itk::Image<short, 3> LabelImageType;
   typedef itk::Image<float, 3> ScalarImageType;
@@ -114,8 +112,6 @@ protected:
   typedef itk::Mesh<float, 3> MeshType;
   typedef std::vector<float> HistogramType;
   
-  
-  
   // methods for main processing steps
   /** Generates the graph and calculates the threshold. */
   bool InitializeOSFSegmentation(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer initialLabelMap); // intial setup for segmentation
@@ -126,15 +122,18 @@ protected:
   /** Modifies the graph node costs based on the most recent local refinement point. */
   void UpdateGraphCostsLocally(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, bool renewOldPoints=false); // incorporate local refinement information
   
-  
-
-  
   /** Completes final steps of segmentation, including solving and modifying the label map. */
   void FinalizeOSFSegmentation(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer initialLabelMap); // update OSF segmentation and output
   
   // helper methods utilized by main processing steps
   /** Convertes the base label map from VTK to ITK.  Gets spacing information from the parameter node. */
   LabelImageType::Pointer ConvertLabelImageToITK(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData);  // convert the copy of the image data to a useable form
+  
+  /** Converts the Segmentation to an ITK labelmap*/
+  LabelImageType::Pointer ConvertSegmentationToITK(vtkMRMLPETTumorSegmentationParametersNode* node);
+  
+  /** obtain label for segment*/
+  short GetSegmentLabel(vtkMRMLPETTumorSegmentationParametersNode* node);
   
   /** Checks if the input for the parameter node is valid. */
   bool ValidInput(vtkMRMLPETTumorSegmentationParametersNode* node);
@@ -166,8 +165,8 @@ protected:
   /** Returns the voxelization of the mesh minus any culling. */
   LabelImageType::Pointer GetSegmentation(vtkMRMLPETTumorSegmentationParametersNode* node, MeshType::Pointer mesh, LabelImageType::Pointer initialLabelMap);
   
-  /** Updates the label map volume to include the newly made segmentation.*/
-  void UpdateLabelMap(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer segmentation, LabelImageType::Pointer initialLabelMap);
+  /** Updates the output (labelmap or segmentation) to include the newly made segmentation.*/
+  void UpdateOutput(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer segmentation, LabelImageType::Pointer initialLabelMap);
   
   /** Calculates the threshold based on the histogram of voxels around the center point. */
   void CalculateThresholdHistogramBased(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume);
@@ -236,8 +235,6 @@ protected:
   /** Makes a deep copy of the graph object. */
   static OSFGraphType::Pointer Clone(OSFGraphType::Pointer graph);
   
-  
-  
 private:
   vtkSlicerPETTumorSegmentationLogic(const vtkSlicerPETTumorSegmentationLogic&); // purposely not implemented
   void operator=(const vtkSlicerPETTumorSegmentationLogic&); // purposely not implemented
@@ -259,8 +256,9 @@ private:
   template <class ITKMeshType>
   void writeMesh(typename ITKMeshType::Pointer itkMesh, char* filename);
   
-  
-  
+  /** Resample image to resolution of target image using nearest Neighbor Interpolation */
+  template <class ITKImageType, class ITKImage2Type>
+  typename ITKImageType::Pointer resampleNN(typename ITKImageType::Pointer image, typename ITKImage2Type::Pointer targetImage); 
   
   /** Determines the density of the spherical mesh.  At density of 4, there are 1026 vertices. */
   const static int meshResolution;
@@ -300,8 +298,6 @@ private:
   
   /** The portion of the total uptake of the original array a possible refinement array's difference with it must be below to be considered similar.  A higher value makes refinement spread more, a lower value makes it spread less.  0.05 is sufficient to have a strict requirement to reject unlike arrays, but still allow it to spread to similar constructs nearby. */
   const static float similarityThresholdFactor;
-  
-  
   
   /** The name of the most recent PET volume node.  Stored to recognize when watershed volumes need not be recalculated. */
   std::string volumeFingerPrint;

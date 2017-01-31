@@ -33,7 +33,9 @@ vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParameters
   this->CenterPointIndicatorListReference = NULL;
   this->GlobalRefinementIndicatorListReference = NULL;
   this->LocalRefinementIndicatorListReference = NULL;
-  this->SegmentationVolumeReference = NULL;  
+  this->SegmentationVolumeReference = NULL;
+  this->SegmentationReference = NULL;
+  this->SelectedSegmentID = NULL;
   this->AssistCentering = true;
   this->Splitting = false;
   this->Sealing = false;
@@ -41,6 +43,7 @@ vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParameters
   this->LinearCost = false;
   this->NecroticRegion = false;
   this->OSFGraph = NULL;
+  this->InitialLabelMap = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -51,11 +54,14 @@ vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParameter
   this->SetGlobalRefinementIndicatorListReference ( NULL );
   this->SetLocalRefinementIndicatorListReference ( NULL );
   this->SetSegmentationVolumeReference ( NULL );
+  this->SetSegmentationReference ( NULL );
+  this->SetSelectedSegmentID ( NULL );
 }
 
 void vtkMRMLPETTumorSegmentationParametersNode::Clear()
 {
   this->OSFGraph = NULL;
+  this->InitialLabelMap = NULL;
   Histogram.clear();
 }
 
@@ -80,6 +86,8 @@ void vtkMRMLPETTumorSegmentationParametersNode::Copy(vtkMRMLNode *anode)
     this->SetGlobalRefinementIndicatorListReference(node->GetGlobalRefinementIndicatorListReference());
     this->SetLocalRefinementIndicatorListReference(node->GetLocalRefinementIndicatorListReference());
     this->SetSegmentationVolumeReference(node->GetSegmentationVolumeReference());
+    this->SetSegmentationReference(node->GetSegmentationReference());
+    this->SetSelectedSegmentID(node->GetSelectedSegmentID());
     this->SetAssistCentering(node->GetAssistCentering());
     this->SetSplitting(node->GetSplitting());
     this->SetSealing(node->GetSealing());
@@ -90,6 +98,7 @@ void vtkMRMLPETTumorSegmentationParametersNode::Copy(vtkMRMLNode *anode)
     //intermediate results
     this->SetCenterpoint(node->GetCenterpoint());
     this->SetOSFGraph(node->GetOSFGraph());
+    this->SetInitialLabelMap(node->GetInitialLabelMap());
     this->SetHistogram(node->GetHistogram());
     this->SetHistogramRange(node->GetHistogramRange());
     this->SetHistogramMedian(node->GetHistogramMedian());
@@ -135,6 +144,14 @@ void vtkMRMLPETTumorSegmentationParametersNode::WriteXML(ostream& of, int nInden
   if (this->SegmentationVolumeReference != NULL)
     {
     of << indent << " segmentationVolumeReference=\"" << this->SegmentationVolumeReference << "\"";
+    }
+  if (this->SegmentationReference != NULL)
+    {
+    of << indent << " SegmentationReference=\"" << this->SegmentationReference << "\"";
+    }
+  if (this->SelectedSegmentID != NULL)
+    {
+    of << indent << " SelectedSegmentID=\"" << this->SelectedSegmentID << "\"";
     }
 
   of << indent << " paintOver=\"" << this->PaintOver << "\"";

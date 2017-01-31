@@ -20,6 +20,7 @@ include(${Slicer_USE_FILE})
 # Extension modules
 add_subdirectory(PETTumorSegmentation)
 add_subdirectory(PETTumorSegmentationEffect)
+add_subdirectory(SegmentEditorPETTumorSegmentationEffect)
 ## NEXT_MODULE
 
 #-----------------------------------------------------------------------------
