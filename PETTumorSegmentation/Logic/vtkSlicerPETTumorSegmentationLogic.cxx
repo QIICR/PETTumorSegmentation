@@ -1585,7 +1585,7 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateOutput(vtkMRMLPETTumorSegmentatio
     
       // get binary image of current segment
       typedef itk::BinaryThresholdImageFilter<LabelImageType, LabelImageType> BinaryThresholdImageFilterType;
-      typename BinaryThresholdImageFilterType::Pointer binaryThresholdFilter = BinaryThresholdImageFilterType::New();
+      BinaryThresholdImageFilterType::Pointer binaryThresholdFilter = BinaryThresholdImageFilterType::New();
       binaryThresholdFilter->SetInput( labelMap );
       binaryThresholdFilter->SetLowerThreshold( label );
       binaryThresholdFilter->SetUpperThreshold( label );
