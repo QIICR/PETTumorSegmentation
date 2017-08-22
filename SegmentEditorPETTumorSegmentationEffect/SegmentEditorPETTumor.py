@@ -532,13 +532,16 @@ class SegmentEditorPETTumor(ScriptedLoadableModule):
   """
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
-    parent.title = "Segment Editor PET Tumor Segmentation"
-    parent.categories = ["Developer Tools.Segment Editor Extensions"]
-    parent.contributors = ["Christian Bauer (University of Iowa), Markus van Tol (University of Iowa), Steve Pieper (Isomics)"] # insert your name in the list
-    parent.helpText = """
+    self.parent.title = "Segment Editor PET Tumor Segmentation"
+    self.parent.categories = ["Developer Tools.Segment Editor Extensions"]
+    self.parent.contributors = ["Christian Bauer (University of Iowa), Markus van Tol (University of Iowa), "
+                                "Steve Pieper (Isomics)"] # insert your name in the list
+    self.parent.hidden = True
+
+    self.parent.helpText = """
     PET Tumor Segmentation Module
     """
-    parent.acknowledgementText = """
+    self.parent.acknowledgementText = """
     This editor extension was developed by
     Christian Bauer, University of Iowa and
     Markus van Tol, Univesity of Iowa
@@ -548,11 +551,10 @@ class SegmentEditorPETTumor(ScriptedLoadableModule):
     Jean-Christophe Fillion-Robin, Kitware Inc.
     and was partially funded by NIH grants U01CA140206, U24CA180918 and 3P41RR013218.
     """
+    qt.QTimer.singleShot(0, self.registerEditorEffect)
 
-    # don't show this module - it only appears in the Editor module
-    parent.hidden = True
 
-    # register segmenation effect
+  def registerEditorEffect(self):
     import qSlicerSegmentationsEditorEffectsPythonQt as effects
     scriptedEffect = effects.qSlicerSegmentEditorScriptedEffect(None)
     scriptedEffect.setPythonSource(__file__.replace('\\','/'))
