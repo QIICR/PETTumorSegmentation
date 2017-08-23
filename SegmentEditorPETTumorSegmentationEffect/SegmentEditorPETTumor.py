@@ -552,11 +552,19 @@ class SegmentEditorPETTumor(ScriptedLoadableModule):
     and was partially funded by NIH grants U01CA140206, U24CA180918 and 3P41RR013218.
     """
     qt.QTimer.singleShot(0, self.registerEditorEffect)
-
+    qt.QTimer.singleShot(0, self.loadTerminologyAndAnatomicContext)
 
   def registerEditorEffect(self):
     import qSlicerSegmentationsEditorEffectsPythonQt as effects
     scriptedEffect = effects.qSlicerSegmentEditorScriptedEffect(None)
     scriptedEffect.setPythonSource(__file__.replace('\\','/'))
     scriptedEffect.self().register()
-
+  
+  def loadTerminologyAndAnatomicContext(self):
+    terminologyFile = os.path.join(os.path.dirname(__file__), 'SegmentationCategoryTypeModifier-HeadAndNeckCancer.json')
+    anatomicContextFile = os.path.join(os.path.dirname(__file__), 'AnatomicRegionAndModifier-DICOM-HeadAndNeckCancer.json')
+    terminologyLogic = slicer.modules.terminologies.logic()
+    terminologyLogic.LoadTerminologyFromFile(terminologyFile)
+    terminologyLogic.LoadAnatomicContextFromFile(anatomicContextFile)
+    
+    

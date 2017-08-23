@@ -10,6 +10,8 @@ set(MODULE_PYTHON_SCRIPTS
 
 set(MODULE_PYTHON_RESOURCES
   PETTumorEffect.png
+  SegmentationCategoryTypeModifier-HeadAndNeckCancer.json
+  AnatomicRegionAndModifier-DICOM-HeadAndNeckCancer.json
   )
 
 #-----------------------------------------------------------------------------

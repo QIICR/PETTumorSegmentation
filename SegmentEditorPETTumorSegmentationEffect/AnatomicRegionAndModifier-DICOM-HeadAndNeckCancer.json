@@ -1,0 +1,287 @@
+{
+    "AnatomicContextName": "Anatomic codes - Head and Neck Cancer",
+    "@schema": "https://raw.githubusercontent.com/qiicr/dcmqi/master/doc/anatomic-context-schema.json#",
+    "AnatomicCodes": {
+        "AnatomicRegion": [
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "base of tongue",
+                "UMLSConceptUID": "C0226958",
+                "CodeValue": "T-53131",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "7283002"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "buccal mucosa",
+                "UMLSConceptUID": "C1578559",
+                "CodeValue": "T-51305",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "16811007"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "floor of mouth",
+                "UMLSConceptUID": "C0026638",
+                "CodeValue": "T-51200",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "36360002"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "glottis",
+                "UMLSConceptUID": "C0017681",
+                "CodeValue": "T-24440",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "1307006"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "hypopharynx",
+                "UMLSConceptUID": "C0020629",
+                "CodeValue": "T-55300",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "81502006"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "larynx",
+                "UMLSConceptUID": "C0023078",
+                "CodeValue": "T-24100",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "4596009"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "lingual tonsil",
+                "UMLSConceptUID": "C0229871",
+                "CodeValue": "T-C5140",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "2048000"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "lip",
+                "UMLSConceptUID": "C0023759",
+                "CodeValue": "T-52000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "48477009"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "lower alveolar ridge",
+                "UMLSConceptUID": "C0222755",
+                "CodeValue": "T-D07CB",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "288546009"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "maxillary sinus",
+                "UMLSConceptUID": "C0024957",
+                "CodeValue": "T-22100",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "15924003"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "nasal cavity",
+                "UMLSConceptUID": "C0027423",
+                "CodeValue": "T-21301",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "279549004"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "nasopharynx",
+                "UMLSConceptUID": "C0027442",
+                "CodeValue": "T-23000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "71836000"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "oral cavity",
+                "UMLSConceptUID": "C0226896",
+                "CodeValue": "T-51004",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "74262004"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "oropharyngeal tonsil (waldeyer's ring)",
+                "UMLSConceptUID": "C0459892",
+                "CodeValue": "T-C5000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "17861009"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "oropharynx",
+                "UMLSConceptUID": "C0521367",
+                "CodeValue": "T-55200",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "31389004"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "palatine tonsil",
+                "UMLSConceptUID": "C0040421",
+                "CodeValue": "T-C5100",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "75573002"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "palatine uvula",
+                "UMLSConceptUID": "C0042173",
+                "CodeValue": "T-51130",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "26140008"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "paranasal sinus",
+                "UMLSConceptUID": "C0030471",
+                "CodeValue": "T-22000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "2095001"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "pharyngeal tonsil (adenoid)",
+                "UMLSConceptUID": "C0001428",
+                "CodeValue": "T-C5300",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "55940004"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "pyriform sinus",
+                "UMLSConceptUID": "C0227170",
+                "CodeValue": "T-55320",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "6217003"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "retromolar trigone",
+                "UMLSConceptUID": "C0226920",
+                "CodeValue": "T-51600",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "85816001"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "salivary gland",
+                "UMLSConceptUID": "C0036098",
+                "CodeValue": "T-61007",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "385294005"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "supraglottis",
+                "UMLSConceptUID": "C0225574",
+                "CodeValue": "T-24454",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "119255006"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "tongue",
+                "UMLSConceptUID": "C0040408",
+                "CodeValue": "T-53000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "21974007"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "tonsil and adenoid",
+                "UMLSConceptUID": "C0580788",
+                "CodeValue": "T-C5001",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "303337002"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "tubal tonsil",
+                "UMLSConceptUID": "C0229883",
+                "CodeValue": "T-C5330",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "21058000"
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "UMLS",
+                "CodeMeaning": "unknown primary neoplasia site",
+                "UMLSConceptUID": "C0221297",
+                "CodeValue": "C0221297",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": ""
+            },
+            {
+                "cid": "7601",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "uvula",
+                "UMLSConceptUID": "C0042173",
+                "CodeValue": "T-51130",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "26140008"
+            },
+            {
+                "cid": "4030,7154",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "Liver",
+                "UMLSConceptUID": "C0023884",
+                "CodeValue": "T-62000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "10200004"
+            },
+            {
+                "cid": "4030",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "Cerebellum",
+                "UMLSConceptUID": "C0007765",
+                "CodeValue": "T-A6000",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "113305005"
+            },
+            {
+                "cid": "3010,4030,6117",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "Aortic arch",
+                "UMLSConceptUID": "C0003489",
+                "CodeValue": "T-42300",
+                "contextGroupName": "Head and Neck Cancer Anatomic Sites",
+                "SNOMEDCTConceptID": "57034009"
+            }
+        ]
+    }
+}
