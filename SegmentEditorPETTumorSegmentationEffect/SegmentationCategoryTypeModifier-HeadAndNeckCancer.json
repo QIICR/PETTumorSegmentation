@@ -1,84 +1,84 @@
 {
-    "SegmentationCategoryTypeContextName": "Segmentation category and type - Head and Neck Cancer",
-    "@schema": "https://raw.githubusercontent.com/qiicr/dcmqi/master/doc/segment-context-schema.json#",
-    "SegmentationCodes": {
-        "Category": [
-            {
-                "cid": "7150",
-                "CodingSchemeDesignator": "SRT",
-                "CodeMeaning": "Morphologically Altered Structure",
-                "showAnatomy": true,
-                "CodeValue": "M-01000",
-                "contextGroupName": "SegmentationPropertyCategories",
-                "Type": [
-                    {
-                        "recommendedDisplayRGBValue": [
-                            0,
-                            255,
-                            0
-                        ],
-                        "cid": "7159",
-                        "CodingSchemeDesignator": "SRT",
-                        "CodeMeaning": "Neoplasm, Primary",
-                        "UMLSConceptUID": "C1306459",
-                        "CodeValue": "M-80003",
-                        "contextGroupName": "LesionSegmentationTypes",
-                        "SNOMEDCTConceptID": "86049000"
-                    },
-                    {
-                        "recommendedDisplayRGBValue": [
-                            255,
-                            255,
-                            0
-                        ],
-                        "cid": "7159",
-                        "CodingSchemeDesignator": "SRT",
-                        "CodeMeaning": "Neoplasm, Secondary",
-                        "UMLSConceptUID": "C2939419",
-                        "CodeValue": "M-80006",
-                        "contextGroupName": "LesionSegmentationTypes",
-                        "SNOMEDCTConceptID": "14799000"
-                    },
-                    {
-                        "recommendedDisplayRGBValue": [
-                            255,
-                            0,
-                            0
-                        ],
-                        "cid": "7159",
-                        "CodingSchemeDesignator": "SRT",
-                        "CodeMeaning": "Neoplasm",
-                        "UMLSConceptUID": "C0027651",
-                        "CodeValue": "M-8FFFF",
-                        "contextGroupName": "LesionSegmentationTypes",
-                        "SNOMEDCTConceptID": "108369006"
-                    }
-                ]
-            },
-            {
-                "cid": "7150",
-                "CodingSchemeDesignator": "SRT",
-                "showAnatomy": true,
-                "CodeMeaning": "Spatial and Relational Concept",
-                "CodeValue": "R-42018",
-                "contextGroupName": "SegmentationPropertyCategories",
-                "Type": [
-                    {
-                        "recommendedDisplayRGBValue": [
-                            0,
-                            0,
-                            255
-                        ],
-                        "cid": "7165",
-                        "CodingSchemeDesignator": "NCIt",
-                        "CodeMeaning": "Reference Region",
-                        "UMLSConceptUID": "C2986814",
-                        "CodeValue": "C94970",
-                        "contextGroupName": "AbstractSegmentationTypes",
-                        "SNOMEDCTConceptID": "C2986814"
-                    }
-                ]
-            }
+  "SegmentationCategoryTypeContextName": "Segmentation category and type - Head and Neck Cancer",
+  "@schema": "https://raw.githubusercontent.com/qiicr/dcmqi/master/doc/segment-context-schema.json#",
+  "SegmentationCodes": {
+    "Category": [
+      {
+        "cid": "7150",
+        "CodingSchemeDesignator": "SRT",
+        "CodeMeaning": "Morphologically Altered Structure",
+        "showAnatomy": true,
+        "CodeValue": "M-01000",
+        "contextGroupName": "SegmentationPropertyCategories",
+        "Type": [
+          {
+            "recommendedDisplayRGBValue": [
+              0,
+              255,
+              0
+            ],
+            "cid": "7159",
+            "CodingSchemeDesignator": "SRT",
+            "CodeMeaning": "Neoplasm, Primary",
+            "UMLSConceptUID": "C1306459",
+            "CodeValue": "M-80003",
+            "contextGroupName": "LesionSegmentationTypes",
+            "SNOMEDCTConceptID": "86049000"
+          },
+          {
+            "recommendedDisplayRGBValue": [
+              255,
+              255,
+              0
+            ],
+            "cid": "7159",
+            "CodingSchemeDesignator": "SRT",
+            "CodeMeaning": "Neoplasm, Secondary",
+            "UMLSConceptUID": "C2939419",
+            "CodeValue": "M-80006",
+            "contextGroupName": "LesionSegmentationTypes",
+            "SNOMEDCTConceptID": "14799000"
+          },
+          {
+            "recommendedDisplayRGBValue": [
+              255,
+              0,
+              0
+            ],
+            "cid": "7159",
+            "CodingSchemeDesignator": "SRT",
+            "CodeMeaning": "Neoplasm",
+            "UMLSConceptUID": "C0027651",
+            "CodeValue": "M-8FFFF",
+            "contextGroupName": "LesionSegmentationTypes",
+            "SNOMEDCTConceptID": "108369006"
+          }
         ]
-    }
+      },
+      {
+        "cid": "7150",
+        "CodingSchemeDesignator": "SRT",
+        "showAnatomy": true,
+        "CodeMeaning": "Spatial and Relational Concept",
+        "CodeValue": "R-42018",
+        "contextGroupName": "SegmentationPropertyCategories",
+        "Type": [
+          {
+            "recommendedDisplayRGBValue": [
+              0,
+              0,
+              255
+            ],
+            "cid": "7165",
+            "CodingSchemeDesignator": "NCIt",
+            "CodeMeaning": "Reference Region",
+            "UMLSConceptUID": "C2986814",
+            "CodeValue": "C94970",
+            "contextGroupName": "AbstractSegmentationTypes",
+            "SNOMEDCTConceptID": "C2986814"
+          }
+        ]
+      }
+    ]
+  }
 }
