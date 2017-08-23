@@ -281,6 +281,14 @@
                 "CodeValue": "T-42300",
                 "contextGroupName": "Head and Neck Cancer Anatomic Sites",
                 "SNOMEDCTConceptID": "57034009"
+            },
+            {
+                "cid": "7600",
+                "CodingSchemeDesignator": "SRT",
+                "CodeMeaning": "lymph node of head and neck",
+                "CodeValue": "T-C4004",
+                "SNOMEDCTConceptID": "312501005",
+                "UMLSConceptUID": "C0729853"
             }
         ]
     }
