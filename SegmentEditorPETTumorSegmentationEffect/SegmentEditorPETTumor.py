@@ -289,7 +289,6 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
       return abortEvent
     
     if eventId == vtk.vtkCommand.LeftButtonPressEvent:
-      self.scriptedEffect.cursorOff(viewWidget)
       xy = callerInteractor.GetEventPosition()
       rasCoorinate = self.xyToRas(xy, viewWidget)
       self.onApplyMouseClick(rasCoorinate)
