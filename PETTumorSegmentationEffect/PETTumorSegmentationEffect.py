@@ -207,10 +207,13 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
     # register editor undo/redo buttons
     # due to order of object loading in Slicer, this must be done relatively late, and so is
     # kept in its own subroutine
-    editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
-    editorUndoButton.connect('clicked()', self.onUndo )
-    editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
-    editorRedoButton.connect('clicked()', self.onRedo )
+    if not hasattr(slicer.modules, 'EditorWidget'):
+      print("Not running in main Editor module, so undo/redo not available")
+    else:
+      editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
+      editorUndoButton.connect('clicked()', self.onUndo )
+      editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
+      editorRedoButton.connect('clicked()', self.onRedo )
     self.buttonsRegistered = True
 
   #Called when removing the tool
@@ -227,10 +230,11 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
     # This prevents our onUndo/onRedo methods from being activated when out of our tool
     # Since we can't recognize when new states are applied, we don't try to track the entire
     # undo/redo process
-    editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
-    editorUndoButton.disconnect('clicked()', self.onUndo )
-    editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
-    editorRedoButton.disconnect('clicked()', self.onRedo )
+    if hasattr(slicer.modules, 'EditorWidget'):
+      editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
+      editorUndoButton.disconnect('clicked()', self.onUndo )
+      editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
+      editorRedoButton.disconnect('clicked()', self.onRedo )
 
   # note: this method needs to be implemented exactly as-is
   # in each leaf subclass so that "self" in the observer
