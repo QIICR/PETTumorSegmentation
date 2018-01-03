@@ -28,7 +28,7 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
     super(PETTumorSegmentationEffectOptions,self).__init__(parent)
     self.usesThreshold = False; #Ignored by this tool
     self.usesPaintOver = False; #"Allow Overwriting" under Advanced replaces this
-    self.buttonsRegistered = False;
+    self.undoRedoRegistered = False;
 
     # self.attributes should be tuple of options:
     # 'MouseTool' - grabs the cursor
@@ -203,15 +203,13 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
 
   #Registers the undo/redo buttons from Slicer so that native onUndo/onRedo functions can be
   #tied to them
-  def registerEditorButtons(self):
-    # register editor undo/redo buttons
+  def registerEditorUndoRedo(self):
+    # register editor undo/redo functionality
     # due to order of object loading in Slicer, this must be done relatively late, and so is
     # kept in its own subroutine
-    editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
-    editorUndoButton.connect('clicked()', self.onUndo )
-    editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
-    editorRedoButton.connect('clicked()', self.onRedo )
-    self.buttonsRegistered = True
+    self.undoRedo.addUndoObserver(self.onUndo)
+    self.undoRedo.addRedoObserver(self.onRedo)
+    self.undoRedoRegistered = True
 
   #Called when removing the tool
   def destroy(self):
@@ -223,14 +221,12 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
     #free up memory in scene undo/redo when removing tool
     self.logic.reset()
 
-    # unregister editor undo/redo buttons and label selector
+    # unregister editor undo/redo
     # This prevents our onUndo/onRedo methods from being activated when out of our tool
     # Since we can't recognize when new states are applied, we don't try to track the entire
     # undo/redo process
-    editorUndoButton = slicer.modules.EditorWidget.toolsBox.buttons['PreviousCheckPoint']
-    editorUndoButton.disconnect('clicked()', self.onUndo )
-    editorRedoButton = slicer.modules.EditorWidget.toolsBox.buttons['NextCheckPoint']
-    editorRedoButton.disconnect('clicked()', self.onRedo )
+    self.undoRedo.removeUndoObserver(self.onUndo)
+    self.undoRedo.removeRedoObserver(self.onRedo)
 
   # note: this method needs to be implemented exactly as-is
   # in each leaf subclass so that "self" in the observer
@@ -491,8 +487,8 @@ class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
   #Would include image stash save state here, but this gets called by the editor itself on Apply, so it can't take another argument.
   #So, the image stash queue is updated in line instead.
   def saveStateForUndo(self):
-    if self.options and self.options.buttonsRegistered == False:
-      self.options.registerEditorButtons()
+    if self.options and self.options.undoRedoRegistered == False:
+      self.options.registerEditorUndoRedo()
     if self.undoRedo:
       self.undoRedo.saveState()
       #capture reference to the vtkImageStash used when saving the state
