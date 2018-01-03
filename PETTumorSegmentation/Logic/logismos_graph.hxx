@@ -103,7 +103,7 @@ private:
   /// \brief Set node as active and add it to active node queue.
   inline void activate(node* p_node)
   {
-    assert(!p_node);
+    assert(p_node);
     if(p_node->is_active() == false){
       p_node->set_active(true);
       m_active_nodes.push_back(p_node);
