@@ -533,6 +533,7 @@ class SegmentEditorPETTumor(ScriptedLoadableModule):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "Segment Editor PET Tumor Segmentation"
     self.parent.categories = ["Developer Tools.Segment Editor Extensions"]
+    self.parent.dependencies = ['Terminologies']
     self.parent.contributors = ["Christian Bauer (University of Iowa), Markus van Tol (University of Iowa), "
                                 "Steve Pieper (Isomics)"] # insert your name in the list
     self.parent.hidden = True
@@ -550,8 +551,8 @@ class SegmentEditorPETTumor(ScriptedLoadableModule):
     Jean-Christophe Fillion-Robin, Kitware Inc.
     and was partially funded by NIH grants U01CA140206, U24CA180918 and 3P41RR013218.
     """
-    qt.QTimer.singleShot(0, self.registerEditorEffect)
-    qt.QTimer.singleShot(0, self.loadTerminologyAndAnatomicContext)
+    slicer.app.connect("startupCompleted()", self.registerEditorEffect)
+    slicer.app.connect("startupCompleted()", self.loadTerminologyAndAnatomicContext)
 
   def registerEditorEffect(self):
     import qSlicerSegmentationsEditorEffectsPythonQt as effects
