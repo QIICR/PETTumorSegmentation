@@ -21,19 +21,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTest(ScriptedLoadableModule):
     self.parent.helpText = """This is a self test for SegmentEditorPETTumorSegmentationEffect."""
     parent.acknowledgementText = """This work was partially funded by NIH grants U01-CA140206 and U24-CA180918."""
 
-    # Add this test to the SelfTest module's list for discovery when the module
-    # is created.  Since this module may be discovered before SelfTests itself,
-    # create the list if it doesn't already exist.
-    try:
-      slicer.selfTests
-    except AttributeError:
-      slicer.selfTests = {}
-    slicer.selfTests['SegmentEditorPETTumorSegmentationEffectSelfTest'] = self.runTest
-
-  def runTest(self):
-    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
-    tester.runTest()
-
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestWidget
 #
@@ -53,8 +40,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestLogic(ScriptedLoadableModul
   this class and make use of the functionality without
   requiring an instance of the Widget
   """
-  def __init__(self):
-    pass
 
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModuleTest):
