@@ -237,7 +237,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     segmentation = paramsNode.GetSegmentationNode().GetSegmentation()
     segmentIDs = vtk.vtkStringArray()
     segmentation.GetSegmentIDs(segmentIDs)
-    for index in xrange(segmentIDs.GetNumberOfValues()):
+    for index in range(segmentIDs.GetNumberOfValues()):
       segmentID = segmentIDs.GetValue(index)
       segment = segmentation.GetSegment(segmentID)
       if segment.HasTag('PETTumorSegmentation.SegmentationId'):
@@ -406,7 +406,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     segmentation = paramsNode.GetSegmentationNode().GetSegmentation()
     segmentIDs = vtk.vtkStringArray()
     segmentation.GetSegmentIDs(segmentIDs)
-    for index in xrange(segmentIDs.GetNumberOfValues()):
+    for index in range(segmentIDs.GetNumberOfValues()):
       segmentID = segmentIDs.GetValue(index)
       segment = segmentation.GetSegment(segmentID)
       petSegmentationId = vtk.mutable("")
@@ -425,7 +425,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     segmentIDs = vtk.vtkStringArray()
     segmentation.GetSegmentIDs(segmentIDs)
     currentSegmentationID = -1
-    for index in xrange(segmentIDs.GetNumberOfValues()):
+    for index in range(segmentIDs.GetNumberOfValues()):
       segmentID = segmentIDs.GetValue(index)
       segment = segmentation.GetSegment(segmentID)
       petSegmentationId = vtk.mutable("")
@@ -517,12 +517,12 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     localRefinementFiducialNode = self.scene.GetNodeByID( str( node.GetLocalRefinementIndicatorListReference() ) )
     localRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( localRefinementFiducialNode )
     
-    print '  volumeId='+str(node.GetPETVolumeReference())
-    print '  segmentationID='+str(node.GetSegmentationReference())
-    print '  selectedSegmentID='+str(node.GetSelectedSegmentID())
-    print '  #centerPointFiducials='+str(centerPointFiducials.GetNumberOfFiducials())
-    print '  #globalRefinementFiducial='+str(globalRefinementFiducial.GetNumberOfFiducials())
-    print '  #localRefinementFiducial='+str(localRefinementFiducial.GetNumberOfFiducials())
+    print('  volumeId='+str(node.GetPETVolumeReference()))
+    print('  segmentationID='+str(node.GetSegmentationReference()))
+    print('  selectedSegmentID='+str(node.GetSelectedSegmentID()))
+    print('  #centerPointFiducials='+str(centerPointFiducials.GetNumberOfFiducials()))
+    print('  #globalRefinementFiducial='+str(globalRefinementFiducial.GetNumberOfFiducials()))
+    print('  #localRefinementFiducial='+str(localRefinementFiducial.GetNumberOfFiducials()))
 
 class SegmentEditorPETTumor(ScriptedLoadableModule):
   """

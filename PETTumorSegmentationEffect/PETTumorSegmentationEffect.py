@@ -747,7 +747,7 @@ class PETTumorSegmentationEffectExtension(LabelEffect.LabelEffect):
 # PETTumorSegmentationEffect
 #
 
-class PETTumorSegmentationEffect:
+class PETTumorSegmentationEffect(object):
   """
   This class is the 'hook' for slicer to detect and recognize the extension
   as a loadable scripted module
@@ -786,7 +786,7 @@ class PETTumorSegmentationEffect:
 # PETTumorSegmentationEffectWidget
 #
 
-class PETTumorSegmentationEffectWidget:
+class PETTumorSegmentationEffectWidget(object):
   def __init__(self, parent = None):
     self.parent = parent
 

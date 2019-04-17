@@ -91,7 +91,7 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       import shutil
       if os.path.exists(self.tempDataDir):
         shutil.rmtree(self.tempDataDir)
-    except Exception, e:
+    except Exception as e:
       import traceback
       traceback.print_exc()
       self.delayDisplay('Test caused exception!\n' + str(e),self.delayMs*2)
@@ -109,8 +109,8 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
 
     dicomWidget = slicer.modules.dicom.widgetRepresentation().self()
     dicomPluginCheckbox =  dicomWidget.detailsPopup.pluginSelector.checkBoxByPlugin
-    dicomPluginStates = {(key,value.checked) for key,value in dicomPluginCheckbox.iteritems()}
-    for cb in dicomPluginCheckbox.itervalues(): cb.checked=False
+    dicomPluginStates = {(key,value.checked) for key,value in dicomPluginCheckbox.items()}
+    for cb in dicomPluginCheckbox.values(): cb.checked=False
     dicomPluginCheckbox['DICOMScalarVolumePlugin'].checked = True
 
     # Download, unzip, import, and load data. Verify loaded nodes.
