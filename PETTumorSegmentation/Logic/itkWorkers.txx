@@ -25,7 +25,7 @@ namespace itk
 
 //----------------------------------------------------------------------------
 Workers::Workers(int numWorkers) :
-m_MultiThreader(itk::MultiThreader::New())
+m_MultiThreader(itk::PlatformMultiThreader::New())
 {
   m_NumWorkers = std::max(1, std::min(numWorkers, int(m_MultiThreader->GetGlobalMaximumNumberOfThreads())));
   m_MultiThreader->SetNumberOfThreads(m_NumWorkers);
@@ -49,15 +49,15 @@ void Workers::RunMethod(T* object, void(T::*method)(int, int) )
 
 //----------------------------------------------------------------------------
 template <class T>
-ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int);};    
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);    
   ((data->object)->*(data->method))(workerId,numWorkers);    
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -72,15 +72,15 @@ void Workers::RunMethod(T* object, void(T::*method)(int, int, T1), T1 p1 )
 
 //----------------------------------------------------------------------------
 template <class T, typename T1>
-ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int, T1); T1 p1;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);    
   ((data->object)->*(data->method))(workerId,numWorkers, data->p1);
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -95,15 +95,15 @@ void Workers::RunMethod(T* object, void(T::*method)(int, int) const )
 
 //----------------------------------------------------------------------------
 template <class T>
-ITK_THREAD_RETURN_TYPE Workers::RunConstMethodCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunConstMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int) const;};    
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);    
   ((data->object)->*(data->method))(workerId,numWorkers);    
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -116,15 +116,15 @@ void Workers::RunFunction(void(*function)(int, int))
 }
 
 //----------------------------------------------------------------------------
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(int, int);};    
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);    
   (data->method)(workerId,numWorkers);
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
   
 //----------------------------------------------------------------------------
@@ -139,15 +139,15 @@ void Workers::RunFunction(void(*function)(int, int, T1), T1 p1)
 
 //----------------------------------------------------------------------------
 template <typename T1>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(int, int, T1); T1 p1;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);    
   (data->method)(workerId,numWorkers, data->p1);
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -162,10 +162,10 @@ void Workers::RunFunctionForRange(void(*function)(RangeType), RangeType min, Ran
 
 //----------------------------------------------------------------------------
 template <typename RangeType>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType); RangeType min; RangeType max;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -175,7 +175,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
     (data->method)(currentValue);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -190,10 +190,10 @@ void Workers::RunFunctionForRange(void(*function)(RangeType, T1), RangeType min,
 
 //----------------------------------------------------------------------------
 template <typename RangeType, typename T1>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1); RangeType min; RangeType max; T1 p1;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -203,7 +203,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
     (data->method)(currentValue, data->p1);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -218,10 +218,10 @@ void Workers::RunFunctionForRange(void(*function)(RangeType, T1, T2, T3), RangeT
 
 //----------------------------------------------------------------------------
 template <typename RangeType, typename T1, typename T2, typename T3>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -231,7 +231,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
     (data->method)(currentValue, data->p1, data->p2, data->p3);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -246,10 +246,10 @@ void Workers::RunFunctionForRange(void(*function)(RangeType, T1, T2, T3, T4, T5)
 
 //----------------------------------------------------------------------------
 template <typename RangeType, typename T1, typename T2,  typename T3, typename T4, typename T5>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3, T4 p4, T5 p5); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3; T4 p4; T5 p5;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -259,7 +259,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
     (data->method)(currentValue, data->p1, data->p2, data->p3, data->p4, data->p5);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -274,10 +274,10 @@ void Workers::RunFunctionForRange(void(*function)(RangeType, T1, T2, T3, T4, T5,
 
 //----------------------------------------------------------------------------
 template <typename RangeType, typename T1,  typename T2,  typename T3, typename T4, typename T5, typename T6>
-ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3, T4 p4, T5 p5, T6 p6); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3; T4 p4; T5 p5; T6 p6;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -287,7 +287,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
     (data->method)(currentValue, data->p1, data->p2, data->p3, data->p4, data->p5, data->p6);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -302,10 +302,10 @@ void Workers::RunMethodForRange(T* object, void(T::*method)(RangeType), RangeTyp
 
 //----------------------------------------------------------------------------
 template <class T, typename RangeType>
-ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(*method)(RangeType); RangeType min; RangeType max;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -315,7 +315,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
      ((data->object)->*(data->method))(currentValue);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 //----------------------------------------------------------------------------
@@ -330,10 +330,10 @@ void Workers::RunMethodForRange(T* object, void(T::*method)(RangeType, T1), Rang
 
 //----------------------------------------------------------------------------
 template <class T, typename RangeType, typename T1>
-ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
+itk::ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(*method)(RangeType); RangeType min; RangeType max; T1 p1;};
-  itk::MultiThreader::ThreadInfoStruct* threadInfo = (itk::MultiThreader::ThreadInfoStruct *)( arg );
+  itk::PlatformMultiThreader::ThreadInfoStruct* threadInfo = (itk::PlatformMultiThreader::ThreadInfoStruct *)( arg );
   int workerId = threadInfo->ThreadID;
   int numWorkers = threadInfo->NumberOfThreads;    
   UserData* data = (UserData*)(threadInfo->UserData);
@@ -343,7 +343,7 @@ ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
      ((data->object)->*(data->method))(currentValue, data->p1);
     currentValue+=RangeType(numWorkers);
   }
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 } // namespace
