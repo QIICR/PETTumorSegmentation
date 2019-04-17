@@ -63,9 +63,8 @@ SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
 template <class TInputImage, class TUptakeImage, class TOutputImage>
 void
 SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-  (void) threadId; // mute unused parameter warning; we use outputRegionForThread instead of threadId
   typedef itk::ConstNeighborhoodIterator<InputImageType> InputNeighborhoodIteratorType;
   typedef itk::ImageRegionIterator<UptakeImageType> UptakeIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;

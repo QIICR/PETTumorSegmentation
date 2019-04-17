@@ -27,7 +27,7 @@ namespace itk
 Workers::Workers(int numWorkers) :
 m_MultiThreader(itk::PlatformMultiThreader::New())
 {
-  m_NumWorkers = std::max(1, std::min(numWorkers, int(m_MultiThreader->GetGlobalMaximumNumberOfThreads())));
+  m_NumWorkers = std::max(1, std::min(numWorkers, int(m_MultiThreader->MultiThreaderBase::GetGlobalMaximumNumberOfThreads())));
   m_MultiThreader->SetNumberOfThreads(m_NumWorkers);
 }
 
