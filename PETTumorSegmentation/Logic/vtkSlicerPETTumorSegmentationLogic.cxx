@@ -110,8 +110,8 @@ vtkSlicerPETTumorSegmentationLogic::vtkSlicerPETTumorSegmentationLogic()
   //Clear local variables
   volumeFingerPrint.erase();
   centerFingerPrint.clear();
-  StrongWatershedVolume_saved = NULL;
-  WeakWatershedVolume_saved = NULL;
+  StrongWatershedVolume_saved = nullptr;
+  WeakWatershedVolume_saved = nullptr;
 }
 
 //----------------------------------------------------------------------------
@@ -126,8 +126,8 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
   if (!ValidInput(node))  //check for validity
     return;
   ScalarImageType::Pointer petVolume = GetPETVolume(node);
-  LabelImageType::Pointer initialLabelMap(NULL);
-  if (labelImageData!=NULL) // for use with Segmentation Editor
+  LabelImageType::Pointer initialLabelMap(nullptr);
+  if (labelImageData!=nullptr) // for use with Segmentation Editor
     initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
   else // for use with Segment Editor
   {
@@ -160,8 +160,8 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSe
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
-  LabelImageType::Pointer initialLabelMap(NULL);
-  if (labelImageData!=NULL) // for use with Segmentation Editor
+  LabelImageType::Pointer initialLabelMap(nullptr);
+  if (labelImageData!=nullptr) // for use with Segmentation Editor
     initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
   else // for use with Segment Editor
     initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
@@ -181,8 +181,8 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyLocalRefinement(vtkMRMLPETTumorSeg
     return;
   
   ScalarImageType::Pointer petVolume = GetPETVolume(node);  //convert pet volume to ITK for processing
-  LabelImageType::Pointer initialLabelMap(NULL);
-  if (labelImageData!=NULL) // for use with Segmentation Editor
+  LabelImageType::Pointer initialLabelMap(nullptr);
+  if (labelImageData!=nullptr) // for use with Segmentation Editor
     initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
   else // for use with Segment Editor
     initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
@@ -259,13 +259,13 @@ bool vtkSlicerPETTumorSegmentationLogic::ValidInput(vtkMRMLPETTumorSegmentationP
   // verify existance of pet scan
   vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
   vtkMRMLScalarVolumeNode* petVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetPETVolumeReference() ));
-  if ( petVolume==NULL )
+  if ( petVolume==nullptr )
     return false;
   
   // verify existance of label map or segmentation
   vtkMRMLScalarVolumeNode* segmentationVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationVolumeReference() ));
   vtkMRMLSegmentationNode* segmentation = static_cast<vtkMRMLSegmentationNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationReference() ));
-  if ( segmentation==NULL && segmentationVolume==NULL )
+  if ( segmentation==nullptr && segmentationVolume==nullptr )
     return false;    
     
   // verify validity of centerpoint
@@ -986,7 +986,9 @@ bool vtkSlicerPETTumorSegmentationLogic::CalculateCenterPoint(vtkMRMLPETTumorSeg
 vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSegmentationLogic::ExtractPETSubVolume(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume)
 {
   if (petVolume.IsNull())
-    return NULL;
+    {
+    return nullptr;
+    }
     
   // identify ROI based on center point, sphere radius, plus a one voxel margin
   ScalarImageType::RegionType roi;
@@ -1289,7 +1291,7 @@ vtkSlicerPETTumorSegmentationLogic::MeshType::Pointer vtkSlicerPETTumorSegmentat
   // extract the segmentation surface from the OSF graph as a mesh
   OSFGraphType::Pointer solvedGraph = node->GetOSFGraph();
   if (solvedGraph.IsNull())
-    return NULL;
+    return nullptr;
     
   // Get resulting surface mesh from osf graph
   typedef itk::OSFGraphToMeshFilter<OSFGraphType,MeshType> OSFGraphToMeshFilterType;
@@ -1309,7 +1311,7 @@ void vtkSlicerPETTumorSegmentationLogic::CalculateThresholdHistogramBased(vtkMRM
     return;
   
   // denoise hisogram if requested
-  ScalarImageType::Pointer medianPetVolume = NULL;
+  ScalarImageType::Pointer medianPetVolume = nullptr;
   if (node->GetDenoiseThreshold())  //set the medianPetVolume only if needed
   {
     typedef itk::MedianImageFilter<ScalarImageType, ScalarImageType> MedianFilterType;
@@ -1486,7 +1488,7 @@ void vtkSlicerPETTumorSegmentationLogic::CalculateThresholdPointLocationBased(vt
 vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSegmentationLogic::GetSegmentation(vtkMRMLPETTumorSegmentationParametersNode* node, MeshType::Pointer segmentationMesh, LabelImageType::Pointer initialLabelMap)
 {
   if (segmentationMesh.IsNull() || initialLabelMap.IsNull())
-    return NULL;
+    return nullptr;
 
   // voxelize mesh
   typedef itk::TriangleMeshToBinaryImageFilter<MeshType, LabelImageType> MeshToLabelImageFilterType;
@@ -1559,7 +1561,7 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateOutput(vtkMRMLPETTumorSegmentatio
   LabelImageType::Pointer labelMap = segmentationMerger->GetOutput();
   
   vtkMRMLScalarVolumeNode* segmentationVolumeNode = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetSegmentationVolumeReference() ));
-  if (segmentationVolumeNode!=NULL) // for use with segmentation editor (vtkLabelMap)
+  if (segmentationVolumeNode!=nullptr) // for use with segmentation editor (vtkLabelMap)
   {
     // convert itk label map to vtk label map and update label volume node in MRML scene
     vtkSmartPointer<vtkImageData> vtkLabelMap = convert2VTK<LabelImageType>(labelMap, VTK_SHORT);
@@ -1826,16 +1828,16 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateFingerPrint(vtkMRMLPETTumorSegmen
   vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>(node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
   if (centerFiducials->GetNumberOfFiducials()==0) //if no center, clear everything
   {
-    StrongWatershedVolume_saved = NULL;
-    WeakWatershedVolume_saved = NULL;
+    StrongWatershedVolume_saved = nullptr;
+    WeakWatershedVolume_saved = nullptr;
     centerFingerPrint.clear();
     return;
   }
   PointType centerFingerPrint_node = convert2ITK( centerFiducials->GetNthFiducialXYZ(centerFiducials->GetNumberOfFiducials()-1) );
   if (centerFingerPrint.size() == 0 || centerFingerPrint_node[0] != centerFingerPrint[0] || centerFingerPrint_node[1] != centerFingerPrint[1] || centerFingerPrint_node[2] != centerFingerPrint[2]) //set the center point if it doesn't already match
   {
-    StrongWatershedVolume_saved = NULL;
-    WeakWatershedVolume_saved = NULL;
+    StrongWatershedVolume_saved = nullptr;
+    WeakWatershedVolume_saved = nullptr;
     centerFingerPrint.resize(3);
     centerFingerPrint[0] = centerFingerPrint_node[0];
     centerFingerPrint[1] = centerFingerPrint_node[1];
@@ -1868,7 +1870,7 @@ bool vtkSlicerPETTumorSegmentationLogic::CheckFingerPrint(vtkMRMLPETTumorSegment
 vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSegmentationLogic::GetPETVolume(vtkMRMLPETTumorSegmentationParametersNode* node)
 {
   //Converts the PET volume from reference to vtk volume to itk volume
-  ScalarImageType::Pointer petVolume = NULL;
+  ScalarImageType::Pointer petVolume = nullptr;
   vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
   vtkMRMLScalarVolumeNode* vtkPetVolume = static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID( node->GetPETVolumeReference() ));
   petVolume = convert2ITK<ScalarImageType>( vtkPetVolume->GetImageData() );
@@ -1922,7 +1924,9 @@ vtkSlicerPETTumorSegmentationLogic::OSFGraphType::Pointer
 vtkSlicerPETTumorSegmentationLogic::Clone(OSFGraphType::Pointer graph)
 { //Copy the graph itself for MRML node undo/redo
   if (graph.IsNull())
-    return OSFGraphType::Pointer(0);
+    {
+    return OSFGraphType::Pointer(nullptr);
+    }
   typedef itk::CloneOSFGraphFilter<OSFGraphType> CloneGraphFilterType;
   CloneGraphFilterType::Pointer cloner = CloneGraphFilterType::New();
   cloner->SetInput(graph);

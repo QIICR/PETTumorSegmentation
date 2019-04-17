@@ -164,7 +164,7 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   
   void SetInitialLabelMap(LabelImageType::Pointer labelMap) {InitialLabelMap = labelMap;};
   LabelImageType::Pointer GetInitialLabelMap() {return InitialLabelMap;};
-  void ClearInitialLabelMap() {InitialLabelMap = NULL;};
+  void ClearInitialLabelMap() {InitialLabelMap = nullptr;};
   
  protected:
 

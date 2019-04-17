@@ -27,7 +27,7 @@ namespace itk
 template <class TInputOSFGraph, class TOutputOSFGraph>
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::LOGISMOSOSFGraphSolverFilter() :
-  m_MaxFlowGraph(NULL),
+  m_MaxFlowGraph(nullptr),
   m_FlowValue(0)
 {
 }
@@ -37,10 +37,10 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::~LOGISMOSOSFGraphSolverFilter()
 {
-  if (m_MaxFlowGraph!=NULL)
+  if (m_MaxFlowGraph!=nullptr)
   {
     delete m_MaxFlowGraph;
-    m_MaxFlowGraph = NULL;
+    m_MaxFlowGraph = nullptr;
   }
 }
 
@@ -64,7 +64,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   // store result
   this->UpdateResult();
   delete m_MaxFlowGraph;
-  m_MaxFlowGraph = NULL;
+  m_MaxFlowGraph = nullptr;
 }
 
 //----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   // note: instead of iterating through all nodes, we could do a binary search on the nodes associated with a column
   // this could give some speedup in case of many column positions
   
-  if (m_MaxFlowGraph==NULL)
+  if (m_MaxFlowGraph==nullptr)
     return;
     
   InputOSFGraphConstPointer input = this->GetInput();
