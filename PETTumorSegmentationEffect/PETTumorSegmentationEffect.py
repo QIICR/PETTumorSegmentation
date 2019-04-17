@@ -1,11 +1,8 @@
 import os
 from __main__ import vtk, qt, ctk, slicer
-import EditorLib
 from EditorLib.EditOptions import HelpButton
-from EditorLib.EditOptions import EditOptions
 from EditorLib import EditUtil
-from EditorLib import LabelEffect
-from EditorLib import Effect
+from EditorLib import LabelEffectOptions, LabelEffectTool, LabelEffectLogic, LabelEffect
 
 #
 # The Editor Extension itself.
@@ -18,7 +15,7 @@ from EditorLib import Effect
 # Generates the Qt GUI elements and organizes them
 # Connects elements to their functionality
 #
-class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
+class PETTumorSegmentationEffectOptions(LabelEffectOptions):
   """ PETTumorSegmentationEffect-specfic gui
   """
 
@@ -190,7 +187,7 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
 
     self.frame.layout().addWidget(self.optFrame);     
 
-    EditorLib.HelpButton(self.frame, "Click on a lesion in a PET scan to segment it. Depending on refinement settings, click again to refine globally and/or locally. Options may help deal with cases such as segmenting individual lesions in a chain. For more information: http://www.slicer.org/slicerWiki/index.php/Documentation/4.4/Modules/PETTumorSegmentationEffect")
+    HelpButton(self.frame, "Click on a lesion in a PET scan to segment it. Depending on refinement settings, click again to refine globally and/or locally. Options may help deal with cases such as segmenting individual lesions in a chain. For more information: http://www.slicer.org/slicerWiki/index.php/Documentation/4.4/Modules/PETTumorSegmentationEffect")
     
     # Add vertical spacer
     self.frame.layout().addStretch(1)
@@ -333,7 +330,7 @@ class PETTumorSegmentationEffectOptions(EditorLib.LabelEffectOptions):
 # Recognizes the click event and calls logic.  Multiple instances of this are generated.
 #
 
-class PETTumorSegmentationEffectTool(LabelEffect.LabelEffectTool):
+class PETTumorSegmentationEffectTool(LabelEffectTool):
   """
   One instance of this will be created per-view when the effect
   is selected.  It is responsible for implementing feedback and
@@ -372,7 +369,7 @@ class PETTumorSegmentationEffectTool(LabelEffect.LabelEffectTool):
 # Main methods for our effect here.
 #
 
-class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
+class PETTumorSegmentationEffectLogic(LabelEffectLogic):
   """
   This class contains helper methods for a given effect
   type.  It can be instanced as needed by an PETTumorSegmentationEffectTool
@@ -728,7 +725,7 @@ class PETTumorSegmentationEffectLogic(LabelEffect.LabelEffectLogic):
 # The PETTumorSegmentationEffectExtension class definition
 #
 
-class PETTumorSegmentationEffectExtension(LabelEffect.LabelEffect):
+class PETTumorSegmentationEffectExtension(LabelEffect):
   """Organizes the Options, Tool, and Logic classes into a single instance
   that can be managed by the EditBox
   """
