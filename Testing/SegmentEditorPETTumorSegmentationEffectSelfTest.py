@@ -160,7 +160,7 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       # one-click segmentation
       self.delayDisplay('Applying ne-click segmentation')
       effect.self().onApplyMouseClick([41.3,220.1,-980.2])
-      self.assertEqual(self.getSignature(seg),2890720391)
+      self.assertEqual(self.getSignature(seg),2893772894)
     
       # global refinement
       self.delayDisplay('Applying global refinement')
