@@ -26,8 +26,32 @@ class SegmentEditorPETTumorSegmentationEffectSelfTest(ScriptedLoadableModule):
 #
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestWidget(ScriptedLoadableModuleWidget):
+  """Uses ScriptedLoadableModuleWidget base class, available at:
+  https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
+  """
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
+    # Instantiate and connect widgets ...
+
+    # Collapsible button
+    testsCollapsibleButton = ctk.ctkCollapsibleButton()
+    testsCollapsibleButton.text = "SegmentEditorPETTumorSegmentationEffect Tests"
+    self.layout.addWidget(testsCollapsibleButton)
+
+    # Layout within the collapsible button
+    collapsibleButtonLayout = qt.QFormLayout(testsCollapsibleButton)
+
+    self.loadTestDataButton = qt.QPushButton("Download and load test data")
+    self.loadTestDataButton.connect('clicked(bool)', self.onLoadTestData)
+    collapsibleButtonLayout.addWidget(self.loadTestDataButton)
+
+    # Add vertical spacer
+    self.layout.addStretch(1)
+
+  def onLoadTestData(self):
+    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
+    tester.loadTestData()
+
 
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestLogic
@@ -49,6 +73,11 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
+  def __init__(self, *args, **kwargs):
+    super(SegmentEditorPETTumorSegmentationEffectSelfTestTest, self).__init__(*args, **kwargs)
+    self.tempDataDir = os.path.join(slicer.app.temporaryPath,'PETTest')
+    self.tempDicomDatabaseDir = os.path.join(slicer.app.temporaryPath,'PETTestDicom')
+
   def runTest(self):
     """Run as few or as many tests as needed here.
     """
@@ -61,8 +90,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
     """
     slicer.mrmlScene.Clear(0)
     self.delayMs = 700
-    self.tempDataDir = os.path.join(slicer.app.temporaryPath,'PETTest')
-    self.tempDicomDatabaseDir = os.path.join(slicer.app.temporaryPath,'PETTestDicom')
 
   def doCleanups(self):
     """ cleanup temporary data in case an exception occurs
