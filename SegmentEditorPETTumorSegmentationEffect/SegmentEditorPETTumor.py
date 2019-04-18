@@ -411,7 +411,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
       segment = segmentation.GetSegment(segmentID)
       petSegmentationId = vtk.mutable("")
       if segment.GetTag('PETTumorSegmentation.SegmentationId',petSegmentationId):
-        if int(petSegmentationId)>self.segmentationIdCounter:
+        if int(str(petSegmentationId))>self.segmentationIdCounter:
           segment.RemoveTag('PETTumorSegmentation.SegmentationId')
     
     selectedSegmentID = paramsNode.GetSelectedSegmentID()
@@ -430,8 +430,8 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
       segment = segmentation.GetSegment(segmentID)
       petSegmentationId = vtk.mutable("")
       if segment.GetTag('PETTumorSegmentation.SegmentationId',petSegmentationId):
-        if int(petSegmentationId)>currentSegmentationID:
-          currentSegmentationID = int(petSegmentationId)
+        if int(str(petSegmentationId))>currentSegmentationID:
+          currentSegmentationID = int(str(petSegmentationId))
     return currentSegmentationID
   
   # Safely return parameter node at right stage (considering potentialundos/redos)
