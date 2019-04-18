@@ -17,7 +17,7 @@
 #ifndef _itkWorkers_h
 #define _itkWorkers_h
 
-#include <itkMultiThreader.h>
+#include <itkPlatformMultiThreader.h>
 
 namespace itk
 {
@@ -87,57 +87,57 @@ public:
   
 protected:
   int m_NumWorkers;
-  itk::MultiThreader::Pointer m_MultiThreader;
+  itk::PlatformMultiThreader::Pointer m_MultiThreader;
   
   // callback to run non-const method on object without parameters
   template <class T>
-  static ITK_THREAD_RETURN_TYPE RunMethodCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunMethodCB(void* arg);
   
   // callback to run non-const method on object with one parameter
   template <class T, typename T1>
-  static ITK_THREAD_RETURN_TYPE RunMethodCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunMethodCB(void* arg);
     
   // callback to run const method on object without parameters
   template <class T>
-  static ITK_THREAD_RETURN_TYPE RunConstMethodCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunConstMethodCB(void* arg);
   
   // callback to run static method or function without parameters
-  static ITK_THREAD_RETURN_TYPE RunFunctionCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionCB(void* arg);
   
   // callback to run static method or function with one parameter
   template <typename T1>
-  static ITK_THREAD_RETURN_TYPE RunFunctionCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionCB(void* arg);
   
   // callback to run method without parameters for a specified range of values
   template <class T, typename RangeType>
-  static ITK_THREAD_RETURN_TYPE RunMethodForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunMethodForRangeCB(void* arg);
   
   // callback to run method with one parameter for a specified range of values
   template <class T, typename RangeType, typename T1>
-  static ITK_THREAD_RETURN_TYPE RunMethodForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunMethodForRangeCB(void* arg);
   
   // callback to run static method or function without parameters for a specified range of values
   template <typename RangeType>
-  static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
   
   // callback to run static method or function with one parameters for a specified range of values 
   template <typename RangeType, typename T1>
-  static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
   
   // callback to run static method or function with two parameters for a specified range of values
   // TODO: implement
   
   // callback to run static method or function with three parameters for a specified range of values  
   template <typename RangeType, typename T1,  typename T2,  typename T3>
-  static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
   
   // callback to run static method or function with five parameters for a specified range of values  
   template <typename RangeType, typename T1,  typename T2,  typename T3, typename T4, typename T5>
-  static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
   
   // callback to run static method or function with six parameters for a specified range of values  
   template <typename RangeType, typename T1,  typename T2,  typename T3, typename T4, typename T5, typename T6>
-  static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
   
   
 };

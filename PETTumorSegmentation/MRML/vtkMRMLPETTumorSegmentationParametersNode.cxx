@@ -29,39 +29,39 @@ vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParameters
   this->PaintOver = false;
   this->GlobalRefinementOn = true;
   this->LocalRefinementOn = false;
-  this->PETVolumeReference = NULL;
-  this->CenterPointIndicatorListReference = NULL;
-  this->GlobalRefinementIndicatorListReference = NULL;
-  this->LocalRefinementIndicatorListReference = NULL;
-  this->SegmentationVolumeReference = NULL;
-  this->SegmentationReference = NULL;
-  this->SelectedSegmentID = NULL;
+  this->PETVolumeReference = nullptr;
+  this->CenterPointIndicatorListReference = nullptr;
+  this->GlobalRefinementIndicatorListReference = nullptr;
+  this->LocalRefinementIndicatorListReference = nullptr;
+  this->SegmentationVolumeReference = nullptr;
+  this->SegmentationReference = nullptr;
+  this->SelectedSegmentID = nullptr;
   this->AssistCentering = true;
   this->Splitting = false;
   this->Sealing = false;
   this->DenoiseThreshold = false;
   this->LinearCost = false;
   this->NecroticRegion = false;
-  this->OSFGraph = NULL;
-  this->InitialLabelMap = NULL;
+  this->OSFGraph = nullptr;
+  this->InitialLabelMap = nullptr;
 }
 
 //----------------------------------------------------------------------------
 vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParametersNode()
 {
-  this->SetPETVolumeReference ( NULL );
-  this->SetCenterPointIndicatorListReference ( NULL );
-  this->SetGlobalRefinementIndicatorListReference ( NULL );
-  this->SetLocalRefinementIndicatorListReference ( NULL );
-  this->SetSegmentationVolumeReference ( NULL );
-  this->SetSegmentationReference ( NULL );
-  this->SetSelectedSegmentID ( NULL );
+  this->SetPETVolumeReference ( nullptr );
+  this->SetCenterPointIndicatorListReference ( nullptr );
+  this->SetGlobalRefinementIndicatorListReference ( nullptr );
+  this->SetLocalRefinementIndicatorListReference ( nullptr );
+  this->SetSegmentationVolumeReference ( nullptr );
+  this->SetSegmentationReference ( nullptr );
+  this->SetSelectedSegmentID ( nullptr );
 }
 
 void vtkMRMLPETTumorSegmentationParametersNode::Clear()
 {
-  this->OSFGraph = NULL;
-  this->InitialLabelMap = NULL;
+  this->OSFGraph = nullptr;
+  this->InitialLabelMap = nullptr;
   Histogram.clear();
 }
 
@@ -125,31 +125,31 @@ void vtkMRMLPETTumorSegmentationParametersNode::WriteXML(ostream& of, int nInden
   
   of << indent << " label=\"" << this->Label << "\"";
   
-  if (this->PETVolumeReference != NULL)
+  if (this->PETVolumeReference != nullptr)
     {
     of << indent << " PETVolumeReference=\"" << this->PETVolumeReference << "\"";
     }
-  if (this->CenterPointIndicatorListReference != NULL)
+  if (this->CenterPointIndicatorListReference != nullptr)
     {
     of << indent << " centerPointIndicatorListReference=\"" << this->CenterPointIndicatorListReference << "\"";
     }
-  if (this->GlobalRefinementIndicatorListReference != NULL)
+  if (this->GlobalRefinementIndicatorListReference != nullptr)
     {
     of << indent << " globalRefinementIndicatorListReference=\"" << this->GlobalRefinementIndicatorListReference << "\"";
     }
-  if (this->LocalRefinementIndicatorListReference != NULL)
+  if (this->LocalRefinementIndicatorListReference != nullptr)
     {
     of << indent << " localRefinementIndicatorListReference=\"" << this->LocalRefinementIndicatorListReference << "\"";
     }
-  if (this->SegmentationVolumeReference != NULL)
+  if (this->SegmentationVolumeReference != nullptr)
     {
     of << indent << " segmentationVolumeReference=\"" << this->SegmentationVolumeReference << "\"";
     }
-  if (this->SegmentationReference != NULL)
+  if (this->SegmentationReference != nullptr)
     {
     of << indent << " SegmentationReference=\"" << this->SegmentationReference << "\"";
     }
-  if (this->SelectedSegmentID != NULL)
+  if (this->SelectedSegmentID != nullptr)
     {
     of << indent << " SelectedSegmentID=\"" << this->SelectedSegmentID << "\"";
     }
@@ -174,7 +174,7 @@ void vtkMRMLPETTumorSegmentationParametersNode::ReadXMLAttributes(const char** a
 
   const char* attName;
   const char* attValue;
-  while (*atts != NULL)
+  while (*atts != nullptr)
     {
     attName = *(atts++);
     attValue = *(atts++);

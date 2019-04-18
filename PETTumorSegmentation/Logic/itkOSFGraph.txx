@@ -378,7 +378,7 @@ void
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::CopyInformation(const DataObject *data)
 {
-  const OSFGraph * osfGraph = NULL;
+  const OSFGraph * osfGraph = nullptr;
   
   try
     {
@@ -416,7 +416,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
   // Copy Meta Data
   this->CopyInformation( data );
  
-  const Self * osfGraph = NULL;
+  const Self * osfGraph = nullptr;
   
   try
     {

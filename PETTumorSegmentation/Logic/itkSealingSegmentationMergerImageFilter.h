@@ -119,7 +119,7 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
   
   void BeforeThreadedGenerateData();
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId);
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
 private:
   SealingSegmentationMergerImageFilter(const Self&); //purposely not implemented

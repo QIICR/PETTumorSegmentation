@@ -113,7 +113,7 @@ OSFGraphSource<TOutputOSFGraph>
 
   if ( !graft )
     {
-    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    itkExceptionMacro(<<"Requested to graft output that is a nullptr pointer" );
     }
 
   DataObject * output = this->GetOutput( idx );
