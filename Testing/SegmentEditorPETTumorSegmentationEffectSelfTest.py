@@ -21,26 +21,37 @@ class SegmentEditorPETTumorSegmentationEffectSelfTest(ScriptedLoadableModule):
     self.parent.helpText = """This is a self test for SegmentEditorPETTumorSegmentationEffect."""
     parent.acknowledgementText = """This work was partially funded by NIH grants U01-CA140206 and U24-CA180918."""
 
-    # Add this test to the SelfTest module's list for discovery when the module
-    # is created.  Since this module may be discovered before SelfTests itself,
-    # create the list if it doesn't already exist.
-    try:
-      slicer.selfTests
-    except AttributeError:
-      slicer.selfTests = {}
-    slicer.selfTests['SegmentEditorPETTumorSegmentationEffectSelfTest'] = self.runTest
-
-  def runTest(self):
-    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
-    tester.runTest()
-
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestWidget
 #
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestWidget(ScriptedLoadableModuleWidget):
+  """Uses ScriptedLoadableModuleWidget base class, available at:
+  https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
+  """
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
+    # Instantiate and connect widgets ...
+
+    # Collapsible button
+    testsCollapsibleButton = ctk.ctkCollapsibleButton()
+    testsCollapsibleButton.text = "SegmentEditorPETTumorSegmentationEffect Tests"
+    self.layout.addWidget(testsCollapsibleButton)
+
+    # Layout within the collapsible button
+    collapsibleButtonLayout = qt.QFormLayout(testsCollapsibleButton)
+
+    self.loadTestDataButton = qt.QPushButton("Download and load test data")
+    self.loadTestDataButton.connect('clicked(bool)', self.onLoadTestData)
+    collapsibleButtonLayout.addWidget(self.loadTestDataButton)
+
+    # Add vertical spacer
+    self.layout.addStretch(1)
+
+  def onLoadTestData(self):
+    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
+    tester.loadTestData()
+
 
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestLogic
@@ -53,8 +64,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestLogic(ScriptedLoadableModul
   this class and make use of the functionality without
   requiring an instance of the Widget
   """
-  def __init__(self):
-    pass
 
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModuleTest):
@@ -63,6 +72,11 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
   Uses ScriptedLoadableModuleTest base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
+
+  def __init__(self, *args, **kwargs):
+    super(SegmentEditorPETTumorSegmentationEffectSelfTestTest, self).__init__(*args, **kwargs)
+    self.tempDataDir = os.path.join(slicer.app.temporaryPath,'PETTest')
+    self.tempDicomDatabaseDir = os.path.join(slicer.app.temporaryPath,'PETTestDicom')
 
   def runTest(self):
     """Run as few or as many tests as needed here.
@@ -76,8 +90,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
     """
     slicer.mrmlScene.Clear(0)
     self.delayMs = 700
-    self.tempDataDir = os.path.join(slicer.app.temporaryPath,'PETTest')
-    self.tempDicomDatabaseDir = os.path.join(slicer.app.temporaryPath,'PETTestDicom')
 
   def doCleanups(self):
     """ cleanup temporary data in case an exception occurs
