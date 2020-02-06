@@ -1,18 +1,18 @@
 /*==============================================================================
- 
+
  Program: PETTumorSegmentation
- 
+
  (c) Copyright University of Iowa All Rights Reserved.
- 
+
  See COPYRIGHT.txt
  or http://www.slicer.org/copyright/copyright.txt for details.
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- 
+
  ==============================================================================*/
 
 #ifndef __itkSealingSegmentationMergerImageFilter_h
@@ -76,7 +76,7 @@ public:
   typedef typename     OutputImageType::PixelType   OutputImagePixelType;
 
   typedef typename TOutputImage::PointType PointType;
-  
+
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -86,7 +86,7 @@ public:
 
   itkSetObjectMacro(DataImage, UptakeImageType);
   itkGetObjectMacro(DataImage, UptakeImageType);
-  
+
   itkSetObjectMacro(LabelImage, InputImageType);
   itkGetObjectMacro(LabelImage, InputImageType);
 
@@ -95,10 +95,10 @@ public:
 
   itkSetMacro(Label, InputImagePixelType);
   itkGetMacro(Label, InputImagePixelType);
-  
+
   itkSetMacro(PaintOver, bool);
   itkGetMacro(PaintOver, bool);
-  
+
   itkSetMacro(Sealing, bool);
   itkGetMacro(Sealing, bool);
 
@@ -117,9 +117,9 @@ protected:
   SealingSegmentationMergerImageFilter();
   virtual ~SealingSegmentationMergerImageFilter() {};
   void PrintSelf(std::ostream& os, Indent indent) const;
-  
+
   void BeforeThreadedGenerateData();
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId);
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
 private:
   SealingSegmentationMergerImageFilter(const Self&); //purposely not implemented

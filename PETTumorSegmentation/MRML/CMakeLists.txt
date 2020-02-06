@@ -12,6 +12,12 @@ set(${KIT}_INCLUDE_DIRECTORIES
   #message(${Slicer_binary_dir}/Modules/Scripted/EditorLib/Logic/vtkImageStash.h)
   #${Slicer_source_dir}/Modules/Scripted/EditorLib/Logic/vtkImageStash.h
   #
+  ${MRML_INCLUDE_DIRS}
+  ${MRMLCore_INCLUDE_DIRS}
+  ${Slicer_ModuleMRML_INCLUDE_DIRS}
+  ${Slicer_Base_INCLUDE_DIRS}
+  ${vtkSlicerSegmentationsModuleLogic_INCLUDE_DIRS}
+  ${Slicer_ModuleSegmentations_INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -21,7 +27,10 @@ set(${KIT}_SRCS
 set(${KIT}_TARGET_LIBRARIES
   ${MRML_LIBRARIES}
   vtkSlicerSegmentationsModuleLogic
+  ${ITK_LIBRARIES}
+  vtkSlicerAnnotationsModuleMRML
   #vtkSlicerEditorLibModuleLogic
+  vtkSlicerSegmentationsModuleLogic
   )
 
 #-----------------------------------------------------------------------------

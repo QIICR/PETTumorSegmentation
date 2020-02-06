@@ -31,7 +31,7 @@ OSFGraphSource<TOutputOSFGraph>
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputMesh
   OutputOSFGraphPointer output
-    = static_cast<TOutputOSFGraph*>(this->MakeOutput(0).GetPointer()); 
+    = static_cast<TOutputOSFGraph*>(this->MakeOutput(0).GetPointer());
 
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
@@ -56,7 +56,7 @@ OSFGraphSource<TOutputOSFGraph>
     {
     return 0;
     }
-  
+
   return static_cast<TOutputOSFGraph*>
     (this->ProcessObject::GetOutput(0));
 }
@@ -107,13 +107,13 @@ OSFGraphSource<TOutputOSFGraph>
 {
   if ( idx >= this->GetNumberOfOutputs() )
     {
-    itkExceptionMacro(<<"Requested to graft output " << idx << 
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
         " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }  
+    }
 
   if ( !graft )
     {
-    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    itkExceptionMacro(<<"Requested to graft output that is a nullptr pointer" );
     }
 
   DataObject * output = this->GetOutput( idx );
@@ -136,4 +136,3 @@ OSFGraphSource<TOutputOSFGraph>
 } // namespace
 
 #endif
-

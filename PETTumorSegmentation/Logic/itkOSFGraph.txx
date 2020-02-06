@@ -31,9 +31,9 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
   m_SurfacesContainer = SurfacesContainer::New();
   m_GraphNodesContainer = GraphNodesContainer::New();
   m_GraphEdgesContainer = GraphEdgesContainer::New();
-  
-  // If we used unstructured regions instead of structured regions, then 
-  // assume this object was created by the user and this is region 0 of 
+
+  // If we used unstructured regions instead of structured regions, then
+  // assume this object was created by the user and this is region 0 of
   // 1 region.
   m_MaximumNumberOfRegions = 1;
   m_NumberOfRegions = 1;
@@ -120,7 +120,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphNode& 
+typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphNode&
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::GetNode(GraphNodeIdentifier nodeId)
 {
@@ -133,9 +133,9 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-const typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphNode& 
+const typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphNode&
 OSFGraph<TCostType, TSurfaceMeshTraits >
-::GetNode(GraphNodeIdentifier nodeId) const 
+::GetNode(GraphNodeIdentifier nodeId) const
 {
   if ( !m_GraphNodesContainer->IndexExists(nodeId) )
     {
@@ -204,7 +204,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphEdge& 
+typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphEdge&
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::GetEdge(GraphEdgeIdentifier edgeId)
 {
@@ -217,9 +217,9 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-const typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphEdge& 
+const typename OSFGraph<TCostType, TSurfaceMeshTraits >::GraphEdge&
 OSFGraph<TCostType, TSurfaceMeshTraits >
-::GetEdge(GraphEdgeIdentifier edgeId) const 
+::GetEdge(GraphEdgeIdentifier edgeId) const
 {
   if ( !m_GraphEdgesContainer->IndexExists(edgeId) )
     {
@@ -279,13 +279,13 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-void 
+void
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::BuildGraphNodeIdentifierLookupTable()
 {
   // note: because of the type of the datastrucure for the lookup table and it's construction a lot of copying and reallocation may occur.
-  // -> reimplement the lookup table if really slow in practice 
-  
+  // -> reimplement the lookup table if really slow in practice
+
   for (typename GraphNodesContainer::ConstIterator nodeIt=m_GraphNodesContainer->Begin(); nodeIt!=m_GraphNodesContainer->End(); nodeIt++)
   {
     GraphNodeIdentifier nodeId = nodeIt.Index();
@@ -293,9 +293,9 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
     SurfaceIdentifier surfaceId = node.surfaceId;
     VertexIdentifier vertexId = node.vertexId;
     ColumnPositionIdentifier positionId = node.positionId;
-    
+
     //std::cout << nodeId << " " << surfaceId << " " << vertexId <<  " " << positionId << std::endl;
-    
+
     if (m_GraphNodeIdentifierLookupTable.size()<surfaceId+1)
       m_GraphNodeIdentifierLookupTable.resize(surfaceId+1);
     if (m_GraphNodeIdentifierLookupTable[surfaceId].size()<vertexId+1)
@@ -351,10 +351,10 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
     {
     this->GetSource()->UpdateOutputInformation();
     }
-  
-  // Now we should know what our largest possible region is. If our 
-  // requested region was not set yet, (or has been set to something 
-  // invalid - with no data in it ) then set it to the largest 
+
+  // Now we should know what our largest possible region is. If our
+  // requested region was not set yet, (or has been set to something
+  // invalid - with no data in it ) then set it to the largest
   // possible region.
   if ( m_RequestedRegion == -1 && m_RequestedNumberOfRegions == 0 )
     {
@@ -378,8 +378,8 @@ void
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::CopyInformation(const DataObject *data)
 {
-  const OSFGraph * osfGraph = NULL;
-  
+  const OSFGraph * osfGraph = nullptr;
+
   try
     {
     osfGraph = dynamic_cast<const OSFGraph*>(data);
@@ -415,9 +415,9 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 {
   // Copy Meta Data
   this->CopyInformation( data );
- 
-  const Self * osfGraph = NULL;
-  
+
+  const Self * osfGraph = nullptr;
+
   try
     {
     osfGraph = dynamic_cast<const Self*>(data);
@@ -437,7 +437,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
                       << typeid(data).name() << " to "
                       << typeid(Self*).name() );
     }
-  
+
   for (SurfaceIdentifier surfaceId=0; surfaceId<osfGraph->m_SurfacesContainer->Size(); surfaceId++)
     this->SetSurface( surfaceId, osfGraph->m_SurfacesContainer->ElementAt(surfaceId) );
   this->SetNodes( osfGraph->m_GraphNodesContainer );
@@ -452,7 +452,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 ::SetRequestedRegion(DataObject *data)
 {
   Self *osfGraph;
-  
+
   osfGraph = dynamic_cast<Self*>(data);
 
   if ( osfGraph )
@@ -525,7 +525,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
        m_RequestedRegion < 0 )
     {
     itkExceptionMacro( << "Invalid update region " << m_RequestedRegion
-                       << ". Must be between 0 and " 
+                       << ". Must be between 0 and "
                        << m_RequestedNumberOfRegions - 1);
     }
 
@@ -544,7 +544,7 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 {
 return;
   Superclass::Initialize();
-  
+
   m_SurfacesContainer = SurfacesContainer::New();
   m_GraphNodesContainer = GraphNodesContainer::New();
   m_GraphEdgesContainer = GraphEdgesContainer::New();
@@ -564,4 +564,3 @@ OSFGraph<TCostType, TSurfaceMeshTraits >
 } // namespace
 
 #endif
-

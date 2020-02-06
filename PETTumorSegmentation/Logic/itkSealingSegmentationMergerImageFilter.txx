@@ -63,17 +63,16 @@ SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
 template <class TInputImage, class TUptakeImage, class TOutputImage>
 void
 SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, ThreadIdType threadId)
+::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-  (void) threadId; // mute unused parameter warning; we use outputRegionForThread instead of threadId
   typedef itk::ConstNeighborhoodIterator<InputImageType> InputNeighborhoodIteratorType;
   typedef itk::ImageRegionIterator<UptakeImageType> UptakeIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  
+
   typedef typename InputNeighborhoodIteratorType::RadiusType InputRadiusType;
   InputRadiusType radius;
   radius.Fill(1);
-  
+
   InputNeighborhoodIteratorType inputIt(radius, this->GetInput(), outputRegionForThread); //iterator for newly created label
   InputNeighborhoodIteratorType segmentationIt(radius, this->GetLabelImage(), outputRegionForThread); //iterator for existing labels
   UptakeIteratorType uptakeIt(this->GetDataImage(), outputRegionForThread);
@@ -98,16 +97,16 @@ SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
           outputIt.Set(m_Label);
         else if (inputIt.GetNext(dim)>0 && (segmentationIt.GetPrevious(dim)>0 || inputIt.GetPrevious(dim)>0)) //If next in this dimension is a new label and previous is a new or old label, seal with new label
           outputIt.Set(m_Label);
-      }       
+      }
     }
     else
       outputIt.Set(0);
-      
+
     ++inputIt;
     ++segmentationIt;
     ++uptakeIt;
-    ++outputIt;    
-  }  
+    ++outputIt;
+  }
 }
 
 template <class TInputImage, class TUptakeImage, class TOutputImage>

@@ -27,7 +27,7 @@ namespace itk
 template <class TInputOSFGraph, class TOutputOSFGraph>
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::LOGISMOSOSFGraphSolverFilter() :
-  m_MaxFlowGraph(NULL),
+  m_MaxFlowGraph(nullptr),
   m_FlowValue(0)
 {
 }
@@ -37,10 +37,10 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::~LOGISMOSOSFGraphSolverFilter()
 {
-  if (m_MaxFlowGraph!=NULL)
+  if (m_MaxFlowGraph!=nullptr)
   {
     delete m_MaxFlowGraph;
-    m_MaxFlowGraph = NULL;
+    m_MaxFlowGraph = nullptr;
   }
 }
 
@@ -53,18 +53,18 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   this->CopyInputOSFGraphToOutputOSFGraphSurfaces();
   this->CopyInputOSFGraphToOutputOSFGraphGraph();
   InputOSFGraphConstPointer input = this->GetInput();
-  
+
   // build graph
   m_MaxFlowGraph = new MaxFlowGraphType();
-  
+
   this->BuildMaxFlowGraphGraph();
   // solve max flow
   m_FlowValue = m_MaxFlowGraph->solve();
-  
+
   // store result
   this->UpdateResult();
   delete m_MaxFlowGraph;
-  m_MaxFlowGraph = NULL;
+  m_MaxFlowGraph = nullptr;
 }
 
 //----------------------------------------------------------------------------
@@ -78,17 +78,17 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   typename GraphNodeContainer::ConstPointer graphNodes = this->GetInput()->GetNodes();
   typename GraphNodeContainer::ConstIterator graphNodesItr = graphNodes->Begin();
   typename GraphNodeContainer::ConstIterator graphNodesEnd = graphNodes->End();
-  
+
   m_MaxFlowGraph->add_nodes( graphNodes->Size() );
 
   while ( graphNodesItr!=graphNodesEnd )
   {
     typename InputOSFGraphType::GraphNodeIdentifier nodeId = graphNodesItr.Index();
     const typename InputOSFGraphType::GraphNode& node = graphNodesItr.Value();
-    m_MaxFlowGraph->add_st_edge( nodeId, node.cap_source, node.cap_sink );    
+    m_MaxFlowGraph->add_st_edge( nodeId, node.cap_source, node.cap_sink );
     ++graphNodesItr;
   }
-  
+
   // add edges
   typedef typename InputOSFGraphType::GraphEdgesContainer GraphEdgesContainer;
   typename GraphEdgesContainer::ConstPointer graphEdges = this->GetInput()->GetEdges();
@@ -100,7 +100,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
     m_MaxFlowGraph->add_edge( edge.startNodeId, edge.endNodeId, edge.cap, edge.rev_cap );
     ++graphEdgesItr;
   }
-  
+
 }
 
 //----------------------------------------------------------------------------
@@ -110,16 +110,16 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::UpdateResult()
 {
   // note: we assume Boykov's max flow lib procudes the same node_id's we use
-  
+
   // note: instead of iterating through all nodes, we could do a binary search on the nodes associated with a column
   // this could give some speedup in case of many column positions
-  
-  if (m_MaxFlowGraph==NULL)
+
+  if (m_MaxFlowGraph==nullptr)
     return;
-    
+
   InputOSFGraphConstPointer input = this->GetInput();
   OutputOSFGraphPointer output = this->GetOutput();
-  
+
   // set all column positions to 0 first
   for (typename OutputOSFGraphType::SurfaceIdentifier surfaceId=0; surfaceId<output->GetNumberOfSurfaces(); surfaceId++)
   {
@@ -127,7 +127,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
     for (typename OutputOSFGraphType::VertexIdentifier vertexId=0; vertexId<surface->GetNumberOfVertices(); vertexId++)
       surface->SetCurrentVertexPositionIdentifier(vertexId,0);
   }
-  
+
   // update to higest column position still attached to the source
   std::size_t numNodes = m_MaxFlowGraph->get_node_cnt();
   for (std::size_t nodeId=0; nodeId<numNodes; nodeId++)
@@ -142,7 +142,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
         surface->SetCurrentVertexPositionIdentifier(node.vertexId, node.positionId);
     }
   }
-  
+
 }
 
 //----------------------------------------------------------------------------
@@ -158,4 +158,3 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 } // namespace
 
 #endif
-

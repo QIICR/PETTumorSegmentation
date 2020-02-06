@@ -1,6 +1,5 @@
 import os
 import unittest
-import dicom
 import vtk, qt, ctk, slicer, logging
 from DICOMLib import DICOMUtils
 from SegmentStatistics import SegmentStatisticsLogic
@@ -21,26 +20,36 @@ class SegmentEditorPETTumorSegmentationEffectSelfTest(ScriptedLoadableModule):
     self.parent.helpText = """This is a self test for SegmentEditorPETTumorSegmentationEffect."""
     parent.acknowledgementText = """This work was partially funded by NIH grants U01-CA140206 and U24-CA180918."""
 
-    # Add this test to the SelfTest module's list for discovery when the module
-    # is created.  Since this module may be discovered before SelfTests itself,
-    # create the list if it doesn't already exist.
-    try:
-      slicer.selfTests
-    except AttributeError:
-      slicer.selfTests = {}
-    slicer.selfTests['SegmentEditorPETTumorSegmentationEffectSelfTest'] = self.runTest
-
-  def runTest(self):
-    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
-    tester.runTest()
-
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestWidget
 #
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestWidget(ScriptedLoadableModuleWidget):
+  """Uses ScriptedLoadableModuleWidget base class, available at:
+  https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
+  """
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
+    # Instantiate and connect widgets ...
+
+    # Collapsible button
+    testsCollapsibleButton = ctk.ctkCollapsibleButton()
+    testsCollapsibleButton.text = "SegmentEditorPETTumorSegmentationEffect Tests"
+    self.layout.addWidget(testsCollapsibleButton)
+
+    # Layout within the collapsible button
+    collapsibleButtonLayout = qt.QFormLayout(testsCollapsibleButton)
+
+    self.loadTestDataButton = qt.QPushButton("Download and load test data")
+    self.loadTestDataButton.connect('clicked(bool)', self.onLoadTestData)
+    collapsibleButtonLayout.addWidget(self.loadTestDataButton)
+
+    # Add vertical spacer
+    self.layout.addStretch(1)
+
+  def onLoadTestData(self):
+    tester = SegmentEditorPETTumorSegmentationEffectSelfTestTest()
+    tester.loadTestData()
 
 #
 # SegmentEditorPETTumorSegmentationEffectSelfTestLogic
@@ -53,8 +62,6 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestLogic(ScriptedLoadableModul
   this class and make use of the functionality without
   requiring an instance of the Widget
   """
-  def __init__(self):
-    pass
 
 
 class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModuleTest):
@@ -86,17 +93,17 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
 
   def tearDown(self):
     """ Close temporary DICOM database and remove temporary data
-    """ 
+    """
     try:
       import shutil
       if os.path.exists(self.tempDataDir):
         shutil.rmtree(self.tempDataDir)
-    except Exception, e:
+    except Exception as e:
       import traceback
       traceback.print_exc()
       self.delayDisplay('Test caused exception!\n' + str(e),self.delayMs*2)
 
-  def loadTestData(self):    
+  def loadTestData(self):
     #download data and add to dicom database
     zipFileUrl = 'http://slicer.kitware.com/midas3/download/item/257234/QIN-HEADNECK-01-0139-PET.zip'
     zipFilePath = self.tempDataDir+'/dicom.zip'
@@ -106,24 +113,16 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       os.mkdir(self.tempDataDir)
     if not os.access(zipFileData, os.F_OK):
       os.mkdir(zipFileData)
+      slicer.util.downloadAndExtractArchive( zipFileUrl, zipFilePath, zipFileData, expectedNumOfFiles)
+    DICOMUtils.importDicom(zipFileData)
 
-    dicomWidget = slicer.modules.dicom.widgetRepresentation().self()
-    dicomPluginCheckbox =  dicomWidget.detailsPopup.pluginSelector.checkBoxByPlugin
-    dicomPluginStates = {(key,value.checked) for key,value in dicomPluginCheckbox.iteritems()}
-    for cb in dicomPluginCheckbox.itervalues(): cb.checked=False
-    dicomPluginCheckbox['DICOMScalarVolumePlugin'].checked = True
-
-    # Download, unzip, import, and load data. Verify loaded nodes.
-    loadedNodes = {'vtkMRMLScalarVolumeNode':1}
-    with DICOMUtils.LoadDICOMFilesToDatabase(zipFileUrl, zipFilePath, zipFileData, expectedNumOfFiles, {}, loadedNodes) as success:
-      self.assertTrue(success)
-      print ('loading returned true')
-
-    self.assertEqual( len( slicer.util.getNodes('vtkMRMLSubjectHierarchyNode*') ), 1 )
-    imageNode = slicer.mrmlScene.GetFirstNodeByClass('vtkMRMLScalarVolumeNode')
-
-    for key,value in dicomPluginStates:
-      dicomPluginCheckbox[key].checked=value
+    # load dataset
+    dicomFiles = slicer.util.getFilesInDirectory(zipFileData)
+    loadablesByPlugin, loadEnabled = DICOMUtils.getLoadablesFromFileLists([dicomFiles],['DICOMScalarVolumePlugin'])
+    loadedNodeIDs = DICOMUtils.loadLoadables(loadablesByPlugin)
+    imageNode = slicer.mrmlScene.GetNodeByID(loadedNodeIDs[0])
+    imageNode.SetSpacing(3.3940266832237, 3.3940266832237, 2.02490234375) # mimic spacing as produced by Slicer 4.10 for which the test was originally developed
+    imageNode.SetOrigin(285.367523193359375,494.58682250976556816,-1873.3819580078125) # mimic origin as produced by Slicer 4.10 for which the test was originally developed
 
     # apply the SUVbw conversion factor and set units and quantity
     suvNormalizationFactor = 0.00040166400000000007
@@ -143,14 +142,14 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
     imageNode.SetVoxelValueUnits(units)
 
     return imageNode
-  
+
   def test_SegmentEditorEffect(self):
-  
+
     self.assertIsNotNone( slicer.vtkSlicerPETTumorSegmentationLogic )
     with DICOMUtils.TemporaryDICOMDatabase(self.tempDicomDatabaseDir) as db:
       self.assertTrue(db.isOpen)
       self.assertEqual(slicer.dicomDatabase, db)
-      
+
       self.delayDisplay('Loading PET DICOM dataset (including download if necessary)')
       petNode = self.loadTestData()
       self.delayDisplay('Switching to Segment Editor')
@@ -159,42 +158,42 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       editor = widget.editor
       params = widget.parameterSetNode
       seg = widget.editor.segmentationNode()
-    
+
       self.delayDisplay('Adding emtpy segment')
       # add segment similar to onAddSegment: https://github.com/Slicer/Slicer/blob/28ea2ebef031788d706a3085a46fac41d0017c05/Modules/Loadable/Segmentations/Widgets/qMRMLSegmentEditorWidget.cxx#L1894
       editor.saveStateForUndo()
       addedSegmentID = seg.GetSegmentation().AddEmptySegment()
       editor.setCurrentSegmentID(addedSegmentID)
-    
+
       # switch to PET tumor segmentation effect
       self.delayDisplay('Activating PET Tumor Segmentation effect')
       editor.setActiveEffectByName('PET Tumor Segmentation')
       effect = editor.activeEffect()
       self.assertIsNotNone(effect)
-    
+
       # one-click segmentation
-      self.delayDisplay('Applying ne-click segmentation')
+      self.delayDisplay('Applying one-click segmentation')
       effect.self().onApplyMouseClick([41.3,220.1,-980.2])
       self.assertEqual(self.getSignature(seg),2890720391)
-    
+
       # global refinement
       self.delayDisplay('Applying global refinement')
       effect.self().globalRefinementRadioButton.click()
       effect.self().onApplyMouseClick([40.1,264.2,-969.2])
       self.assertEqual(self.getSignature(seg),3700505133)
-    
+
       # local refinement
       self.delayDisplay('Applying local refinement')
       effect.self().localRefinementRadioButton.click()
       effect.self().onApplyMouseClick([40.1,258.1,-1025.1])
       self.assertEqual(self.getSignature(seg),3550788737)
-    
+
       # undo with local refinement
       self.delayDisplay('Testing undo with local refinement')
       editor.undo()
       self.assertEqual(self.getSignature(seg),3700505133)
       effect.self().onApplyMouseClick([40.1,234.2, 934.7])
-    
+
       # go back to initial segmentation before refinement and use splitting option
       self.delayDisplay('Applying splitting option')
       editor.undo()
@@ -202,40 +201,40 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       effect.self().splittingCheckBox.checked = True
       effect.self().onApplyParameters()
       self.assertEqual(self.getSignature(seg),4231292517)
-    
+
       # add second segment
       self.delayDisplay('Adding second segment')
       editor.saveStateForUndo()
       addedSegmentID = seg.GetSegmentation().AddEmptySegment()
       editor.setCurrentSegmentID(addedSegmentID)
-    
+
       # one-click segmentation
       self.delayDisplay('Applying one-click segmentation')
       effect.self().onApplyMouseClick([41.3,229.1,-952.5])
       effect.self().onApplyParameters()
       self.assertEqual(self.getSignature(seg),4226190476)
-    
+
       # assist centering
       self.delayDisplay('Applying assist centering option')
       effect.self().assistCenteringCheckBox.checked = False
       effect.self().onApplyParameters()
       self.assertEqual(self.getSignature(seg),4401777778)
-    
+
       # sealing centering
       self.delayDisplay('Applying sealing option')
       effect.self().sealingCheckBox.checked = True
       effect.self().onApplyParameters()
       self.assertEqual(self.getSignature(seg),4451555556)
-    
+
       # overwriting
       self.delayDisplay('Applying overwriting option')
       effect.self().allowOverwritingCheckBox.checked = True
       effect.self().onApplyParameters()
       self.assertEqual(self.getSignature(seg),5756378601)
-    
+
       editor.undo()
-      self.assertEqual(self.getSignature(seg),4451555556)      
-    
+      self.assertEqual(self.getSignature(seg),4451555556)
+
       self.delayDisplay('Test passed!')
 
   def getSignature(self, seg):
@@ -247,4 +246,3 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
     stat.SetInputData(self.labelmap.GetImageData())
     stat.Update()
     return int(round(stat.GetMean()[0]*1e10))
-    
