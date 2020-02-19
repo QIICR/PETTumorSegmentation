@@ -226,8 +226,10 @@ class PETTumorSegmentationEffectOptions(LabelEffectOptions):
     # This prevents our onUndo/onRedo methods from being activated when out of our tool
     # Since we can't recognize when new states are applied, we don't try to track the entire
     # undo/redo process
-    self.undoRedo.removeUndoObserver(self.onUndo)
-    self.undoRedo.removeRedoObserver(self.onRedo)
+    if self.undoRedoRegistered:
+      self.undoRedo.removeUndoObserver(self.onUndo)
+      self.undoRedo.removeRedoObserver(self.onRedo)
+      self.undoRedoRegistered = False
 
   # note: this method needs to be implemented exactly as-is
   # in each leaf subclass so that "self" in the observer
