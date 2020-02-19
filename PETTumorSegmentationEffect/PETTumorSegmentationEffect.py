@@ -233,7 +233,7 @@ class PETTumorSegmentationEffectOptions(LabelEffectOptions):
   # in each leaf subclass so that "self" in the observer
   # is of the correct type
   def updateParameterNode(self, caller, event):
-    node = EditUtil.EditUtil().getParameterNode()
+    node = EditUtil.getParameterNode()
     if node != self.parameterNode:
       if self.parameterNode:
         node.RemoveObserver(self.parameterNodeTag)
@@ -443,20 +443,24 @@ class PETTumorSegmentationEffectLogic(LabelEffectLogic):
     be called for any other reason.
     """
     node = slicer.vtkMRMLPETTumorSegmentationParametersNode()
+    node.SetUndoEnabled(True)
     self.scene.AddNode(node)
     # Since we are a singleton, the scene won't add our node into the scene,
     # but will instead insert a copy, so we find that and return it
     node = self._findPETTumorSegmentationParameterNodeInScene()
 
     centerFiducialList = slicer.vtkMRMLFiducialListNode()
+    centerFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( centerFiducialList )
     node.SetCenterPointIndicatorListReference( centerFiducialList.GetID() )
 
     globalRefinementFiducialList = slicer.vtkMRMLFiducialListNode()
+    globalRefinementFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( globalRefinementFiducialList )
     node.SetGlobalRefinementIndicatorListReference( globalRefinementFiducialList.GetID() )
 
     localRefinementFiducialList = slicer.vtkMRMLFiducialListNode()
+    localRefinementFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( localRefinementFiducialList )
     node.SetLocalRefinementIndicatorListReference( localRefinementFiducialList.GetID() )
 
