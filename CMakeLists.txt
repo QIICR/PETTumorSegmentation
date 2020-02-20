@@ -37,7 +37,7 @@ endif()
 # Extension modules
 add_subdirectory(PETTumorSegmentation)
 add_subdirectory(PETTumorSegmentationEffect)
-add_subdirectory(SegmentEditorPETTumorSegmentationEffect)
+add_subdirectory(SEPETTumorEffect)
 add_subdirectory(Testing)
 ## NEXT_MODULE
 

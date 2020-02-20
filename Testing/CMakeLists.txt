@@ -1,9 +1,9 @@
 #-----------------------------------------------------------------------------
-set(MODULE_NAME SegmentEditorPETTumorSegmentationEffectSelfTest)
+set(MODULE_NAME SEPETTumorEffectSelfTest)
 
 #-----------------------------------------------------------------------------
 set(MODULE_PYTHON_SCRIPTS
-  SegmentEditorPETTumorSegmentationEffectSelfTest.py
+  SEPETTumorEffectSelfTest.py
   )
 
 set(MODULE_PYTHON_RESOURCES
