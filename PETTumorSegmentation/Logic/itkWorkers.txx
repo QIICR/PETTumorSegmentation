@@ -28,7 +28,7 @@ Workers::Workers(int numWorkers) :
 m_MultiThreader(MultiThreader::New())
 {
   m_NumWorkers = std::max(1, std::min(numWorkers, int(m_MultiThreader->MultiThreaderBase::GetGlobalMaximumNumberOfThreads())));
-  m_MultiThreader->SetNumberOfThreads(m_NumWorkers);
+  m_MultiThreader->SetNumberOfWorkUnits(m_NumWorkers);
 }
 
 //----------------------------------------------------------------------------
@@ -52,9 +52,9 @@ template <class T>
 ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int);};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   ((data->object)->*(data->method))(workerId,numWorkers);
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
@@ -75,9 +75,9 @@ template <class T, typename T1>
 ITK_THREAD_RETURN_TYPE Workers::RunMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int, T1); T1 p1;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   ((data->object)->*(data->method))(workerId,numWorkers, data->p1);
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
@@ -98,9 +98,9 @@ template <class T>
 ITK_THREAD_RETURN_TYPE Workers::RunConstMethodCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(T::*method)(int, int) const;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   ((data->object)->*(data->method))(workerId,numWorkers);
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
@@ -119,9 +119,9 @@ void Workers::RunFunction(void(*function)(int, int))
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(int, int);};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   (data->method)(workerId,numWorkers);
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
@@ -142,9 +142,9 @@ template <typename T1>
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(int, int, T1); T1 p1;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   (data->method)(workerId,numWorkers, data->p1);
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
@@ -165,9 +165,9 @@ template <typename RangeType>
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType); RangeType min; RangeType max;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -193,9 +193,9 @@ template <typename RangeType, typename T1>
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1); RangeType min; RangeType max; T1 p1;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -221,9 +221,9 @@ template <typename RangeType, typename T1, typename T2, typename T3>
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -249,9 +249,9 @@ template <typename RangeType, typename T1, typename T2,  typename T3, typename T
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3, T4 p4, T5 p5); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3; T4 p4; T5 p5;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -277,9 +277,9 @@ template <typename RangeType, typename T1,  typename T2,  typename T3, typename 
 ITK_THREAD_RETURN_TYPE Workers::RunFunctionForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; void(*method)(RangeType, T1, T2, T3, T4 p4, T5 p5, T6 p6); RangeType min; RangeType max; T1 p1; T2 p2; T3 p3; T4 p4; T5 p5; T6 p6;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -305,9 +305,9 @@ template <class T, typename RangeType>
 ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(*method)(RangeType); RangeType min; RangeType max;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)
@@ -333,9 +333,9 @@ template <class T, typename RangeType, typename T1>
 ITK_THREAD_RETURN_TYPE Workers::RunMethodForRangeCB(void* arg)
 {
   struct UserData{Workers* workers; T* object; void(*method)(RangeType); RangeType min; RangeType max; T1 p1;};
-  typename MultiThreader::ThreadInfoStruct* threadInfo = (typename MultiThreader::ThreadInfoStruct *)( arg );
-  int workerId = threadInfo->ThreadID;
-  int numWorkers = threadInfo->NumberOfThreads;
+  typename MultiThreader::WorkUnitInfo* threadInfo = (typename MultiThreader::WorkUnitInfo *)( arg );
+  int workerId = threadInfo->WorkUnitID;
+  int numWorkers = threadInfo->NumberOfWorkUnits;
   UserData* data = (UserData*)(threadInfo->UserData);
   RangeType currentValue = (data->min)+RangeType(workerId);
   while (currentValue<=data->max)

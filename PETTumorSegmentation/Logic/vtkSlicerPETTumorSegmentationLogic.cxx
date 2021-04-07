@@ -138,7 +138,7 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
       node->SetInitialLabelMap(this->ConvertSegmentationToITK(node));
     initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
   }
-  itkDebugMacro(node->WriteTXT("seg_init.txt"));
+  vtkDebugMacro(;node->WriteTXT("seg_init.txt"));
 
   //If from a click, there will be a new finger print.  If not, update the finger print.
   if (!this->CheckFingerPrint(node))
@@ -154,7 +154,7 @@ void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParame
     //Create the segmentation and apply it to the label map.
     FinalizeOSFSegmentation(node, petVolume, initialLabelMap);
   }
-  itkDebugMacro(node->WriteTXT("seg_final.txt"));
+  vtkDebugMacro(;node->WriteTXT("seg_final.txt"));
 }
 
 //----------------------------------------------------------------------------
@@ -169,7 +169,7 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSe
     initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
   else // for use with Segment Editor
     initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
-  itkDebugMacro(node->WriteTXT("global_refinement_init.txt"));
+  vtkDebugMacro(;node->WriteTXT("global_refinement_init.txt"));
 
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsGlobally(node, petVolume, initialLabelMap); //Sets the cost for all nodes by threshold.  New threshold is determined inside.
@@ -177,7 +177,7 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyGlobalRefinement(vtkMRMLPETTumorSe
   UpdateGraphCostsLocally(node, petVolume, true); //Reapplies all local refinement, since older points' effects are lost when global update changes base cost.
   FinalizeOSFSegmentation(node, petVolume, initialLabelMap);  //Applies the changed label map
 
-  itkDebugMacro(node->WriteTXT("global_refinement_final.txt"));
+  vtkDebugMacro(;node->WriteTXT("global_refinement_final.txt"));
 }
 
 //----------------------------------------------------------------------------
@@ -192,13 +192,13 @@ void vtkSlicerPETTumorSegmentationLogic::ApplyLocalRefinement(vtkMRMLPETTumorSeg
     initialLabelMap = ConvertLabelImageToITK(node, labelImageData);
   else // for use with Segment Editor
     initialLabelMap = resampleNN<LabelImageType,ScalarImageType>(node->GetInitialLabelMap(), petVolume);
-  itkDebugMacro(node->WriteTXT("local_refinement_init.txt"));
+  vtkDebugMacro(;node->WriteTXT("local_refinement_init.txt"));
 
   node->SetOSFGraph( Clone(node->GetOSFGraph()) ); // we manipulate graph costs directly; therefore, we need to clone the initial graph to ensure correct undo/redo behavior
   UpdateGraphCostsLocally(node, petVolume); //Add effect of most recent refinement point only
 
   FinalizeOSFSegmentation(node, petVolume, initialLabelMap);  //Applies the changed label map
-  itkDebugMacro(node->WriteTXT("local_refinement_final.txt"));
+  vtkDebugMacro(;node->WriteTXT("local_refinement_final.txt"));
 }
 
 //----------------------------------------------------------------------------

@@ -260,7 +260,7 @@ void vtkMRMLPETTumorSegmentationParametersNode::ReadXMLAttributes(const char** a
 void vtkMRMLPETTumorSegmentationParametersNode::WriteTXT(const char* filename)
 {
   vtkMRMLScene* slicerMrmlScene = qSlicerApplication::application()->mrmlScene();
-  ofstream outfile;
+  std::ofstream outfile;
   outfile.open (filename);
   outfile << "Writing this to a file.\n";
   outfile << "Label="<<Label<<"\n"; // short Label;
