@@ -36,7 +36,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Extension modules
 add_subdirectory(PETTumorSegmentation)
-add_subdirectory(PETTumorSegmentationEffect)
+# add_subdirectory(PETTumorSegmentationEffect) # requires legacy Editor with got removed: https://github.com/Slicer/Slicer/commit/39283db420baf502fa99865c9d5d58d0e5295a6e
 add_subdirectory(SegmentEditorPETTumorSegmentationEffect)
 add_subdirectory(Testing)
 ## NEXT_MODULE
