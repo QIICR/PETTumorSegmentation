@@ -91,7 +91,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     self.scriptedEffect.addOptionsWidget(self.refinementBoxesFrame)
 
     #options are hidden (collapsed) until requested
-    self.optFrame = ctk.ctkCollapsibleGroupBox(self.frame);
+    self.optFrame = ctk.ctkCollapsibleGroupBox(self.frame)
     self.optFrame.setTitle("Options")
     self.optFrame.setLayout(qt.QVBoxLayout())
     self.optFrame.visible = True
@@ -99,7 +99,7 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     self.optFrame.setToolTip("Displays algorithm options.")
 
     #most useful options are kept on top: Splitting, Sealing, Assist Centering, Allow
-    #Overwriting; to save vertical space, put 2 ina  row, so subframes here with
+    #Overwriting; to save vertical space, put 2 in a row, so subframes here with
     #horizontal layout are used
 
     #first row
@@ -327,11 +327,11 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
 
     #Get the fiducial nodes
     centerPointFiducialsNode = self.scene.GetNodeByID( str( segmentationParameters.GetCenterPointIndicatorListReference() ) )
-    centerPointFiducials = slicer.vtkMRMLFiducialListNode.SafeDownCast( centerPointFiducialsNode )
+    centerPointFiducials = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( centerPointFiducialsNode )
     globalRefinementFiducialNode = self.scene.GetNodeByID( str( segmentationParameters.GetGlobalRefinementIndicatorListReference() ) )
-    globalRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( globalRefinementFiducialNode )
+    globalRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( globalRefinementFiducialNode )
     localRefinementFiducialNode = self.scene.GetNodeByID( str( segmentationParameters.GetLocalRefinementIndicatorListReference() ) )
-    localRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( localRefinementFiducialNode )
+    localRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( localRefinementFiducialNode )
 
     #Set the current segment information and volumes
     segmentationParameters.SetPETVolumeReference(volumeID)
@@ -341,30 +341,30 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     #If there are no center points, then the click should make a new center point and segmentation.
     #If the label has changed, go with this and remove center points to start a new segmentation.
     #If no refinement mode is on, remove points and start a new segmentation.
-    if (centerPointFiducials.GetNumberOfFiducials()==0 or selectedSegmentID!=oldSelectedSegmentID or segmentationParameters.GetNoRefinementOn()): # initialize segmentation
+    if (centerPointFiducials.GetNumberOfControlPoints()==0 or selectedSegmentID!=oldSelectedSegmentID or segmentationParameters.GetNoRefinementOn()): # initialize segmentation
       # clear old data
       segmentationParameters.ClearInitialLabelMap()
-      if (centerPointFiducials.GetNumberOfFiducials()!=0):
-        globalRefinementFiducial.RemoveAllFiducials()
-        localRefinementFiducial.RemoveAllFiducials()
-        centerPointFiducials.RemoveAllFiducials()
+      if (centerPointFiducials.GetNumberOfControlPoints()!=0):
+        globalRefinementFiducial.RemoveAllControlPoints()
+        localRefinementFiducial.RemoveAllControlPoints()
+        centerPointFiducials.RemoveAllControlPoints()
       #add the new center point
-      centerPointFiducials.AddFiducialWithXYZ(rasCoorinate[0], rasCoorinate[1], rasCoorinate[2], False )
+      centerPointFiducials.AddControlPoint( vtk.vtkVector3d(rasCoorinate) )
       self.vtkSegmentationLogic.Apply( segmentationParameters, None )
     else:
       #If global refinement is active, then the existing segmentation should be refined globally.
       if (segmentationParameters.GetGlobalRefinementOn()): # perform global refinement, unless new label
         #Only one global refinement point at a time
-        globalRefinementFiducial.RemoveAllFiducials()
-        globalRefinementFiducial.AddFiducialWithXYZ(rasCoorinate[0], rasCoorinate[1], rasCoorinate[2], False )
+        globalRefinementFiducial.RemoveAllControlPoints()
+        globalRefinementFiducial.AddControlPoint( vtk.vtkVector3d(rasCoorinate) )
         self.vtkSegmentationLogic.ApplyGlobalRefinement( segmentationParameters, None )
       #If local refinement is active, then the existing segmentation should be refined localy.
       elif (segmentationParameters.GetLocalRefinementOn()): # perform local refinement, unless new label
-        localRefinementFiducial.AddFiducialWithXYZ(rasCoorinate[0], rasCoorinate[1], rasCoorinate[2], False )
+        localRefinementFiducial.AddControlPoint( vtk.vtkVector3d(rasCoorinate) )
         self.vtkSegmentationLogic.ApplyLocalRefinement( segmentationParameters, None )
 
     # run segmentation algorithm
-    #self._showDebugInfo(segmentationParameters)
+    self._showDebugInfo(segmentationParameters)
     #self.vtkSegmentationLogic.Apply( segmentationParameters, None )
     self.updateCurrentSegmentationID()
 
@@ -389,8 +389,8 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     if not self.vtkSegmentationLogic: self.vtkSegmentationLogic = slicer.vtkSlicerPETTumorSegmentationLogic()
 
     centerPointFiducialsNode = self.scene.GetNodeByID( str( segmentationParameters.GetCenterPointIndicatorListReference() ) )
-    centerPointFiducials = slicer.vtkMRMLFiducialListNode.SafeDownCast( centerPointFiducialsNode )
-    if (centerPointFiducials.GetNumberOfFiducials()==0 or selectedSegmentID!=oldSelectedSegmentID):
+    centerPointFiducials = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( centerPointFiducialsNode )
+    if (centerPointFiducials.GetNumberOfControlPoints()==0 or selectedSegmentID!=oldSelectedSegmentID):
       # there is no segmentation which could be changed by updated paramters
       return
 
@@ -457,14 +457,14 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
       if node:
         node.ClearInitialLabelMap()
         centerPointFiducialsNode = self.scene.GetNodeByID( str( node.GetCenterPointIndicatorListReference() ) )
-        centerPointFiducials = slicer.vtkMRMLFiducialListNode.SafeDownCast( centerPointFiducialsNode )
+        centerPointFiducials = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( centerPointFiducialsNode )
         globalRefinementFiducialNode = self.scene.GetNodeByID( str( node.GetGlobalRefinementIndicatorListReference() ) )
-        globalRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( globalRefinementFiducialNode )
+        globalRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( globalRefinementFiducialNode )
         localRefinementFiducialNode = self.scene.GetNodeByID( str( node.GetLocalRefinementIndicatorListReference() ) )
-        localRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( localRefinementFiducialNode )
-        centerPointFiducials.RemoveAllFiducials()
-        globalRefinementFiducial.RemoveAllFiducials()
-        localRefinementFiducial.RemoveAllFiducials()
+        localRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( localRefinementFiducialNode )
+        centerPointFiducials.RemoveAllControlPoints()
+        globalRefinementFiducial.RemoveAllControlPoints()
+        localRefinementFiducial.RemoveAllControlPoints()
         self.segmentationIdCounter = 0
 
     """Get the Editor parameter node - a singleton in the scene"""
@@ -495,17 +495,17 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
     # but will instead insert a copy, so we find that and return it
     node = self._findPETTumorSegmentationParameterNodeInScene()
 
-    centerFiducialList = slicer.vtkMRMLFiducialListNode()
+    centerFiducialList = slicer.vtkMRMLMarkupsFiducialNode() 
     centerFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( centerFiducialList )
     node.SetCenterPointIndicatorListReference( centerFiducialList.GetID() )
 
-    globalRefinementFiducialList = slicer.vtkMRMLFiducialListNode()
+    globalRefinementFiducialList = slicer.vtkMRMLMarkupsFiducialNode() 
     globalRefinementFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( globalRefinementFiducialList )
     node.SetGlobalRefinementIndicatorListReference( globalRefinementFiducialList.GetID() )
 
-    localRefinementFiducialList = slicer.vtkMRMLFiducialListNode()
+    localRefinementFiducialList = slicer.vtkMRMLMarkupsFiducialNode() 
     localRefinementFiducialList.SetUndoEnabled(True)
     self.scene.AddNode( localRefinementFiducialList )
     node.SetLocalRefinementIndicatorListReference( localRefinementFiducialList.GetID() )
@@ -517,18 +517,18 @@ class SegmentEditorPETTumorEffect(AbstractScriptedSegmentEditorEffect):
 
     #Get the fiducial nodes
     centerPointFiducialsNode = self.scene.GetNodeByID( str( node.GetCenterPointIndicatorListReference() ) )
-    centerPointFiducials = slicer.vtkMRMLFiducialListNode.SafeDownCast( centerPointFiducialsNode )
+    centerPointFiducials = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( centerPointFiducialsNode )
     globalRefinementFiducialNode = self.scene.GetNodeByID( str( node.GetGlobalRefinementIndicatorListReference() ) )
-    globalRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( globalRefinementFiducialNode )
+    globalRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( globalRefinementFiducialNode )
     localRefinementFiducialNode = self.scene.GetNodeByID( str( node.GetLocalRefinementIndicatorListReference() ) )
-    localRefinementFiducial = slicer.vtkMRMLFiducialListNode.SafeDownCast( localRefinementFiducialNode )
+    localRefinementFiducial = slicer.vtkMRMLMarkupsFiducialNode.SafeDownCast( localRefinementFiducialNode )
 
     print('  volumeId='+str(node.GetPETVolumeReference()))
     print('  segmentationID='+str(node.GetSegmentationReference()))
     print('  selectedSegmentID='+str(node.GetSelectedSegmentID()))
-    print('  #centerPointFiducials='+str(centerPointFiducials.GetNumberOfFiducials()))
-    print('  #globalRefinementFiducial='+str(globalRefinementFiducial.GetNumberOfFiducials()))
-    print('  #localRefinementFiducial='+str(localRefinementFiducial.GetNumberOfFiducials()))
+    print('  #centerPointFiducials='+str(centerPointFiducials.GetNumberOfControlPoints()))
+    print('  #globalRefinementFiducial='+str(globalRefinementFiducial.GetNumberOfControlPoints()))
+    print('  #localRefinementFiducial='+str(localRefinementFiducial.GetNumberOfControlPoints()))
 
 class SegmentEditorPETTumor(ScriptedLoadableModule):
   """

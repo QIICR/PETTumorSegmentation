@@ -173,10 +173,7 @@ protected:
   
   /** Calculates the threshold in the parameter node based on the global refinement point's location. */
   void CalculateThresholdPointLocationBased(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume);
-  
-  
-  
-  
+    
   // methods for local refinement node selection
   /** Finds the closest vertex to the target point p. */
   int GetClosestVertex(vtkMRMLPETTumorSegmentationParametersNode* node, const PointType& p);
@@ -242,7 +239,9 @@ private:
   /** Converts a VTK volume into an ITK volume. */
   template <class ITKImageType>
   typename ITKImageType::Pointer convert2ITK(vtkSmartPointer<vtkImageData> vtkVolume);
-  PointType convert2ITK(const float* coordinate);
+
+  /** Converts a VTK float/double array to an ITK point. */
+  PointType convert2ITK(const double* coordinate);
   
   /** Converts an ITK volume into a VTK volume. */
   template <class ITKImageType>

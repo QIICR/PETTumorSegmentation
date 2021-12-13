@@ -14,7 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- ==============================================================================*/#include <sstream>
+ ==============================================================================*/
+ #include <sstream>
 
 #include "vtkObjectFactory.h"
 #include "vtkMRMLPETTumorSegmentationParametersNode.h"
@@ -189,13 +190,17 @@ void vtkMRMLPETTumorSegmentationParametersNode::ReadXMLAttributes(const char** a
       {
       this->SetPETVolumeReference(attValue);
       }
-    else if (!strcmp(attName, "CenterPointIndicatorListReference"))
+    else if (!strcmp(attName, "centerPointIndicatorListReference"))
       {
       this->SetCenterPointIndicatorListReference(attValue);
       }
     else if (!strcmp(attName, "globalRefinementIndicatorListReference"))
       {
       this->SetGlobalRefinementIndicatorListReference(attValue);
+      }
+    else if (!strcmp(attName, "localRefinementIndicatorListReference"))
+      {
+      this->SetLocalRefinementIndicatorListReference(attValue);
       }
     else if (!strcmp(attName, "paintOver"))
       {
@@ -268,9 +273,9 @@ void vtkMRMLPETTumorSegmentationParametersNode::WriteTXT(const char* filename)
   outfile << "GlobalRefinementOn="<<GlobalRefinementOn<<"\n"; // bool GlobalRefinementOn;
   outfile << "LocalRefinementOn="<<LocalRefinementOn<<"\n"; // bool LocalRefinementOn;
   outfile << "PETVolumeReference="<<VolumeInfo(static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID(PETVolumeReference)))<<"\n"; // char *PETVolumeReference;
-  outfile << "CenterPointIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLFiducialListNode*>(GetScene()->GetNodeByID(CenterPointIndicatorListReference)))<<"\n"; // char *CenterPointIndicatorListReference;
-  outfile << "GlobalRefinementIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLFiducialListNode*>(GetScene()->GetNodeByID(GlobalRefinementIndicatorListReference)))<<"\n"; // char *GlobalRefinementIndicatorListReference;
-  outfile << "LocalRefinementIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLFiducialListNode*>(GetScene()->GetNodeByID(LocalRefinementIndicatorListReference)))<<"\n"; // char *LocalRefinementIndicatorListReference;
+  outfile << "CenterPointIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLMarkupsFiducialNode*>(GetScene()->GetNodeByID(CenterPointIndicatorListReference)))<<"\n"; // char *CenterPointIndicatorListReference;
+  outfile << "GlobalRefinementIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLMarkupsFiducialNode*>(GetScene()->GetNodeByID(GlobalRefinementIndicatorListReference)))<<"\n"; // char *GlobalRefinementIndicatorListReference;
+  outfile << "LocalRefinementIndicatorListReference="<<FiducialsInfo(static_cast<vtkMRMLMarkupsFiducialNode*>(GetScene()->GetNodeByID(LocalRefinementIndicatorListReference)))<<"\n"; // char *LocalRefinementIndicatorListReference;
   outfile << "SegmentationVolumeReference="<<VolumeInfo(static_cast<vtkMRMLScalarVolumeNode*>(slicerMrmlScene->GetNodeByID(SegmentationVolumeReference)))<<"\n"; // char *SegmentationVolumeReference;
   outfile << "SegmentationReference="<<VolumeInfoITK<LabelImageType>(ConvertSegmentationToITK())<<"\n"; // char *SegmentationReference;
   outfile << "SelectedSegmentID="<<SelectedSegmentID<<"\n"; // char* SelectedSegmentID;
@@ -332,17 +337,17 @@ std::string vtkMRMLPETTumorSegmentationParametersNode::VolumeInfoITK(typename IT
 }
 
 //----------------------------------------------------------------------------
-std::string vtkMRMLPETTumorSegmentationParametersNode::FiducialsInfo(vtkMRMLFiducialListNode* fiducials)
+std::string vtkMRMLPETTumorSegmentationParametersNode::FiducialsInfo(vtkMRMLMarkupsFiducialNode* fiducials)
 {
   if (fiducials==nullptr) return std::string("");
   std::stringstream info;
   info << std::setprecision(20);
-  info << fiducials->GetNumberOfFiducials();
-  for (int i=0; i<fiducials->GetNumberOfFiducials(); ++i)
+  info << fiducials->GetNumberOfControlPoints();
+  for (int i=0; i<fiducials->GetNumberOfControlPoints(); ++i)
   {
-    info << "," << fiducials->GetNthFiducialXYZ(i)[0];
-    info << "," << fiducials->GetNthFiducialXYZ(i)[1];
-    info << "," << fiducials->GetNthFiducialXYZ(i)[2];
+    info << "," << fiducials->GetNthControlPointPositionVector(i)[0];
+    info << "," << fiducials->GetNthControlPointPositionVector(i)[1];
+    info << "," << fiducials->GetNthControlPointPositionVector(i)[2];
   }
   return info.str();
 }

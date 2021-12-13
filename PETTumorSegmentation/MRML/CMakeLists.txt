@@ -28,7 +28,7 @@ set(${KIT}_TARGET_LIBRARIES
   ${MRML_LIBRARIES}
   vtkSlicerSegmentationsModuleLogic
   ${ITK_LIBRARIES}
-  vtkSlicerAnnotationsModuleMRML
+  vtkSlicerMarkupsModuleMRML
   #vtkSlicerEditorLibModuleLogic
   vtkSlicerSegmentationsModuleLogic
   )

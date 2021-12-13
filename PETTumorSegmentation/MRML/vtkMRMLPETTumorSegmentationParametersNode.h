@@ -45,7 +45,7 @@
 
 // for debugging
 #include <vtkMRMLScalarVolumeNode.h>
-#include <vtkMRMLFiducialListNode.h>
+#include <vtkMRMLMarkupsFiducialNode.h>
 #include <vtkMRMLScene.h>
 #include <vtkOrientedImageData.h>
 #include <vtkMRMLSegmentationNode.h>
@@ -270,7 +270,7 @@ private:
   // for debugging
   std::string VolumeInfo(vtkMRMLScalarVolumeNode* volume);
   template <class ITKImageType> std::string VolumeInfoITK(typename ITKImageType::Pointer image);
-  std::string FiducialsInfo(vtkMRMLFiducialListNode* fiducials);
+  std::string FiducialsInfo(vtkMRMLMarkupsFiducialNode* fiducials);
   typename LabelImageType::Pointer ConvertSegmentationToITK();
   template <class ITKImageType> typename ITKImageType::Pointer convert2ITK(vtkSmartPointer<vtkImageData> vtkVolume);
 

@@ -34,7 +34,6 @@
 #include <vtkMRMLPETTumorSegmentationParametersNode.h>
 #include <vtkMRMLScalarVolumeNode.h>
 #include <vtkMRMLMarkupsFiducialNode.h>
-#include <vtkMRMLFiducialListNode.h>
 #include <vtkMRMLSegmentationNode.h>
 
 // VTK includes
@@ -259,8 +258,8 @@ short vtkSlicerPETTumorSegmentationLogic::GetSegmentLabel(vtkMRMLPETTumorSegment
 bool vtkSlicerPETTumorSegmentationLogic::ValidInput(vtkMRMLPETTumorSegmentationParametersNode* node)
 {
   // verify centerpoint
-  vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference()) );
-  if  (centerFiducials==0 || centerFiducials->GetNumberOfFiducials()==0)
+  vtkMRMLMarkupsFiducialNode* centerFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference()) );
+  if  (centerFiducials==nullptr  || centerFiducials->GetNumberOfControlPoints()==0)
     return false;
 
   // verify existance of pet scan
@@ -294,12 +293,12 @@ bool vtkSlicerPETTumorSegmentationLogic::InitializeOSFSegmentation(vtkMRMLPETTum
   else
   {
     //Remove most recent point if it failed.  This prevents it from being kept in memory or showing up as a debug info point in Slicer.
-    vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference()) );
-    if  (centerFiducials==0 || centerFiducials->GetNumberOfFiducials()==0)
+    vtkMRMLMarkupsFiducialNode* centerFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference()) );
+    if  (centerFiducials==nullptr || centerFiducials->GetNumberOfControlPoints()==0)
       return false;
     else
     {
-      centerFiducials->RemoveFiducial(centerFiducials->GetNumberOfFiducials()-1);
+      centerFiducials->RemoveNthControlPoint(centerFiducials->GetNumberOfControlPoints()-1);
       return false;
     }
   }
@@ -325,13 +324,13 @@ void vtkSlicerPETTumorSegmentationLogic::FinalizeOSFSegmentation(vtkMRMLPETTumor
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::UpdateGraphCostsGlobally(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer initialLabelMap)
 {
-  vtkMRMLFiducialListNode* globalRefinementFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
+  vtkMRMLMarkupsFiducialNode* globalRefinementFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
   OSFGraphType::Pointer graph = node->GetOSFGraph();
-  if ( globalRefinementFiducials==0 || petVolume.IsNull() || initialLabelMap.IsNull() || graph.IsNull())
+  if ( globalRefinementFiducials==nullptr || petVolume.IsNull() || initialLabelMap.IsNull() || graph.IsNull())
     return;
 
   //If there are no global refinement points, calculate threshold automatically
-  if (globalRefinementFiducials->GetNumberOfFiducials()==0)
+  if (globalRefinementFiducials->GetNumberOfControlPoints()==0)
     CalculateThresholdHistogramBased(node, petVolume);
   else //Otherwise, get it by the point
     CalculateThresholdPointLocationBased(node, petVolume);
@@ -352,10 +351,10 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateGraphCostsGlobally(vtkMRMLPETTumo
     (&SetGlobalGraphCostsForVertex, 0, numVertices-1, node, interpolator, labelInterpolator, strongWatershedInterpolator, weakWatershedInterpolator);
 
   //If there's a global refinement point, apply the specific cost effect of it on the relevant column (cost +1000 to all nodes on the column but closest node to point)
-  if (globalRefinementFiducials->GetNumberOfFiducials()!=0)
+  if (globalRefinementFiducials->GetNumberOfControlPoints()!=0)
   {
     // adjust cost function for column closest to refinement point
-    PointType refinementPoint = convert2ITK( globalRefinementFiducials->GetNthFiducialXYZ(globalRefinementFiducials->GetNumberOfFiducials()-1) );
+    PointType refinementPoint = convert2ITK( globalRefinementFiducials->GetNthControlPointPosition(globalRefinementFiducials->GetNumberOfControlPoints()-1) );
     int vertexId = GetClosestVertex(node, refinementPoint);
     int columnId = GetClosestColumnOnVertex(node, refinementPoint, vertexId);
     std::vector<float>& costs = graph->GetSurface()->GetColumnCosts(vertexId)->CastToSTLContainer();
@@ -683,11 +682,11 @@ vtkSlicerPETTumorSegmentationLogic::SampleColumnPoints(int vertexId, vtkMRMLPETT
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::UpdateGraphCostsLocally(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, bool renewOldPoints)
 {
-  vtkMRMLFiducialListNode* localRefinementFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetLocalRefinementIndicatorListReference()) );
+  vtkMRMLMarkupsFiducialNode* localRefinementFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetLocalRefinementIndicatorListReference()) );
   OSFGraphType::Pointer graph = node->GetOSFGraph();
-  if (localRefinementFiducials->GetNumberOfFiducials()==0 || graph.IsNull()) // nothing to do
+  if (localRefinementFiducials->GetNumberOfControlPoints()==0 || graph.IsNull()) // nothing to do
     return;
-//  vtkMRMLFiducialListNode* globalRefinementFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
+//  vtkMRMLMarkupsFiducialNode* globalRefinementFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
 //TODO: fill in so depth0ModifiedOverall also tracks any global refinement point and prevents modification thereof
 
   //prevent modification of depth=0 modified columns; IE if a column has a refinement node on it, it can't be modified any further.
@@ -697,17 +696,16 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateGraphCostsLocally(vtkMRMLPETTumor
   depth0ModifiedSequence.resize(node->GetOSFGraph()->GetSurface()->GetNumberOfVertices(), false);
 
   //Find the closest vertex id for each of the existing nodes and mark it as modified at depth 0
-  for (int i=0; i<localRefinementFiducials->GetNumberOfFiducials(); ++i)
+  for (int i=0; i<localRefinementFiducials->GetNumberOfControlPoints(); ++i)
   {
-    PointType refinementPoint = convert2ITK( localRefinementFiducials->GetNthFiducialXYZ(i) );
+    PointType refinementPoint = convert2ITK( localRefinementFiducials->GetNthControlPointPosition(i) );
     int vertexId = GetClosestVertex(node, refinementPoint);
     depth0ModifiedOverall[vertexId] = true;
   }
 
-
-  for (int i=(renewOldPoints == true)? 0 : localRefinementFiducials->GetNumberOfFiducials()-1; i<localRefinementFiducials->GetNumberOfFiducials(); ++i)
+  for (int i=(renewOldPoints == true)? 0 : localRefinementFiducials->GetNumberOfControlPoints()-1; i<localRefinementFiducials->GetNumberOfControlPoints(); ++i)
   {
-    PointType refinementPoint = convert2ITK( localRefinementFiducials->GetNthFiducialXYZ(i) );
+    PointType refinementPoint = convert2ITK( localRefinementFiducials->GetNthControlPointPosition(i) );
     AddLocalRefinementCosts(node, petVolume, refinementPoint, depth0ModifiedOverall, depth0ModifiedSequence);
     int vertexId = GetClosestVertex(node, refinementPoint);
     depth0ModifiedSequence[vertexId] = true;
@@ -882,15 +880,13 @@ int vtkSlicerPETTumorSegmentationLogic::GetBestTemplateMatch(std::vector<float> 
 bool vtkSlicerPETTumorSegmentationLogic::CalculateCenterPoint(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume, LabelImageType::Pointer labelVolume)
 {
   // get centerpoint
-  vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>(node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
-  if (centerFiducials->GetNumberOfFiducials()==0)
+  vtkMRMLMarkupsFiducialNode* centerFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
+  if (centerFiducials->GetNumberOfControlPoints()==0)
     return false;
-
 
   // check that point is within region of pet and label volumes, and not right at the edges, due to problems that causes.
   ScalarImageType::RegionType petRegion = petVolume->GetLargestPossibleRegion();
   LabelImageType::RegionType labelRegion = labelVolume->GetLargestPossibleRegion();
-
 
   //Make sure the initial point given by each is within the bounds of each.
 
@@ -908,7 +904,7 @@ bool vtkSlicerPETTumorSegmentationLogic::CalculateCenterPoint(vtkMRMLPETTumorSeg
   labelHighestIndex[2] += labelRegion.GetSize()[2]-1;
 
   //Get the initial point as ITK.
-  PointType initialPoint = convert2ITK( centerFiducials->GetNthFiducialXYZ(centerFiducials->GetNumberOfFiducials()-1) );
+  PointType initialPoint = convert2ITK( centerFiducials->GetNthControlPointPosition(centerFiducials->GetNumberOfControlPoints()-1) );
   node->SetCenterpoint(initialPoint);
 
   LabelImageType::IndexType centerIndex;
@@ -1457,15 +1453,15 @@ void vtkSlicerPETTumorSegmentationLogic::GetMedianUptakeForShell(int shellId, vt
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::CalculateThresholdPointLocationBased(vtkMRMLPETTumorSegmentationParametersNode* node, ScalarImageType::Pointer petVolume)
 {
-  vtkMRMLFiducialListNode* globalRefinementFiducials = static_cast<vtkMRMLFiducialListNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
-  if (globalRefinementFiducials->GetNumberOfFiducials()==0 || petVolume.IsNull() )
+  vtkMRMLMarkupsFiducialNode* globalRefinementFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetGlobalRefinementIndicatorListReference()) );
+  if (globalRefinementFiducials->GetNumberOfControlPoints()==0 || petVolume.IsNull() )
     return;
 
   // utilize global refinement fiducial to determine threshold
-  PointType refinementPoint = convert2ITK( globalRefinementFiducials->GetNthFiducialXYZ(globalRefinementFiducials->GetNumberOfFiducials()-1) );
+  PointType refinementPoint = convert2ITK( globalRefinementFiducials->GetNthControlPointPosition(globalRefinementFiducials->GetNumberOfControlPoints()-1) );
+  
   IndexType index;
   petVolume->TransformPhysicalPointToIndex(refinementPoint, index);
-
 
   // check that point is within region of pet and label volumes, and not right at the edges, due to problems that causes.
   ScalarImageType::RegionType petRegion = petVolume->GetLargestPossibleRegion();
@@ -1734,7 +1730,7 @@ vtkSmartPointer<vtkImageData> vtkSlicerPETTumorSegmentationLogic::convert2VTK(ty
 //---------------------------------------------------------------------------
 // TODO: move into separate conversion utils file
 vtkSlicerPETTumorSegmentationLogic::PointType
-vtkSlicerPETTumorSegmentationLogic::convert2ITK(const float* coordinate)
+vtkSlicerPETTumorSegmentationLogic::convert2ITK(const double* coordinate)
 {
   PointType p;
   p[0] = -coordinate[0];
@@ -1829,15 +1825,15 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateFingerPrint(vtkMRMLPETTumorSegmen
     centerFingerPrint.clear();
     volumeFingerPrint = volumeFingerPrint_node;
   }
-  vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>(node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
-  if (centerFiducials->GetNumberOfFiducials()==0) //if no center, clear everything
+  vtkMRMLMarkupsFiducialNode* centerFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
+  if (centerFiducials->GetNumberOfControlPoints()==0) //if no center, clear everything
   {
     StrongWatershedVolume_saved = nullptr;
     WeakWatershedVolume_saved = nullptr;
     centerFingerPrint.clear();
     return;
   }
-  PointType centerFingerPrint_node = convert2ITK( centerFiducials->GetNthFiducialXYZ(centerFiducials->GetNumberOfFiducials()-1) );
+  PointType centerFingerPrint_node = convert2ITK( centerFiducials->GetNthControlPointPosition(centerFiducials->GetNumberOfControlPoints()-1) );
   if (centerFingerPrint.size() == 0 || centerFingerPrint_node[0] != centerFingerPrint[0] || centerFingerPrint_node[1] != centerFingerPrint[1] || centerFingerPrint_node[2] != centerFingerPrint[2]) //set the center point if it doesn't already match
   {
     StrongWatershedVolume_saved = nullptr;
@@ -1859,16 +1855,15 @@ bool vtkSlicerPETTumorSegmentationLogic::CheckFingerPrint(vtkMRMLPETTumorSegment
   {
     if (centerFingerPrint.size() == 0)  //no center means no match
       return false;
-    vtkMRMLFiducialListNode* centerFiducials = static_cast<vtkMRMLFiducialListNode*>(node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
-    if (centerFiducials->GetNumberOfFiducials() == 0)  //no center means no match
+    vtkMRMLMarkupsFiducialNode* centerFiducials = static_cast<vtkMRMLMarkupsFiducialNode*>( node->GetScene()->GetNodeByID( node->GetCenterPointIndicatorListReference() ));
+    if (centerFiducials->GetNumberOfControlPoints() == 0)  //no center means no match
       return false;
-    PointType centerFingerPrint_node = convert2ITK( centerFiducials->GetNthFiducialXYZ(centerFiducials->GetNumberOfFiducials()-1) );
+    PointType centerFingerPrint_node = convert2ITK( centerFiducials->GetNthControlPointPosition(centerFiducials->GetNumberOfControlPoints()-1) );
     return (centerFingerPrint_node[0] == centerFingerPrint[0] && centerFingerPrint_node[1] == centerFingerPrint[1] && centerFingerPrint_node[2] == centerFingerPrint[2]);
   }
   else
   { return false; }
 }
-
 
 //---------------------------------------------------------------------------
 vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSegmentationLogic::GetPETVolume(vtkMRMLPETTumorSegmentationParametersNode* node)
