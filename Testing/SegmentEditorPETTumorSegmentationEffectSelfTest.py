@@ -193,14 +193,24 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       editor.undo()
       self.assertEqual(self.getSignature(seg),3700505133)
       effect.self().onApplyMouseClick([40.1,234.2, 934.7])
+      self.assertEqual(self.getSignature(seg),3257504375)
 
-      # go back to initial segmentation before refinement and use splitting option
+      # check that editor undo/redo history works and go back to initial segmentation before refinement
+      self.delayDisplay('Testing segment editor undo/redo history')
+      editor.undo()
+      self.assertEqual(self.getSignature(seg),3700505133)
+      editor.undo()
+      self.assertEqual(self.getSignature(seg),2890720391)
+      editor.redo()
+      self.assertEqual(self.getSignature(seg),3700505133)
+      editor.undo()
+      self.assertEqual(self.getSignature(seg),2890720391)
+
+      #use splitting option
       self.delayDisplay('Applying splitting option')
-      editor.undo()
-      editor.undo()
       effect.self().splittingCheckBox.checked = True
       effect.self().onApplyParameters()
-      self.assertEqual(self.getSignature(seg),4231292517)
+      self.assertEqual(self.getSignature(seg),4476495726)
 
       # add second segment
       self.delayDisplay('Adding second segment')
@@ -212,28 +222,28 @@ class SegmentEditorPETTumorSegmentationEffectSelfTestTest(ScriptedLoadableModule
       self.delayDisplay('Applying one-click segmentation')
       effect.self().onApplyMouseClick([41.3,229.1,-952.5])
       effect.self().onApplyParameters()
-      self.assertEqual(self.getSignature(seg),4226190476)
+      self.assertEqual(self.getSignature(seg),5717391304)
 
-      # assist centering
-      self.delayDisplay('Applying assist centering option')
+      # disable assist centering
+      self.delayDisplay('Applying disabled assist centering option')
       effect.self().assistCenteringCheckBox.checked = False
       effect.self().onApplyParameters()
-      self.assertEqual(self.getSignature(seg),4401777778)
+      self.assertEqual(self.getSignature(seg),5802341598)
 
       # sealing centering
       self.delayDisplay('Applying sealing option')
       effect.self().sealingCheckBox.checked = True
       effect.self().onApplyParameters()
-      self.assertEqual(self.getSignature(seg),4451555556)
+      self.assertEqual(self.getSignature(seg),5864325069)
 
       # overwriting
       self.delayDisplay('Applying overwriting option')
       effect.self().allowOverwritingCheckBox.checked = True
       effect.self().onApplyParameters()
-      self.assertEqual(self.getSignature(seg),5756378601)
+      self.assertEqual(self.getSignature(seg),7592592593)
 
       editor.undo()
-      self.assertEqual(self.getSignature(seg),4451555556)
+      self.assertEqual(self.getSignature(seg),5864325069)
 
       self.delayDisplay('Test passed!')
 
