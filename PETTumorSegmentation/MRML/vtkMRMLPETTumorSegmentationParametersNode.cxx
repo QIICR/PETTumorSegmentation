@@ -24,28 +24,7 @@
 vtkMRMLNodeNewMacro(vtkMRMLPETTumorSegmentationParametersNode);
 
 //----------------------------------------------------------------------------
-vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParametersNode()
-{
-  this->Label = 1;
-  this->PaintOver = false;
-  this->GlobalRefinementOn = true;
-  this->LocalRefinementOn = false;
-  this->PETVolumeReference = nullptr;
-  this->CenterPointIndicatorListReference = nullptr;
-  this->GlobalRefinementIndicatorListReference = nullptr;
-  this->LocalRefinementIndicatorListReference = nullptr;
-  this->SegmentationVolumeReference = nullptr;
-  this->SegmentationReference = nullptr;
-  this->SelectedSegmentID = nullptr;
-  this->AssistCentering = true;
-  this->Splitting = false;
-  this->Sealing = false;
-  this->DenoiseThreshold = false;
-  this->LinearCost = false;
-  this->NecroticRegion = false;
-  this->OSFGraph = nullptr;
-  this->InitialLabelMap = nullptr;
-}
+vtkMRMLPETTumorSegmentationParametersNode::vtkMRMLPETTumorSegmentationParametersNode() = default;
 
 //----------------------------------------------------------------------------
 vtkMRMLPETTumorSegmentationParametersNode::~vtkMRMLPETTumorSegmentationParametersNode()
@@ -77,34 +56,38 @@ void vtkMRMLPETTumorSegmentationParametersNode::Copy(vtkMRMLNode *anode)
   vtkMRMLPETTumorSegmentationParametersNode *node = vtkMRMLPETTumorSegmentationParametersNode::SafeDownCast(anode);
   if (node)
   {
+    vtkMRMLCopyBeginMacro(anode);
+
     //options
-    this->SetLabel(node->GetLabel());
-    this->SetPaintOver(node->GetPaintOver());
-    this->SetGlobalRefinementOn(node->GetGlobalRefinementOn());
-    this->SetLocalRefinementOn(node->GetLocalRefinementOn());
-    this->SetPETVolumeReference(node->GetPETVolumeReference());
-    this->SetCenterPointIndicatorListReference(node->GetCenterPointIndicatorListReference());
-    this->SetGlobalRefinementIndicatorListReference(node->GetGlobalRefinementIndicatorListReference());
-    this->SetLocalRefinementIndicatorListReference(node->GetLocalRefinementIndicatorListReference());
-    this->SetSegmentationVolumeReference(node->GetSegmentationVolumeReference());
-    this->SetSegmentationReference(node->GetSegmentationReference());
-    this->SetSelectedSegmentID(node->GetSelectedSegmentID());
-    this->SetAssistCentering(node->GetAssistCentering());
-    this->SetSplitting(node->GetSplitting());
-    this->SetSealing(node->GetSealing());
-    this->SetDenoiseThreshold(node->GetDenoiseThreshold());
-    this->SetLinearCost(node->GetLinearCost());
-    this->SetNecroticRegion(node->GetNecroticRegion());
+    vtkMRMLCopyIntMacro(Label);
+    vtkMRMLCopyStringMacro(PETVolumeReference);
+    vtkMRMLCopyStringMacro(CenterPointIndicatorListReference);
+    vtkMRMLCopyStringMacro(GlobalRefinementIndicatorListReference);
+    vtkMRMLCopyStringMacro(LocalRefinementIndicatorListReference);
+    vtkMRMLCopyStringMacro(SegmentationVolumeReference);
+    vtkMRMLCopyStringMacro(SegmentationReference);
+    vtkMRMLCopyStringMacro(SelectedSegmentID);
+    vtkMRMLCopyBooleanMacro(PaintOver);
+    vtkMRMLCopyBooleanMacro(GlobalRefinementOn);
+    vtkMRMLCopyBooleanMacro(LocalRefinementOn);
+    vtkMRMLCopyBooleanMacro(AssistCentering);
+    vtkMRMLCopyBooleanMacro(Splitting);
+    vtkMRMLCopyBooleanMacro(Sealing);
+    vtkMRMLCopyBooleanMacro(DenoiseThreshold);
+    vtkMRMLCopyBooleanMacro(LinearCost);
+    vtkMRMLCopyBooleanMacro(NecroticRegion);
 
     //intermediate results
     this->SetCenterpoint(node->GetCenterpoint());
     this->SetOSFGraph(node->GetOSFGraph());
     this->SetInitialLabelMap(node->GetInitialLabelMap());
     this->SetHistogram(node->GetHistogram());
-    this->SetHistogramRange(node->GetHistogramRange());
-    this->SetHistogramMedian(node->GetHistogramMedian());
-    this->SetCenterpointUptake(node->GetCenterpointUptake());
-    this->SetThreshold(node->GetThreshold());
+    vtkMRMLCopyFloatMacro(HistogramRange);
+    vtkMRMLCopyFloatMacro(HistogramMedian);
+    vtkMRMLCopyFloatMacro(CenterpointUptake);
+    vtkMRMLCopyFloatMacro(Threshold);
+
+    vtkMRMLCopyEndMacro();
   }
   this->EndModify(disabledModify);
 
@@ -113,8 +96,27 @@ void vtkMRMLPETTumorSegmentationParametersNode::Copy(vtkMRMLNode *anode)
 //----------------------------------------------------------------------------
 void vtkMRMLPETTumorSegmentationParametersNode::PrintSelf(ostream& os, vtkIndent indent)
 {
-  vtkMRMLNode::PrintSelf(os,indent);
-  //TODO: implement
+  this->Superclass::PrintSelf(os, indent);
+
+  vtkMRMLPrintBeginMacro(os, indent);
+  vtkMRMLPrintIntMacro(Label);
+  vtkMRMLPrintStringMacro(PETVolumeReference);
+  vtkMRMLPrintStringMacro(CenterPointIndicatorListReference);
+  vtkMRMLPrintStringMacro(GlobalRefinementIndicatorListReference);
+  vtkMRMLPrintStringMacro(LocalRefinementIndicatorListReference);
+  vtkMRMLPrintStringMacro(SegmentationVolumeReference);
+  vtkMRMLPrintStringMacro(SegmentationReference);
+  vtkMRMLPrintStringMacro(SelectedSegmentID);
+  vtkMRMLPrintBooleanMacro(PaintOver);
+  vtkMRMLPrintBooleanMacro(GlobalRefinementOn);
+  vtkMRMLPrintBooleanMacro(LocalRefinementOn);
+  vtkMRMLPrintBooleanMacro(AssistCentering);
+  vtkMRMLPrintBooleanMacro(Splitting);
+  vtkMRMLPrintBooleanMacro(Sealing);
+  vtkMRMLPrintBooleanMacro(DenoiseThreshold);
+  vtkMRMLPrintBooleanMacro(LinearCost);
+  vtkMRMLPrintBooleanMacro(NecroticRegion);
+  vtkMRMLPrintEndMacro();
 }
 
 //----------------------------------------------------------------------------
@@ -122,48 +124,25 @@ void vtkMRMLPETTumorSegmentationParametersNode::WriteXML(ostream& of, int nInden
 {
   Superclass::WriteXML(of, nIndent);
 
-  vtkIndent indent(nIndent);
-
-  of << indent << " label=\"" << this->Label << "\"";
-
-  if (this->PETVolumeReference != nullptr)
-    {
-    of << indent << " PETVolumeReference=\"" << this->PETVolumeReference << "\"";
-    }
-  if (this->CenterPointIndicatorListReference != nullptr)
-    {
-    of << indent << " centerPointIndicatorListReference=\"" << this->CenterPointIndicatorListReference << "\"";
-    }
-  if (this->GlobalRefinementIndicatorListReference != nullptr)
-    {
-    of << indent << " globalRefinementIndicatorListReference=\"" << this->GlobalRefinementIndicatorListReference << "\"";
-    }
-  if (this->LocalRefinementIndicatorListReference != nullptr)
-    {
-    of << indent << " localRefinementIndicatorListReference=\"" << this->LocalRefinementIndicatorListReference << "\"";
-    }
-  if (this->SegmentationVolumeReference != nullptr)
-    {
-    of << indent << " segmentationVolumeReference=\"" << this->SegmentationVolumeReference << "\"";
-    }
-  if (this->SegmentationReference != nullptr)
-    {
-    of << indent << " SegmentationReference=\"" << this->SegmentationReference << "\"";
-    }
-  if (this->SelectedSegmentID != nullptr)
-    {
-    of << indent << " SelectedSegmentID=\"" << this->SelectedSegmentID << "\"";
-    }
-
-  of << indent << " paintOver=\"" << this->PaintOver << "\"";
-  of << indent << " globalRefinementOn=\"" << this->GlobalRefinementOn << "\"";
-  of << indent << " localRefinementOn=\"" << this->LocalRefinementOn << "\"";
-  of << indent << " assistCentering=\"" << this->AssistCentering << "\"";
-  of << indent << " splitting=\"" << this->Splitting << "\"";
-  of << indent << " sealing=\"" << this->Sealing << "\"";
-  of << indent << " denoiseThreshold=\"" << this->DenoiseThreshold << "\"";
-  of << indent << " linearCost=\"" << this->LinearCost << "\"";
-  of << indent << " necroticRegion=\"" << this->NecroticRegion << "\"";
+  vtkMRMLWriteXMLBeginMacro(of);
+  vtkMRMLWriteXMLIntMacro(label, Label);
+  vtkMRMLWriteXMLStringMacro(PETVolumeReference, PETVolumeReference);
+  vtkMRMLWriteXMLStringMacro(centerPointIndicatorListReference, CenterPointIndicatorListReference);
+  vtkMRMLWriteXMLStringMacro(globalRefinementIndicatorListReference, GlobalRefinementIndicatorListReference);
+  vtkMRMLWriteXMLStringMacro(localRefinementIndicatorListReference, LocalRefinementIndicatorListReference);
+  vtkMRMLWriteXMLStringMacro(segmentationVolumeReference, SegmentationVolumeReference);
+  vtkMRMLWriteXMLStringMacro(SegmentationReference, SegmentationReference);
+  vtkMRMLWriteXMLStringMacro(SelectedSegmentID, SelectedSegmentID);
+  vtkMRMLWriteXMLBooleanMacro(paintOver, PaintOver);
+  vtkMRMLWriteXMLBooleanMacro(globalRefinementOn, GlobalRefinementOn);
+  vtkMRMLWriteXMLBooleanMacro(localRefinementOn, LocalRefinementOn);
+  vtkMRMLWriteXMLBooleanMacro(assistCentering, AssistCentering);
+  vtkMRMLWriteXMLBooleanMacro(splitting, Splitting);
+  vtkMRMLWriteXMLBooleanMacro(sealing, Sealing);
+  vtkMRMLWriteXMLBooleanMacro(denoiseThreshold, DenoiseThreshold);
+  vtkMRMLWriteXMLBooleanMacro(linearCost, LinearCost);
+  vtkMRMLWriteXMLBooleanMacro(necroticRegion, NecroticRegion);
+  vtkMRMLWriteXMLEndMacro();
 }
 
 //----------------------------------------------------------------------------
@@ -173,90 +152,25 @@ void vtkMRMLPETTumorSegmentationParametersNode::ReadXMLAttributes(const char** a
 
   Superclass::ReadXMLAttributes(atts);
 
-  const char* attName;
-  const char* attValue;
-  while (*atts != nullptr)
-    {
-    attName = *(atts++);
-    attValue = *(atts++);
-
-    if (!strcmp(attName, "label"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->Label;
-      }
-    else if (!strcmp(attName, "PETVolumeReference"))
-      {
-      this->SetPETVolumeReference(attValue);
-      }
-    else if (!strcmp(attName, "centerPointIndicatorListReference"))
-      {
-      this->SetCenterPointIndicatorListReference(attValue);
-      }
-    else if (!strcmp(attName, "globalRefinementIndicatorListReference"))
-      {
-      this->SetGlobalRefinementIndicatorListReference(attValue);
-      }
-    else if (!strcmp(attName, "localRefinementIndicatorListReference"))
-      {
-      this->SetLocalRefinementIndicatorListReference(attValue);
-      }
-    else if (!strcmp(attName, "paintOver"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->PaintOver;
-      }
-    else if (!strcmp(attName, "assistCentering"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->AssistCentering;
-      }
-    else if (!strcmp(attName, "globalRefinementOn"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->GlobalRefinementOn;
-      }
-    else if (!strcmp(attName, "localRefinementOn"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->LocalRefinementOn;
-      }
-    else if (!strcmp(attName, "splitting"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->Splitting;
-      }
-    else if (!strcmp(attName, "sealing"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->Sealing;
-      }
-    else if (!strcmp(attName, "denoiseThreshold"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->DenoiseThreshold;
-      }
-    else if (!strcmp(attName, "linearCost"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->LinearCost;
-      }
-    else if (!strcmp(attName, "necroticRegion"))
-      {
-      std::stringstream ss;
-      ss << attValue;
-      ss >> this->NecroticRegion;
-      }
-    }
+  vtkMRMLReadXMLBeginMacro(atts);
+  vtkMRMLReadXMLIntMacro(label, Label);
+  vtkMRMLReadXMLStringMacro(PETVolumeReference, PETVolumeReference);
+  vtkMRMLReadXMLStringMacro(centerPointIndicatorListReference, CenterPointIndicatorListReference);
+  vtkMRMLReadXMLStringMacro(globalRefinementIndicatorListReference, GlobalRefinementIndicatorListReference);
+  vtkMRMLReadXMLStringMacro(localRefinementIndicatorListReference, LocalRefinementIndicatorListReference);
+  vtkMRMLReadXMLStringMacro(segmentationVolumeReference, SegmentationVolumeReference);
+  vtkMRMLReadXMLStringMacro(SegmentationReference, SegmentationReference);
+  vtkMRMLReadXMLStringMacro(SelectedSegmentID, SelectedSegmentID);
+  vtkMRMLReadXMLBooleanMacro(paintOver, PaintOver);
+  vtkMRMLReadXMLBooleanMacro(globalRefinementOn, GlobalRefinementOn);
+  vtkMRMLReadXMLBooleanMacro(localRefinementOn, LocalRefinementOn);
+  vtkMRMLReadXMLBooleanMacro(assistCentering, AssistCentering);
+  vtkMRMLReadXMLBooleanMacro(splitting, Splitting);
+  vtkMRMLReadXMLBooleanMacro(sealing, Sealing);
+  vtkMRMLReadXMLBooleanMacro(denoiseThreshold, DenoiseThreshold);
+  vtkMRMLReadXMLBooleanMacro(linearCost, LinearCost);
+  vtkMRMLReadXMLBooleanMacro(necroticRegion, NecroticRegion);
+  vtkMRMLReadXMLEndMacro();
 
   this->EndModify(disabledModify);
 }

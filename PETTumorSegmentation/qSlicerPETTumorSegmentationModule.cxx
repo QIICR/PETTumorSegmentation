@@ -43,9 +43,7 @@ public:
 // qSlicerPETTumorSegmentationModulePrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerPETTumorSegmentationModulePrivate::qSlicerPETTumorSegmentationModulePrivate()
-{
-}
+qSlicerPETTumorSegmentationModulePrivate::qSlicerPETTumorSegmentationModulePrivate() = default;
 
 //-----------------------------------------------------------------------------
 // qSlicerPETTumorSegmentationModule methods
@@ -58,9 +56,7 @@ qSlicerPETTumorSegmentationModule::qSlicerPETTumorSegmentationModule(QObject* _p
 }
 
 //-----------------------------------------------------------------------------
-qSlicerPETTumorSegmentationModule::~qSlicerPETTumorSegmentationModule()
-{
-}
+qSlicerPETTumorSegmentationModule::~qSlicerPETTumorSegmentationModule() = default;
 
 //-----------------------------------------------------------------------------
 QString qSlicerPETTumorSegmentationModule::helpText() const

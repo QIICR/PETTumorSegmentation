@@ -186,70 +186,71 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
 
   vtkMRMLPETTumorSegmentationParametersNode();
   ~vtkMRMLPETTumorSegmentationParametersNode() override;
+  
   vtkMRMLPETTumorSegmentationParametersNode(const vtkMRMLPETTumorSegmentationParametersNode&);
   void operator=(const vtkMRMLPETTumorSegmentationParametersNode&);
 
   // segmentation parameters
   /** Current label being applied. */
-  short Label;
+  short Label{ 1 };
 
   /** Whether or not the new label should overwrite existing labels. */
-  bool PaintOver;
+  bool PaintOver{ false };
 
   /** Whether or not global refinement is currently set to be applied when refining. */
-  bool GlobalRefinementOn;
+  bool GlobalRefinementOn{ true };
 
   /** Whether or not local refinement is currently set to be applied when refining. */
-  bool LocalRefinementOn;
+  bool LocalRefinementOn{ false };
 
   /** MRML node ID string for the PET volume node.*/
-  char *PETVolumeReference;
+  char *PETVolumeReference{ nullptr };
 
   /** MRML node ID string for the center point fiducial list node.*/
-  char *CenterPointIndicatorListReference;
+  char *CenterPointIndicatorListReference{ nullptr };
 
   /** MRML node ID string for the global refinement point fiducial list node.*/
-  char *GlobalRefinementIndicatorListReference;
+  char *GlobalRefinementIndicatorListReference{ nullptr };
 
   /** MRML node ID string for the local refinement point fiducial list node.*/
-  char *LocalRefinementIndicatorListReference;
+  char *LocalRefinementIndicatorListReference{ nullptr };
 
   /** MRML node ID string for the segmentation label volume node.*/
-  char *SegmentationVolumeReference;
+  char *SegmentationVolumeReference{ nullptr };
 
   /** MRML node ID string for the segmentation node.*/
-  char *SegmentationReference;
+  char *SegmentationReference{ nullptr };
 
   /** ID string for the segment.*/
-  char* SelectedSegmentID;
+  char* SelectedSegmentID{ nullptr };
 
   /** Whether or not the center point will be adjusted for the segmentation.*/
-  bool AssistCentering;
+  bool AssistCentering{ true };
 
   /** Whether or not to apply modified splitting costs and penalties for the segmentation.*/
-  bool Splitting;
+  bool Splitting{ false };
 
   /** Whether or not to seal the segmentation after voxelization.*/
-  bool Sealing;
+  bool Sealing{ false };
 
   /** Whether or not to calculate the threshold for the segmentation based on a median-filtered image.*/
-  bool DenoiseThreshold;
+  bool DenoiseThreshold{ false };
 
   /** Whether or not to set the low-uptake end of the cost function linearly.*/
-  bool LinearCost;
+  bool LinearCost{ false };
 
   /** Whether or not to apply the segmentation in necrotic mode.*/
-  bool NecroticRegion;
+  bool NecroticRegion{ false };
 
   // intermediate processing results of each segmentation refinement step that will stored for undo-redo operations
   /** The center point after any recentering.*/
   PointType Centerpoint;
 
   /** The intial label map before starting a segmentation of the current lesion. */
-  LabelImageType::Pointer InitialLabelMap;
+  LabelImageType::Pointer InitialLabelMap{ nullptr };
 
   /** The graph structure with all costs and edges.*/
-  GraphType::Pointer OSFGraph;
+  GraphType::Pointer OSFGraph{ nullptr };
 
   /** The histogram of the region around the center.*/
   HistogramType Histogram;
