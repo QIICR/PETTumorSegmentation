@@ -43,6 +43,8 @@ public:
   typedef OSFGraphSource<TOutputOSFGraph> Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphToOSFGraphFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraphToOSFGraphFilter, OSFGraphSource );
@@ -77,8 +79,6 @@ protected:
   // todo: add more copy functions as required
   
 private:
-  OSFGraphToOSFGraphFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class OSFGraphToOSFGraphFilter
 

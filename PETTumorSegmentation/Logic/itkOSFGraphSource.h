@@ -42,6 +42,8 @@ public:
   typedef ProcessObject Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphSource);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraphSource, ProcessObject );
@@ -76,8 +78,6 @@ protected:
   void GenerateInputRequestedRegion() override;
     
 private:
-  OSFGraphSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class OSFGraphSource
 

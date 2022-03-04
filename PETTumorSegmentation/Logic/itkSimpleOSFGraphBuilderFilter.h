@@ -43,6 +43,8 @@ public:
   typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(SimpleOSFGraphBuilderFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( SimpleOSFGraphBuilderFilter, OSFGraphToOSFGraphFilter );
@@ -84,9 +86,6 @@ protected:
   double m_SoftSmoothnessPenalty;
   
 private:
-  SimpleOSFGraphBuilderFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
 }; // end class SimpleOSFGraphBuilderFilter
 
 } // end namespace itk

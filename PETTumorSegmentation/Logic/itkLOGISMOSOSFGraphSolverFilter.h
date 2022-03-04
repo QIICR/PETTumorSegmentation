@@ -42,6 +42,8 @@ public:
   typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(LOGISMOSOSFGraphSolverFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( LOGISMOSOSFGraphSolverFilter, OSFGraphToOSFGraphFilter );
@@ -69,8 +71,6 @@ protected:
   virtual void UpdateResult();
   
 private:
-  LOGISMOSOSFGraphSolverFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class LOGISMOSOSFGraphSolverFilter
 

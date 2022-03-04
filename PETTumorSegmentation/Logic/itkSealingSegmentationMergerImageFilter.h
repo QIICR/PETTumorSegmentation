@@ -53,6 +53,8 @@ public:
   typedef SmartPointer<Self>                            Pointer;
   typedef SmartPointer<const Self>                      ConstPointer;
 
+  ITK_DISALLOW_COPY_AND_ASSIGN(SealingSegmentationMergerImageFilter);
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -122,8 +124,6 @@ protected:
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
-  SealingSegmentationMergerImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   UptakeImagePixelType m_Threshold;
   InputImagePixelType m_Label;
   bool m_Sealing;

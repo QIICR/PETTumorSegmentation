@@ -41,6 +41,8 @@ public:
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
   
+  ITK_DISALLOW_COPY_AND_ASSIGN(CloneOSFGraphFilter);
+
   itkNewMacro( Self );
   itkTypeMacro( CloneOSFGraphFilter, OSFGraphToOSFGraphFilter );
   
@@ -53,8 +55,6 @@ protected:
   void GenerateData() override;
   
 private:
-  CloneOSFGraphFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class CloneOSFGraphFilter
 

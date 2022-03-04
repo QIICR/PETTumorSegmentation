@@ -40,6 +40,8 @@ public:
   typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(CenterNormalColumnBuilderFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( CenterNormalColumnBuilderFilter, OSFGraphToOSFGraphFilter );
@@ -85,8 +87,6 @@ protected:
   virtual void BuildVertexToCellLookupTable();
   
 private:
-  CenterNormalColumnBuilderFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class CenterNormalColumnBuilderFilter
 

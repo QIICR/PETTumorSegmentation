@@ -40,6 +40,8 @@ public:
   typedef OSFGraphSource<TOutputOSFGraph> Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(MeshToOSFGraphFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( MeshToOSFGraphFilter, OSFGraphSource );
@@ -73,8 +75,6 @@ protected:
   virtual void CopyInputMeshToOutputOSFSurfaceCells(InputMeshConstPointer mesh, typename OutputOSFGraphType::OSFSurface::Pointer osfSurface);
     
 private:
-  MeshToOSFGraphFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class MeshToOSFGraphFilter
 

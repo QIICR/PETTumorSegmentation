@@ -41,6 +41,8 @@ public:
   typedef DataObject Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraph);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraph, DataObject );
@@ -189,8 +191,6 @@ protected:
   RegionType m_RequestedRegion;
   
 private:
-  OSFGraph(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
   
 }; // end class OSFGraph
 

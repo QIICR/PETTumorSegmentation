@@ -43,6 +43,8 @@ public:
   typedef Object Superclass;
   typedef SmartPointer< Self > Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(OSFSurface);
   
   itkNewMacro(Self);
   itkTypeMacro(OSFSurface, Object);
@@ -138,9 +140,6 @@ protected:
   VertexIdentifierListContainer::Pointer m_VertexNeighborLookupTable;
   
 private:
-  OSFSurface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
   void AddVertexNeighbors(VertexIdentifier vertex1, VertexIdentifier vertex2);
   
 }; // end class OSFSurface

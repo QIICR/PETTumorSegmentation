@@ -41,6 +41,8 @@ public:
   typedef MeshSource<TOutputMesh>  Superclass;
   typedef SmartPointer<Self>       Pointer;
   typedef SmartPointer<const Self> ConstPointer;
+
+  ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphToMeshFilter);
   
   itkNewMacro( Self );
   
@@ -95,8 +97,6 @@ protected:
   SurfaceType m_SurfaceType;
   
 private:
-  OSFGraphToMeshFilter(const OSFGraphToMeshFilter&); //purposely not implemented
-  void operator=(const OSFGraphToMeshFilter&); //purposely not implemented
 };
 
 } // end namespace itk
