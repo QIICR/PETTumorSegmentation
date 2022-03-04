@@ -62,10 +62,10 @@ public:
 protected:
   /** Constructor for use by New() method. */
   SimpleOSFGraphBuilderFilter();
-  ~SimpleOSFGraphBuilderFilter() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~SimpleOSFGraphBuilderFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  virtual void GenerateData();
+  void GenerateData() override;
   
   typedef typename OutputOSFGraphType::VertexIdentifier SurfaceIdentifier;
   typedef typename OutputOSFGraphType::OSFSurface OSFSurface;

@@ -62,10 +62,10 @@ public:
 protected:
   /** Constructor for use by New() method. */
   CenterNormalColumnBuilderFilter();
-  ~CenterNormalColumnBuilderFilter() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~CenterNormalColumnBuilderFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  virtual void GenerateData();
+  void GenerateData() override;
   
   float m_StepLength;
   unsigned int m_NumberOfSteps;

@@ -84,10 +84,10 @@ public:
 
 protected:
   OSFGraphToMeshFilter();
-  ~OSFGraphToMeshFilter();
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~OSFGraphToMeshFilter() override = default;
+  virtual void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  void GenerateData();
+  void GenerateData() override;
   void GenerateOutputInformation(void);
   virtual void CopyInputOSFSurfaceToOutputMeshPoints(typename InputOSFGraphType::OSFSurface::ConstPointer osfSurface, OutputMeshPointer mesh);
   virtual void CopyInputOSFSurfaceToOutputMeshCells(typename InputOSFGraphType::OSFSurface::ConstPointer osfSurface, OutputMeshPointer mesh);

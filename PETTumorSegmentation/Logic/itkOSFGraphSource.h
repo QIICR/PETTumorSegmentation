@@ -63,17 +63,17 @@ public:
   virtual void GraftOutput(DataObject *output);
   virtual void GraftNthOutput(unsigned int idx, DataObject *output);
   using Superclass::MakeOutput;
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  ProcessObject::DataObjectPointer MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
   
   //virtual void Update();
 
 protected:
   /** Constructor for use by New() method. */
   OSFGraphSource();
-  ~OSFGraphSource() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~OSFGraphSource() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
     
 private:
   OSFGraphSource(const Self&); //purposely not implemented

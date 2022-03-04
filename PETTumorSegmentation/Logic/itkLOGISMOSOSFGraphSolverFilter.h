@@ -55,10 +55,10 @@ public:
 protected:
   /** Constructor for use by New() method. */
   LOGISMOSOSFGraphSolverFilter();
-  ~LOGISMOSOSFGraphSolverFilter();
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~LOGISMOSOSFGraphSolverFilter() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  virtual void GenerateData();
+  void GenerateData() override;
   
   typedef typename InputOSFGraphType::GraphCosts CapacityType;
   typedef LOGISMOS::graph<CapacityType> MaxFlowGraphType;

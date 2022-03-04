@@ -70,7 +70,7 @@ public:
 
   static vtkSlicerPETTumorSegmentationLogic *New();
   vtkTypeMacro(vtkSlicerPETTumorSegmentationLogic, vtkSlicerModuleLogic);
-  void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
   
   // user callable methods for OSF based segmentation
   // note: apply has been called before the refinement steps. Otherwise, there is nothing to refine.
@@ -85,14 +85,14 @@ public:
   
 protected:
   vtkSlicerPETTumorSegmentationLogic();
-  virtual ~vtkSlicerPETTumorSegmentationLogic();
+  ~vtkSlicerPETTumorSegmentationLogic() override = default;
 
-  virtual void SetMRMLSceneInternal(vtkMRMLScene* newScene);
+  void SetMRMLSceneInternal(vtkMRMLScene* newScene) override;
   /// Register MRML Node classes to Scene. Gets called automatically when the MRMLScene is attached to this logic class.
-  virtual void RegisterNodes();
-  virtual void UpdateFromMRMLScene();
-  virtual void OnMRMLSceneNodeAdded(vtkMRMLNode* node);
-  virtual void OnMRMLSceneNodeRemoved(vtkMRMLNode* node);
+  void RegisterNodes() override;
+  void UpdateFromMRMLScene() override;
+  void OnMRMLSceneNodeAdded(vtkMRMLNode* node) override;
+  void OnMRMLSceneNodeRemoved(vtkMRMLNode* node) override;
   
   // typedef internally utilized data representation
   typedef itk::Image<short, 3> LabelImageType;

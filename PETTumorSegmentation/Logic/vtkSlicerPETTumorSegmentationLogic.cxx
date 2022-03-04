@@ -114,10 +114,10 @@ vtkSlicerPETTumorSegmentationLogic::vtkSlicerPETTumorSegmentationLogic()
   WeakWatershedVolume_saved = nullptr;
 }
 
-//----------------------------------------------------------------------------
-vtkSlicerPETTumorSegmentationLogic::~vtkSlicerPETTumorSegmentationLogic()
-{
-}
+// //----------------------------------------------------------------------------
+// vtkSlicerPETTumorSegmentationLogic::~vtkSlicerPETTumorSegmentationLogic()
+// {
+// }
 
 
 //----------------------------------------------------------------------------

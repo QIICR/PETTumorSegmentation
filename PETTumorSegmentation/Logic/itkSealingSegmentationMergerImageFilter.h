@@ -115,11 +115,11 @@ public:
 
 protected:
   SealingSegmentationMergerImageFilter();
-  virtual ~SealingSegmentationMergerImageFilter() {};
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~SealingSegmentationMergerImageFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
-  void BeforeThreadedGenerateData();
-  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
+  void BeforeThreadedGenerateData() override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   SealingSegmentationMergerImageFilter(const Self&); //purposely not implemented

@@ -47,10 +47,10 @@ public:
 protected:
   /** Constructor for use by New() method. */
   CloneOSFGraphFilter();
-  ~CloneOSFGraphFilter() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~CloneOSFGraphFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  virtual void GenerateData();
+  void GenerateData() override;
   
 private:
   CloneOSFGraphFilter(const Self&); //purposely not implemented

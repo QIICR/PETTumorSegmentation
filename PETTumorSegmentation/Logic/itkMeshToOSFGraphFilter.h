@@ -65,10 +65,10 @@ public:
 protected:
   /** Constructor for use by New() method. */
   MeshToOSFGraphFilter();
-  ~MeshToOSFGraphFilter() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~MeshToOSFGraphFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  virtual void GenerateData();
+  void GenerateData() override;
   virtual void CopyInputMeshToOutputOSFSurfacePoints(InputMeshConstPointer mesh, typename OutputOSFGraphType::OSFSurface::Pointer osfSurface);
   virtual void CopyInputMeshToOutputOSFSurfaceCells(InputMeshConstPointer mesh, typename OutputOSFGraphType::OSFSurface::Pointer osfSurface);
     

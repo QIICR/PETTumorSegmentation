@@ -65,8 +65,8 @@ public:
 protected:
   /** Constructor for use by New() method. */
   OSFGraphToOSFGraphFilter();
-  ~OSFGraphToOSFGraphFilter() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~OSFGraphToOSFGraphFilter() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
   typedef typename OutputOSFGraphType::OSFSurface OSFSurface;
   typedef typename OSFSurface::Pointer OSFSurfacePointer;

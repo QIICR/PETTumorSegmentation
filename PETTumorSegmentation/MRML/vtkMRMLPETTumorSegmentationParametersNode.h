@@ -63,31 +63,31 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   public:
   static vtkMRMLPETTumorSegmentationParametersNode *New();
   vtkTypeMacro(vtkMRMLPETTumorSegmentationParametersNode, vtkMRMLNode);
-  void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
   // Description:
   // Clear stored processing results
-  virtual void Clear();
+  void Clear();
 
   // Description:
   // Create instance
-  virtual vtkMRMLNode* CreateNodeInstance();
+  vtkMRMLNode* CreateNodeInstance() override;
 
   // Description:
   // Set node attributes from name/value pairs
-  virtual void ReadXMLAttributes( const char** atts);
+  void ReadXMLAttributes( const char** atts) override;
 
   // Description:
   // Write this node's information to a MRML file in XML format.
-  virtual void WriteXML(ostream& of, int indent);
+  void WriteXML(ostream& of, int indent) override;
 
   // Description:
   // Copy the node's attributes to this object
-  virtual void Copy(vtkMRMLNode *node);
+  void Copy(vtkMRMLNode *node) override;
 
   // Description:
   // Get unique node XML tag name (like Volume, Model)
-  virtual const char* GetNodeTagName() {return "PETTumorSegmentationParametersNode"; };
+  const char* GetNodeTagName() override {return "PETTumorSegmentationParametersNode"; };
 
   vtkGetMacro ( Label, short );
   vtkSetMacro ( Label, short );
@@ -180,12 +180,12 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   void ClearInitialLabelMap() {InitialLabelMap = nullptr;};
 
   // for debugging
-  void WriteTXT(const char* filename);
+  virtual void WriteTXT(const char* filename);
 
  protected:
 
   vtkMRMLPETTumorSegmentationParametersNode();
-  ~vtkMRMLPETTumorSegmentationParametersNode();
+  ~vtkMRMLPETTumorSegmentationParametersNode() override;
   vtkMRMLPETTumorSegmentationParametersNode(const vtkMRMLPETTumorSegmentationParametersNode&);
   void operator=(const vtkMRMLPETTumorSegmentationParametersNode&);
 

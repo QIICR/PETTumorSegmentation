@@ -41,13 +41,6 @@ OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 
 //----------------------------------------------------------------------------
 template <class TInputOSFGraph, class TOutputMesh>
-OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
-::~OSFGraphToMeshFilter()
-{
-}
-
-//----------------------------------------------------------------------------
-template <class TInputOSFGraph, class TOutputMesh>
 DataObject::Pointer
 OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 ::MakeOutput(DataObjectPointerArraySizeType)

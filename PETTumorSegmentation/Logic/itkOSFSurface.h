@@ -123,8 +123,8 @@ public:
 protected:
   /** Constructor for use by New() method. */
   OSFSurface();
-  ~OSFSurface() {};
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~OSFSurface() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
   typename VertexColumnCoordinatesContainer::Pointer m_VertexColumnCoordinatesContainer;
   typename VertexColumnCostsContainer::Pointer m_VertexColumnCostsContainer;

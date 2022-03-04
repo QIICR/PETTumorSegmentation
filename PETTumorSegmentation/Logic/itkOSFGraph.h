@@ -132,7 +132,7 @@ public:
   /** Type used to define Regions */
   typedef long RegionType;
   
-  virtual void Initialize(void);
+  void Initialize(void) override;
 
   /** Get the maximum number of regions that this data can be
    * separated into. */
@@ -145,12 +145,12 @@ public:
   //virtual void SetRequestedRegion(DataObject *data); // TODO: this causes troubles when creating python binding for c++ overloading
   
   /** Methods to manage streaming. */
-  virtual void UpdateOutputInformation();
-  virtual void SetRequestedRegionToLargestPossibleRegion();
-  virtual void CopyInformation(const DataObject *data);
-  virtual void Graft(const DataObject *data);
-  virtual bool RequestedRegionIsOutsideOfTheBufferedRegion();
-  virtual bool VerifyRequestedRegion();
+  void UpdateOutputInformation() override;
+  void SetRequestedRegionToLargestPossibleRegion() override;
+  void CopyInformation(const DataObject *data) override;
+  void Graft(const DataObject *data) override;
+  bool RequestedRegionIsOutsideOfTheBufferedRegion() override;
+  bool VerifyRequestedRegion() override;
   
   /** Set/Get the Requested region */
   //virtual void SetRequestedRegion( const RegionType & region ); // TODO: this causes troubles when creating python binding for c++ overloading
@@ -163,8 +163,8 @@ public:
 protected:
   /** Constructor for use by New() method. */
   OSFGraph();
-  ~OSFGraph() {};
-  virtual void PrintSelf(std::ostream& os, Indent indent) const;
+  ~OSFGraph() override = default;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
   typename SurfacesContainer::Pointer m_SurfacesContainer;
   typename GraphNodesContainer::Pointer m_GraphNodesContainer;
