@@ -50,8 +50,7 @@ public:
   itkTypeMacro(OSFSurface, Object);
   
   // utility typedef that helps defining cells and coordinates
-  typedef TSurfaceMeshTraits MeshTraits;
-  //typedef DefaultStaticMeshTraits<char, 3> MeshTraits;
+  using MeshTraits = TSurfaceMeshTraits;
   
   // typedefs for identifiers
   typedef unsigned long IdentifierType;
@@ -61,7 +60,7 @@ public:
 
   // typedefs for a column of an OSF surface
   typedef typename MeshTraits::CoordRepType CoordRepType;
-  itkStaticConstMacro(PointDimension, unsigned int, MeshTraits::PointDimension);
+  static constexpr unsigned int PointDimension = MeshTraits::PointDimension;
   typedef typename MeshTraits::PointType CoordinateType;
   typedef VectorContainer< ColumnPositionIdentifier, CoordinateType > ColumnCoordinatesContainer;
   typedef TCostType ColumnCostType;
