@@ -96,13 +96,13 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
   {
     // copy column point coordinates
     {
-      typedef typename InputOSFGraphType::OSFSurface::ColumnCoordinatesContainer InputColumnCoordinatesContainerType;
+      using InputColumnCoordinatesContainerType = typename InputOSFGraphType::OSFSurface::ColumnCoordinatesContainer;
       typename InputColumnCoordinatesContainerType::ConstPointer inputPoints = inputOSFSurface->GetColumnCoordinates( vertexId );
       if (inputPoints)
       {
         typename InputColumnCoordinatesContainerType::ConstIterator inputItr = inputPoints->Begin();
         typename InputColumnCoordinatesContainerType::ConstIterator inputEnd = inputPoints->End();
-        typedef typename OutputOSFGraphType::OSFSurface::ColumnCoordinatesContainer OutputColumnCoordinatesContainerType;
+        using OutputColumnCoordinatesContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCoordinatesContainer;
         typename OutputColumnCoordinatesContainerType::Pointer outputPoints = OutputColumnCoordinatesContainerType::New();
         outputPoints->Reserve( inputPoints->Size() );
         typename OutputColumnCoordinatesContainerType::Iterator outputItr = outputPoints->Begin();
@@ -117,13 +117,13 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
     
     // copy column point costs
     {
-      typedef typename InputOSFGraphType::OSFSurface::ColumnCostsContainer InputColumnCostsContainerType;
+      using InputColumnCostsContainerType = typename InputOSFGraphType::OSFSurface::ColumnCostsContainer;
       typename InputColumnCostsContainerType::ConstPointer inputCosts = inputOSFSurface->GetColumnCosts( vertexId );
       if (inputCosts)
       {
         typename InputColumnCostsContainerType::ConstIterator inputItr = inputCosts->Begin();
         typename InputColumnCostsContainerType::ConstIterator inputEnd = inputCosts->End();
-        typedef typename OutputOSFGraphType::OSFSurface::ColumnCostsContainer OutputColumnCostsContainerType;
+        using OutputColumnCostsContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCostsContainer;
         typename OutputColumnCostsContainerType::Pointer outputCosts = OutputColumnCostsContainerType::New();
         outputCosts->Reserve( inputCosts->Size() );
         typename OutputColumnCostsContainerType::Iterator outputItr = outputCosts->Begin();
@@ -141,9 +141,9 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
   }
 
   // copy cells 
-  typedef typename OutputOSFGraphType::OSFSurface::CellsContainer OutputCellsContainer;
-  typedef typename InputOSFGraphType::OSFSurface::CellsContainer InputCellsContainer;
-  typedef typename OutputOSFGraphType::OSFSurface::CellAutoPointer CellAutoPointer;
+  using OutputCellsContainer = typename OutputOSFGraphType::OSFSurface::CellsContainer;
+  using InputCellsContainer = typename InputOSFGraphType::OSFSurface::CellsContainer;
+  using CellAutoPointer = typename OutputOSFGraphType::OSFSurface::CellAutoPointer;
 
   typename OutputCellsContainer::Pointer outputCells = OutputCellsContainer::New();
   const InputCellsContainer * inputCells = inputOSFSurface->GetCells();
@@ -177,7 +177,7 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
 ::CopyInputOSFGraphToOutputOSFGraphGraph()
 {
   // copy nodes
-  typedef typename OutputOSFGraphType::GraphNodesContainer GraphNodesContainer;
+  using GraphNodesContainer = typename OutputOSFGraphType::GraphNodesContainer;
   typename GraphNodesContainer::ConstPointer inputGraphNodes = this->GetInput()->GetNodes();
   typename GraphNodesContainer::Pointer outputGraphNodes = GraphNodesContainer::New();
   
@@ -197,7 +197,7 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
   }
 
   // copy edges
-  typedef typename OutputOSFGraphType::GraphEdgesContainer GraphEdgesContainer;
+  using GraphEdgesContainer = typename OutputOSFGraphType::GraphEdgesContainer;
   typename GraphEdgesContainer::ConstPointer inputGraphEdges = this->GetInput()->GetEdges();
   typename GraphEdgesContainer::Pointer outputGraphEdges = GraphEdgesContainer::New();
   

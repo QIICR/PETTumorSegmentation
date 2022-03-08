@@ -140,16 +140,16 @@ class VTK_SLICER_PETTUMORSEGMENTATION_MODULE_MRML_EXPORT vtkMRMLPETTumorSegmenta
   vtkGetMacro ( NecroticRegion, bool );
   vtkSetMacro ( NecroticRegion, bool );
 
-  typedef itk::Image<short, 3> LabelImageType;
-  typedef itk::LabelMap< itk::LabelObject< short, 3 > > LabelMapType;
-  typedef itk::Image<float, 3> ScalarImageType;
-  typedef ScalarImageType::IndexType IndexType;
-  typedef ScalarImageType::PointType PointType;
-  typedef itk::OSFGraph<float> GraphType;
-  typedef itk::Mesh<float, 3> MeshType;
-  typedef std::vector<float> HistogramType;
-  typedef unsigned long WatershedType;
-  typedef itk::Image<WatershedType, 3> WatershedImageType;
+  using LabelImageType = itk::Image<short, 3>;
+  using LabelMapType = itk::LabelMap< itk::LabelObject< short, 3 > >;
+  using ScalarImageType = itk::Image<float, 3>;
+  using IndexType = ScalarImageType::IndexType;
+  using PointType = ScalarImageType::PointType;
+  using GraphType = itk::OSFGraph<float>;
+  using MeshType = itk::Mesh<float, 3>;
+  using HistogramType = std::vector<float>;
+  using WatershedPixelType = unsigned long;
+  using WatershedImageType = itk::Image<WatershedPixelType, 3>;
 
   void SetCenterpoint(PointType index) {Centerpoint = index;};
   PointType GetCenterpoint() {return Centerpoint;};

@@ -39,45 +39,45 @@ template <typename TCostType, class TSurfaceMeshTraits=DefaultStaticMeshTraits<f
 class ITK_EXPORT OSFSurface : public Object // todo: should probably change to DataObject
 {
 public:
-  typedef OSFSurface Self;
-  typedef Object Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = OSFSurface;
+  using Superclass = Object;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(OSFSurface);
   
   itkNewMacro(Self);
   itkTypeMacro(OSFSurface, Object);
   
-  // utility typedef that helps defining cells and coordinates
+  // utility type alias that helps defining cells and coordinates
   using MeshTraits = TSurfaceMeshTraits;
   
-  // typedefs for identifiers
-  typedef unsigned long IdentifierType;
-  typedef IdentifierType VertexIdentifier;
-  typedef IdentifierType ColumnPositionIdentifier;
-  typedef IdentifierType CellIdentifier;
+  // type aliases for identifiers
+  using IdentifierType = unsigned long;
+  using VertexIdentifier = IdentifierType;
+  using ColumnPositionIdentifier = IdentifierType;
+  using CellIdentifier = IdentifierType;
 
-  // typedefs for a column of an OSF surface
-  typedef typename MeshTraits::CoordRepType CoordRepType;
+  // type aliases for a column of an OSF surface
+  using  CoordRepType= typename MeshTraits::CoordRepType;
   static constexpr unsigned int PointDimension = MeshTraits::PointDimension;
-  typedef typename MeshTraits::PointType CoordinateType;
-  typedef VectorContainer< ColumnPositionIdentifier, CoordinateType > ColumnCoordinatesContainer;
-  typedef TCostType ColumnCostType;
-  typedef VectorContainer< ColumnPositionIdentifier, ColumnCostType > ColumnCostsContainer;
+  using CoordinateType = typename MeshTraits::PointType;
+  using ColumnCoordinatesContainer = VectorContainer< ColumnPositionIdentifier, CoordinateType >;
+  using ColumnCostType = TCostType;
+  using ColumnCostsContainer = VectorContainer< ColumnPositionIdentifier, ColumnCostType >;
   
-  // typedefs for a vertex of an OSF surface (not a coordinate, but a whole column)
-  typedef VectorContainer< VertexIdentifier, typename ColumnCoordinatesContainer::Pointer > VertexColumnCoordinatesContainer;
-  typedef VectorContainer< VertexIdentifier, typename ColumnCostsContainer::Pointer > VertexColumnCostsContainer;
-  typedef VectorContainer< VertexIdentifier, ColumnPositionIdentifier > VertexPositionIdentifierContainer;
+  // type aliases for a vertex of an OSF surface (not a coordinate, but a whole column)
+  using VertexColumnCoordinatesContainer = VectorContainer< VertexIdentifier, typename ColumnCoordinatesContainer::Pointer >;
+  using VertexColumnCostsContainer = VectorContainer< VertexIdentifier, typename ColumnCostsContainer::Pointer >;
+  using VertexPositionIdentifierContainer = VectorContainer< VertexIdentifier, ColumnPositionIdentifier >;
   
-  // typedefs for a cell of an OSF surface
-  typedef typename MeshTraits::CellTraits CellTraits;
-  typedef typename MeshTraits::CellPixelType CellPixelType;
-  typedef CellInterface< CellPixelType, CellTraits > CellType;
-  typedef typename CellType::CellRawPointer CellRawPointer;
-  typedef typename CellType::CellAutoPointer CellAutoPointer;
-  typedef typename MeshTraits::CellsContainer CellsContainer;
+  // type aliases for a cell of an OSF surface
+  using  CellTraits= typename MeshTraits::CellTraits ;
+  using CellPixelType = typename MeshTraits::CellPixelType;
+  using CellType = CellInterface< CellPixelType, CellTraits >;
+  using CellRawPointer = typename CellType::CellRawPointer;
+  using CellAutoPointer = typename CellType::CellAutoPointer;
+  using CellsContainer = typename MeshTraits::CellsContainer;
   
   VertexIdentifier GetNumberOfVertices( ) const;
   ColumnPositionIdentifier GetNumberOfColumns(VertexIdentifier vertexId) const;
@@ -113,13 +113,13 @@ public:
   void SetCell(CellIdentifier cellId, CellAutoPointer& cellPointer);
 
   // allow lookup of neighboring of columns on the surface
-  typedef VectorContainer< unsigned int, VertexIdentifier > VertexIdentifierContainer;
+  using VertexIdentifierContainer = VectorContainer< unsigned int, VertexIdentifier >;
   const VertexIdentifierContainer* GetNeighbors(VertexIdentifier vertexId) const;
   void BuildNeighborLookupTable();
 
   // todo: do we need cell links like provided by the itk::Mesh?
-  //typedef typename MeshTraits::PointCellLinksContainer PointCellLinksContainer; // todo: do we need this?
-  //typedef typename MeshTraits::CellLinksContainer CellLinksContainer; // todo: do we need this?
+  //using PointCellLinksContainer = typename MeshTraits::PointCellLinksContainer; // todo: do we need this?
+  //using CellLinksContainer = typename MeshTraits::CellLinksContainer; // todo: do we need this?
   
 protected:
   /** Constructor for use by New() method. */
@@ -135,7 +135,7 @@ protected:
   
   void ReleaseCellsMemory();
   
-  typedef VectorContainer< VertexIdentifier, typename VertexIdentifierContainer::Pointer > VertexIdentifierListContainer;
+  using VertexIdentifierListContainer = VectorContainer< VertexIdentifier, typename VertexIdentifierContainer::Pointer >;
   VertexIdentifierListContainer::Pointer m_VertexNeighborLookupTable;
   
 private:

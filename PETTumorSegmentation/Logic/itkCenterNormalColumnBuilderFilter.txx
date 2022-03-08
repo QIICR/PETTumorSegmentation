@@ -64,13 +64,12 @@ void
 CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 ::BuildColumn(VertexIdentifier vertexId)
 {
-
   typename OSFSurface::ConstPointer inputSurface =  this->GetInput()->GetSurface();
   typename OSFSurface::Pointer outputSurface =  this->GetOutput()->GetSurface();
   
-  typedef typename OSFSurface::CoordinateType Coordinate;
-  typedef typename OSFSurface::ColumnCoordinatesContainer ColumnCoordinatesContainer;
-  typedef typename OSFSurface::ColumnCostsContainer ColumnCostsContainer;
+  using Coordinate = typename OSFSurface::CoordinateType;
+  using ColumnCoordinatesContainer = typename OSFSurface::ColumnCoordinatesContainer;
+  using ColumnCostsContainer = typename OSFSurface::ColumnCostsContainer;
   
   Coordinate initialPosition;
   initialPosition[0] = m_CenterPoint[0];
@@ -115,7 +114,7 @@ CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 {
   DirectionVector direction;
   direction.Fill(0.0);
-  typedef typename OSFSurface::CoordinateType Point;
+  using Point = typename OSFSurface::CoordinateType;
 
   typename OSFSurface::ConstPointer inputSurface =  this->GetInput()->GetSurface();
 

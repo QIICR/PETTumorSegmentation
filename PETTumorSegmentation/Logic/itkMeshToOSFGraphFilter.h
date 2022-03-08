@@ -36,21 +36,21 @@ template <class TInputMesh, class TOutputOSFGraph>
 class ITK_EXPORT MeshToOSFGraphFilter : public OSFGraphSource<TOutputOSFGraph>
 {
 public:
-  typedef MeshToOSFGraphFilter Self;
-  typedef OSFGraphSource<TOutputOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = MeshToOSFGraphFilter;
+  using Superclass = OSFGraphSource<TOutputOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(MeshToOSFGraphFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( MeshToOSFGraphFilter, OSFGraphSource );
   
-  typedef TInputMesh InputMeshType;
-  typedef typename InputMeshType::ConstPointer InputMeshConstPointer;
+  using InputMeshType = TInputMesh;
+  using InputMeshConstPointer = typename InputMeshType::ConstPointer;
   
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
   using Superclass::SetInput;
   virtual void SetInput(unsigned int idx, const InputMeshType* input); // Set the input image of this process object.
@@ -60,7 +60,7 @@ public:
   
   OutputOSFGraphType* GetOutput(void); // Get the mesh output of this process object.
   virtual void GenerateOutputInformation(void); // Prepare the output
-  typedef typename Superclass::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  using DataObjectPointerArraySizeType = typename Superclass::DataObjectPointerArraySizeType;
   using Superclass::MakeOutput;
   virtual DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx); // create a valid output
 

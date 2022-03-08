@@ -37,28 +37,28 @@ template <typename TCostType, class TOSFSurfaceType=OSFSurface<float> >
 class ITK_EXPORT OSFGraph : public DataObject
 {
 public:
-  typedef OSFGraph Self;
-  typedef DataObject Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = OSFGraph;
+  using Superclass = DataObject;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraph);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraph, DataObject );
   
-  typedef unsigned long IdentifierType;
+  using IdentifierType = unsigned long;
 
   //--------------------------------------------------------------
   // surfaces
   //--------------------------------------------------------------
-  typedef TOSFSurfaceType OSFSurface;
-  typedef typename OSFSurface::VertexIdentifier VertexIdentifier;
-  typedef typename OSFSurface::ColumnPositionIdentifier ColumnPositionIdentifier;
-  typedef IdentifierType SurfaceIdentifier;
-  typedef typename OSFSurface::Pointer OSFSurfacePointer;
-  typedef typename OSFSurface::ConstPointer OSFSurfaceConstPointer;
-  typedef VectorContainer< SurfaceIdentifier, OSFSurfacePointer > SurfacesContainer;
+  using OSFSurface = TOSFSurfaceType;
+  using VertexIdentifier = typename OSFSurface::VertexIdentifier;
+  using ColumnPositionIdentifier = typename OSFSurface::ColumnPositionIdentifier;
+  using SurfaceIdentifier = IdentifierType;
+  using OSFSurfacePointer = typename OSFSurface::Pointer;
+  using OSFSurfaceConstPointer = typename OSFSurface::ConstPointer;
+  using SurfacesContainer = VectorContainer< SurfaceIdentifier, OSFSurfacePointer >;
   
   // access to surfaces
   SurfaceIdentifier GetNumberOfSurfaces() const;
@@ -72,9 +72,9 @@ public:
   //--------------------------------------------------------------
   // graph nodes and edges
   //--------------------------------------------------------------
-  typedef TCostType GraphCosts;
-  typedef IdentifierType GraphNodeIdentifier;
-  typedef IdentifierType GraphEdgeIdentifier;
+  using GraphCosts = TCostType;
+  using GraphNodeIdentifier = IdentifierType;
+  using GraphEdgeIdentifier = IdentifierType;
   
   class GraphNode
   {
@@ -101,8 +101,8 @@ public:
       GraphCosts rev_cap{ 0 };
   };
   
-  typedef VectorContainer< GraphNodeIdentifier, GraphNode > GraphNodesContainer;
-  typedef VectorContainer< GraphEdgeIdentifier, GraphEdge > GraphEdgesContainer;
+  using GraphNodesContainer = VectorContainer< GraphNodeIdentifier, GraphNode >;
+  using GraphEdgesContainer = VectorContainer< GraphEdgeIdentifier, GraphEdge >;
   
   // access to nodes
   GraphNodeIdentifier GetNumberOfNodes() const;
@@ -130,7 +130,7 @@ public:
   const GraphNode& GetNode(SurfaceIdentifier surfaceId, VertexIdentifier vertexId, ColumnPositionIdentifier columnPositionId) const;
   
   /** Type used to define Regions */
-  typedef long RegionType;
+  using RegionType = long;
   
   void Initialize(void) override;
 

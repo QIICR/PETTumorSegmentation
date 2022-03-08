@@ -94,23 +94,23 @@ protected:
   void OnMRMLSceneNodeAdded(vtkMRMLNode* node) override;
   void OnMRMLSceneNodeRemoved(vtkMRMLNode* node) override;
   
-  // typedef internally utilized data representation
-  typedef itk::Image<short, 3> LabelImageType;
-  typedef itk::Image<float, 3> ScalarImageType;
-  typedef itk::Image<double, 3> DoubleImageType;
-  typedef itk::WatershedImageFilter<DoubleImageType> WatershedImageFilterType;
-  typedef WatershedImageFilterType::OutputImageType WatershedImageType;
-  typedef WatershedImageType::PixelType WatershedPixelType;
-  typedef ScalarImageType::IndexType IndexType;
-  typedef ScalarImageType::PointType PointType;
-  typedef ScalarImageType::RegionType RegionType;
-  typedef itk::LinearInterpolateImageFunction<ScalarImageType> InterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<LabelImageType> LabelInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<WatershedImageType> WatershedInterpolatorType;
-  typedef itk::OSFGraph<float> OSFGraphType;
-  typedef OSFGraphType::OSFSurface OSFSurfaceType;
-  typedef itk::Mesh<float, 3> MeshType;
-  typedef std::vector<float> HistogramType;
+  // type aliases internally utilized data representation
+  using LabelImageType = itk::Image<short, 3>;
+  using ScalarImageType = itk::Image<float, 3>;
+  using DoubleImageType = itk::Image<double, 3>;
+  using WatershedImageFilterType = itk::WatershedImageFilter<DoubleImageType>;
+  using WatershedImageType = WatershedImageFilterType::OutputImageType;
+  using WatershedPixelType = WatershedImageType::PixelType;
+  using IndexType = ScalarImageType::IndexType;
+  using PointType = ScalarImageType::PointType;
+  using RegionType = ScalarImageType::RegionType;
+  using InterpolatorType = itk::LinearInterpolateImageFunction<ScalarImageType>;
+  using LabelInterpolatorType = itk::NearestNeighborInterpolateImageFunction<LabelImageType>;
+  using WatershedInterpolatorType = itk::NearestNeighborInterpolateImageFunction<WatershedImageType>;
+  using OSFGraphType = itk::OSFGraph<float>;
+  using OSFSurfaceType = OSFGraphType::OSFSurface;
+  using MeshType = itk::Mesh<float, 3>;
+  using HistogramType = std::vector<float>;
   
   // methods for main processing steps
   /** Generates the graph and calculates the threshold. */

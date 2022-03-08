@@ -67,7 +67,7 @@ void
 SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 ::CreateNodesForColumn(SurfaceIdentifier surfaceId, VertexIdentifier vertexId)
 {
-  typedef typename OutputOSFGraphType::GraphNode GraphNode;
+  using GraphNode = typename OutputOSFGraphType::GraphNode;
   
   OutputOSFGraphPointer output = this->GetOutput();
   typename OSFSurface::ColumnCostsContainer::ConstPointer columnCosts = output->GetSurface(surfaceId)->GetColumnCosts(vertexId);
@@ -105,8 +105,8 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 {
   //Edges along columns, from node to node, outside to inside, with infinite capacity
   //These relate the nodes on the column in the graph, allowing for selection of a single one
-  typedef typename OutputOSFGraphType::GraphEdge GraphEdge;
-  typedef typename OutputOSFGraphType::GraphNodeIdentifier GraphNodeIdentifier;
+  using GraphEdge = typename OutputOSFGraphType::GraphEdge;
+  using GraphNodeIdentifier= typename OutputOSFGraphType::GraphNodeIdentifier;
   
   OutputOSFGraphPointer output = this->GetOutput();
   typename OSFSurface::ColumnPositionIdentifier numColumnPositions = output->GetSurface(surfaceId)->GetNumberOfColumns(vertexId);
@@ -129,8 +129,8 @@ void
 SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 ::CreateInterColumnArcsForColumn(SurfaceIdentifier surfaceId, VertexIdentifier vertexId)
 {
-  typedef typename OutputOSFGraphType::GraphEdge GraphEdge;
-  typedef typename OutputOSFGraphType::GraphNodeIdentifier GraphNodeIdentifier;
+  using GraphEdge = typename OutputOSFGraphType::GraphEdge;
+  using GraphNodeIdentifier = typename OutputOSFGraphType::GraphNodeIdentifier;
   
   OutputOSFGraphPointer output = this->GetOutput();
   typename OSFSurface::ColumnPositionIdentifier numColumnPositions = output->GetSurface(surfaceId)->GetNumberOfColumns(vertexId);

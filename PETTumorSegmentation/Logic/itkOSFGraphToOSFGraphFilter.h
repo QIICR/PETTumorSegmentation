@@ -39,21 +39,21 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 class ITK_EXPORT OSFGraphToOSFGraphFilter : public OSFGraphSource<TOutputOSFGraph>
 {
 public:
-  typedef OSFGraphToOSFGraphFilter Self;
-  typedef OSFGraphSource<TOutputOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = OSFGraphToOSFGraphFilter;
+  using Superclass = OSFGraphSource<TOutputOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphToOSFGraphFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraphToOSFGraphFilter, OSFGraphSource );
   
-  typedef TInputOSFGraph InputOSFGraphType;
-  typedef typename InputOSFGraphType::ConstPointer InputOSFGraphConstPointer;
+  using InputOSFGraphType = TInputOSFGraph;
+  using InputOSFGraphConstPointer = typename InputOSFGraphType::ConstPointer;
   
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
   using Superclass::SetInput;
   virtual void SetInput(unsigned int idx, const InputOSFGraphType* input); // Set the input image of this process object.
@@ -70,9 +70,9 @@ protected:
   ~OSFGraphToOSFGraphFilter() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  typedef typename OutputOSFGraphType::OSFSurface OSFSurface;
-  typedef typename OSFSurface::Pointer OSFSurfacePointer;
-  typedef typename OSFSurface::ConstPointer OSFSurfaceConstPointer;
+  using OSFSurface = typename OutputOSFGraphType::OSFSurface;
+  using OSFSurfacePointer= typename OSFSurface::Pointer;
+  using OSFSurfaceConstPointer = typename OSFSurface::ConstPointer;
   virtual void CopyInputOSFGraphToOutputOSFGraphSurfaces();
   virtual void CopyInputOSFGraphToOutputOSFGraphSurface(OSFSurfaceConstPointer inputOSFSurface, OSFSurfacePointer outputOSFSurface);
   virtual void CopyInputOSFGraphToOutputOSFGraphGraph();

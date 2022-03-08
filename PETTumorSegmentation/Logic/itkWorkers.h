@@ -87,7 +87,7 @@ public:
 
 protected:
   int m_NumWorkers;
-  typedef itk::PlatformMultiThreader MultiThreader;
+  using MultiThreader = itk::PlatformMultiThreader;
   typename MultiThreader::Pointer m_MultiThreader;
 
   // callback to run non-const method on object without parameters
@@ -139,8 +139,6 @@ protected:
   // callback to run static method or function with six parameters for a specified range of values
   template <typename RangeType, typename T1,  typename T2,  typename T3, typename T4, typename T5, typename T6>
   static ITK_THREAD_RETURN_TYPE RunFunctionForRangeCB(void* arg);
-
-
 };
 
 } // end namespace itk

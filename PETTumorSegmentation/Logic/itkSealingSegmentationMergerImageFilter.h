@@ -47,11 +47,11 @@ template <class TInputImage, class TUptakeImage, class TOutputImage>
 class ITK_EXPORT SealingSegmentationMergerImageFilter : public ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
-  /** Standard class typedefs. */
-  typedef SealingSegmentationMergerImageFilter                         Self;
-  typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>                            Pointer;
-  typedef SmartPointer<const Self>                      ConstPointer;
+  /** Standard class type aliases. */
+  using Self = SealingSegmentationMergerImageFilter;
+  using Superclass = ImageToImageFilter<TInputImage,TOutputImage>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(SealingSegmentationMergerImageFilter);
 
@@ -61,24 +61,23 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SealingSegmentationMergerImageFilter, ImageToImageFilter);
 
-  /** Some convenient typedefs. */
-  typedef TInputImage                            InputImageType;
-  typedef typename    InputImageType::ConstPointer    InputImagePointer;
-  typedef typename    InputImageType::RegionType InputImageRegionType;
-  typedef typename    InputImageType::PixelType  InputImagePixelType;
+  /** Some convenient type aliases. */
+  using InputImageType = TInputImage;
+  using InputImagePointer = typename InputImageType::ConstPointer;
+  using InputImageRegionType = typename InputImageType::RegionType;
+  using InputImagePixelType = typename InputImageType::PixelType;
 
-  typedef TUptakeImage                            UptakeImageType;
-  typedef typename    UptakeImageType::Pointer    UptakeImagePointer;
-  typedef typename    UptakeImageType::RegionType UptakeImageRegionType;
-  typedef typename    UptakeImageType::PixelType  UptakeImagePixelType;
+  using UptakeImageType = TUptakeImage;
+  using UptakeImagePointer = typename UptakeImageType::Pointer;
+  using UptakeImageRegionType = typename UptakeImageType::RegionType;
+  using UptakeImagePixelType = typename UptakeImageType::PixelType;
 
-  typedef TOutputImage                              OutputImageType;
-  typedef typename     OutputImageType::Pointer     OutputImagePointer;
-  typedef typename     OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename     OutputImageType::PixelType   OutputImagePixelType;
+  using OutputImageType = TOutputImage;
+  using OutputImagePointer = typename OutputImageType::Pointer;
+  using OutputImageRegionType = typename OutputImageType::RegionType;
+  using OutputImagePixelType = typename OutputImageType::PixelType;
 
-  typedef typename TOutputImage::PointType PointType;
-
+  using PointType = typename TOutputImage::PointType ;
 
   /** ImageDimension enumeration */
   static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;

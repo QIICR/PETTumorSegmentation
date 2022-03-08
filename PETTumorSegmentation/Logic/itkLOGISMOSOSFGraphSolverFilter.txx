@@ -65,7 +65,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::BuildMaxFlowGraphGraph()
 {
   // add nodes with terminal weights
-  typedef typename InputOSFGraphType::GraphNodesContainer GraphNodeContainer;
+  using GraphNodeContainer = typename InputOSFGraphType::GraphNodesContainer;
   typename GraphNodeContainer::ConstPointer graphNodes = this->GetInput()->GetNodes();
   typename GraphNodeContainer::ConstIterator graphNodesItr = graphNodes->Begin();
   typename GraphNodeContainer::ConstIterator graphNodesEnd = graphNodes->End();
@@ -81,7 +81,7 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   }
 
   // add edges
-  typedef typename InputOSFGraphType::GraphEdgesContainer GraphEdgesContainer;
+  using GraphEdgesContainer = typename InputOSFGraphType::GraphEdgesContainer;
   typename GraphEdgesContainer::ConstPointer graphEdges = this->GetInput()->GetEdges();
   typename GraphEdgesContainer::ConstIterator graphEdgesItr = graphEdges->Begin();
   typename GraphEdgesContainer::ConstIterator graphEdgesEnd = graphEdges->End();

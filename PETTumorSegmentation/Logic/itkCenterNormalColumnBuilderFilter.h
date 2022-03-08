@@ -36,21 +36,21 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 class ITK_EXPORT CenterNormalColumnBuilderFilter : public OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>
 {
 public:
-  typedef CenterNormalColumnBuilderFilter Self;
-  typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = CenterNormalColumnBuilderFilter;
+  using Superclass = OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(CenterNormalColumnBuilderFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( CenterNormalColumnBuilderFilter, OSFGraphToOSFGraphFilter );
   
-  typedef TInputOSFGraph InputOSFGraphType;
-  typedef typename InputOSFGraphType::ConstPointer InputOSFGraphConstPointer;
+  using InputOSFGraphType = TInputOSFGraph;
+  using InputOSFGraphConstPointer = typename InputOSFGraphType::ConstPointer;
   
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
   itkSetMacro( StepLength, float );
   itkGetMacro( StepLength, float );
@@ -72,15 +72,15 @@ protected:
   float m_StepLength{ 0 };
   unsigned int m_NumberOfSteps{ 0 };
   
-  typedef typename OutputOSFGraphType::OSFSurface OSFSurface;
-  typedef typename OSFSurface::VertexIdentifier VertexIdentifier;
-  typedef typename OSFSurface::CellIdentifier CellIdentifier;
+  using OSFSurface = typename OutputOSFGraphType::OSFSurface;
+  using VertexIdentifier = typename OSFSurface::VertexIdentifier;
+  using CellIdentifier = typename OSFSurface::CellIdentifier;
   virtual void BuildColumn(VertexIdentifier vertexId);
   
   //typedef Vector< float, ::itk::GetImageDimension<TImage>::ImageDimension > CenterPoint;
   float m_CenterPoint[3]; // todo: assuming fixed number of dimensions here
   //typedef Vector< float, ::itk::GetImageDimension<TImage>::ImageDimension > DirectionVector;
-  typedef Vector< float, 3 > DirectionVector; // todo: assuming fixed number of dimensions here
+  using DirectionVector = Vector< float, 3 >; // todo: assuming fixed number of dimensions here
   virtual DirectionVector GetNormal(const VertexIdentifier vertexId) const;
  
   std::vector< std::set<CellIdentifier> > m_VertexToCellLookupTable;

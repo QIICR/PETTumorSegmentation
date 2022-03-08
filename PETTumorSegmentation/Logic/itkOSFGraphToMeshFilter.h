@@ -36,11 +36,11 @@ template <class TInputOSFGraph, class TOutputMesh>
 class ITK_EXPORT OSFGraphToMeshFilter : public MeshSource<TOutputMesh>
 {
 public:
-  /** Standard class typedefs. */
-  typedef OSFGraphToMeshFilter     Self;
-  typedef MeshSource<TOutputMesh>  Superclass;
-  typedef SmartPointer<Self>       Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  /** Standard class type aliases. */
+  using Self = OSFGraphToMeshFilter;
+  using Superclass = MeshSource<TOutputMesh>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphToMeshFilter);
   
@@ -50,28 +50,29 @@ public:
   itkTypeMacro(OSFGraphToMeshFilter, MeshSource);
   
   /** Enum defining the type of surface to extract */
-  typedef  enum { CurrentSurface,
-                  InitialSurface,
-                  InnermostSurface,
-                  OutermostSurface
-                                   } SurfaceType;
+  enum SurfaceType {
+    CurrentSurface,
+    InitialSurface,
+    InnermostSurface,
+    OutermostSurface
+  };
   
   /** Get/Set the type of surface to extract */
   itkSetMacro( SurfaceType, SurfaceType );
   itkGetMacro( SurfaceType, SurfaceType );
 
   /** Create a valid output. */
-  typedef typename Superclass::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  using DataObjectPointerArraySizeType = typename Superclass::DataObjectPointerArraySizeType;
   using Superclass::MakeOutput;
   DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
 
-  /** Some Image related typedefs. */
-  typedef TInputOSFGraph InputOSFGraphType;
-  typedef typename InputOSFGraphType::ConstPointer InputOSFGraphConstPointer;
+  /** Some Image related type aliases. */
+  using InputOSFGraphType = TInputOSFGraph;
+  using InputOSFGraphConstPointer = typename InputOSFGraphType::ConstPointer;
 
-  /** Some Mesh related typedefs. */
-  typedef TOutputMesh OutputMeshType;
-  typedef typename OutputMeshType::Pointer OutputMeshPointer;
+  /** Some Mesh related type aliases. */
+  using OutputMeshType = TOutputMesh;
+  using OutputMeshPointer = typename OutputMeshType::Pointer;
 
   /** Set the input image of this process object.  */
   using Superclass::SetInput;

@@ -119,8 +119,8 @@ void
 MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
 ::CopyInputMeshToOutputOSFSurfacePoints(InputMeshConstPointer mesh, typename OutputOSFGraphType::OSFSurface::Pointer osfSurface)
 {
-  typedef typename TInputMesh::PointsContainer::ConstIterator PointIterator;
-  typedef typename TInputMesh::PointType PointType;
+  using PointIterator = typename TInputMesh::PointsContainer::ConstIterator;
+  using PointType = typename TInputMesh::PointType;
   PointIterator pointIterator = mesh->GetPoints()->Begin();
   PointIterator pointEnd = mesh->GetPoints()->End();
 
@@ -129,11 +129,11 @@ MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
     typename OutputOSFGraphType::OSFSurface::VertexIdentifier vertexId = pointIterator.Index();
     PointType point = pointIterator.Value();
     
-    typedef typename OutputOSFGraphType::OSFSurface::ColumnCoordinatesContainer ColumnCoordinatesContainerType;
+    using ColumnCoordinatesContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCoordinatesContainer;
     typename ColumnCoordinatesContainerType::Pointer columnCoordinatesContainer = ColumnCoordinatesContainerType::New();
     columnCoordinatesContainer->InsertElement(0, point );
     osfSurface->SetColumnCoordinates(vertexId, columnCoordinatesContainer);
-    typedef typename OutputOSFGraphType::OSFSurface::ColumnCostsContainer ColumnCostsContainerType;
+    using ColumnCostsContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCostsContainer;
     typename ColumnCostsContainerType::Pointer columnCostsContainer = ColumnCostsContainerType::New();
     columnCostsContainer->InsertElement(0, 0.0 );
     osfSurface->SetColumnCosts(vertexId,columnCostsContainer);
@@ -150,9 +150,9 @@ void
 MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
 ::CopyInputMeshToOutputOSFSurfaceCells(InputMeshConstPointer mesh, typename OutputOSFGraphType::OSFSurface::Pointer osfSurface)
 {
-  typedef typename OutputOSFGraphType::OSFSurface::CellsContainer OutputCellsContainer;
-  typedef typename TInputMesh::CellsContainer InputCellsContainer;
-  typedef typename OutputOSFGraphType::OSFSurface::CellAutoPointer CellAutoPointer;
+  using OutputCellsContainer = typename OutputOSFGraphType::OSFSurface::CellsContainer;
+  using InputCellsContainer = typename TInputMesh::CellsContainer;
+  using CellAutoPointer = typename OutputOSFGraphType::OSFSurface::CellAutoPointer;
 
   //outputMesh->SetCellsAllocationMethod( OutputMeshType::CellsAllocatedDynamicallyCellByCell );
 

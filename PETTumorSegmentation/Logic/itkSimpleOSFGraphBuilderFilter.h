@@ -39,21 +39,21 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 class ITK_EXPORT SimpleOSFGraphBuilderFilter : public OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>
 {
 public:
-  typedef SimpleOSFGraphBuilderFilter Self;
-  typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = SimpleOSFGraphBuilderFilter;
+  using Superclass = OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(SimpleOSFGraphBuilderFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( SimpleOSFGraphBuilderFilter, OSFGraphToOSFGraphFilter );
   
-  typedef TInputOSFGraph InputOSFGraphType;
-  typedef typename InputOSFGraphType::ConstPointer InputOSFGraphConstPointer;
+  using InputOSFGraphType = TInputOSFGraph;
+  using InputOSFGraphConstPointer = typename InputOSFGraphType::ConstPointer;
   
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
   itkSetMacro( SmoothnessConstraint, unsigned int );
   itkGetMacro( SmoothnessConstraint, unsigned int );
@@ -69,9 +69,9 @@ protected:
   
   void GenerateData() override;
   
-  typedef typename OutputOSFGraphType::VertexIdentifier SurfaceIdentifier;
-  typedef typename OutputOSFGraphType::OSFSurface OSFSurface;
-  typedef typename OSFSurface::VertexIdentifier VertexIdentifier;
+  using SurfaceIdentifier = typename OutputOSFGraphType::VertexIdentifier;
+  using OSFSurface = typename OutputOSFGraphType::OSFSurface;
+  using VertexIdentifier = typename OSFSurface::VertexIdentifier;
   virtual void CreateNodesForColumn(SurfaceIdentifier surfaceId, VertexIdentifier vertexId);
   virtual void CreateIntraColumnArcsForColumn(SurfaceIdentifier surfaceId, VertexIdentifier vertexId);
   virtual void CreateInterColumnArcsForColumn(SurfaceIdentifier surfaceId, VertexIdentifier vertexId);

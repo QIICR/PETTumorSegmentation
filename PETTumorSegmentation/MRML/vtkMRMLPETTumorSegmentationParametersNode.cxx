@@ -278,7 +278,7 @@ typename vtkMRMLPETTumorSegmentationParametersNode::LabelImageType::Pointer vtkM
   vtkSmartPointer<vtkOrientedImageData> vtkLabelVolume = vtkSmartPointer<vtkOrientedImageData>::New();
   vtkSegmentation->GenerateMergedLabelmapForAllSegments(vtkLabelVolume, vtkSegmentation::EXTENT_UNION_OF_SEGMENTS_PADDED, referenceGeometry);
 
-  typedef itk::Image<short, 3> LabelImageType;
+  using LabelImageType = itk::Image<short, 3>;
   LabelImageType::Pointer labelVolume = convert2ITK<LabelImageType>( vtkLabelVolume );
   labelVolume->SetSpacing( vtkLabelVolume->GetSpacing() );
   double origin2[3] = {-referenceGeometry->GetOrigin()[0], -referenceGeometry->GetOrigin()[1], referenceGeometry->GetOrigin()[2]};

@@ -147,9 +147,9 @@ void
 OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 ::CopyInputOSFSurfaceToOutputMeshCells(typename InputOSFGraphType::OSFSurface::ConstPointer osfSurface, OutputMeshPointer mesh)
 {
-  typedef typename InputOSFGraphType::OSFSurface::CellsContainer InputCellsContainer;
-  typedef typename TOutputMesh::CellsContainer OutputCellsContainer;
-  typedef typename InputOSFGraphType::OSFSurface::CellAutoPointer CellAutoPointer;
+  using InputCellsContainer = typename InputOSFGraphType::OSFSurface::CellsContainer;
+  using OutputCellsContainer = typename TOutputMesh::CellsContainer;
+  using CellAutoPointer = typename InputOSFGraphType::OSFSurface::CellAutoPointer;
 
   mesh->SetCellsAllocationMethod( OutputMeshType::CellsAllocatedDynamicallyCellByCell );
 

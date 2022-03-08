@@ -38,21 +38,21 @@ template <class TInputOSFGraph, class TOutputOSFGraph>
 class ITK_EXPORT LOGISMOSOSFGraphSolverFilter : public OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>
 {
 public:
-  typedef LOGISMOSOSFGraphSolverFilter Self;
-  typedef OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = LOGISMOSOSFGraphSolverFilter;
+  using Superclass = OSFGraphToOSFGraphFilter<TInputOSFGraph,TOutputOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(LOGISMOSOSFGraphSolverFilter);
   
   itkNewMacro( Self );
   itkTypeMacro( LOGISMOSOSFGraphSolverFilter, OSFGraphToOSFGraphFilter );
   
-  typedef TInputOSFGraph InputOSFGraphType;
-  typedef typename InputOSFGraphType::ConstPointer InputOSFGraphConstPointer;
+  using InputOSFGraphType = TInputOSFGraph;
+  using InputOSFGraphConstPointer = typename InputOSFGraphType::ConstPointer;
   
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
 protected:
   /** Constructor for use by New() method. */
@@ -62,9 +62,9 @@ protected:
   
   void GenerateData() override;
   
-  typedef typename InputOSFGraphType::GraphCosts CapacityType;
-  typedef LOGISMOS::graph<CapacityType> MaxFlowGraphType;
-  typedef MaxFlowGraphType* MaxFlowGraphPointer;
+  using CapacityType = typename InputOSFGraphType::GraphCosts;
+  using MaxFlowGraphType = LOGISMOS::graph<CapacityType>;
+  using MaxFlowGraphPointer = MaxFlowGraphType*;
   MaxFlowGraphPointer m_MaxFlowGraph{ nullptr };
   CapacityType m_FlowValue{ 0 };
   virtual void BuildMaxFlowGraphGraph();

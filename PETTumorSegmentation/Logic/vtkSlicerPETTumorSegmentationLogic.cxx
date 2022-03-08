@@ -405,7 +405,7 @@ void vtkSlicerPETTumorSegmentationLogic::SetGlobalBaseGraphCostsForVertex(int ve
   }
 
   // set costs for vertex
-  typedef OSFSurfaceType::ColumnCostsContainer ColumnCostsContainer;
+  using ColumnCostsContainer = OSFSurfaceType::ColumnCostsContainer;
   ColumnCostsContainer::Pointer columnCosts = node->GetOSFGraph()->GetSurface()->GetColumnCosts( vertexId );
   columnCosts->CastToSTLContainer() = costs;
 }
@@ -631,7 +631,7 @@ std::vector<valueType>
 vtkSlicerPETTumorSegmentationLogic::SampleColumnPoints(int vertexId, vtkMRMLPETTumorSegmentationParametersNode* node, typename ImageInterpolatorType::Pointer interpolator, valueType defaultValue)
 {
   //Copy all the uptake values interpolated on the column's nodes into a vector.
-  typedef OSFSurfaceType::ColumnCoordinatesContainer ColumnCoordinatesContainer;
+  using ColumnCoordinatesContainer = OSFSurfaceType::ColumnCoordinatesContainer;
 
   ColumnCoordinatesContainer::ConstPointer columnCoordinates = node->GetOSFGraph()->GetSurface()->GetColumnCoordinates( vertexId );
   ColumnCoordinatesContainer::ConstIterator coordItr = columnCoordinates->Begin();
@@ -996,7 +996,7 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   finalROI.Crop(roi);
 
   // extract subvolume
-  typedef itk::RegionOfInterestImageFilter<ScalarImageType, ScalarImageType> ROIExtractorType;
+  using ROIExtractorType = itk::RegionOfInterestImageFilter<ScalarImageType, ScalarImageType>;
   ROIExtractorType::Pointer roiExtractor = ROIExtractorType::New();
   roiExtractor->SetInput(petVolume);
   roiExtractor->SetRegionOfInterest(finalROI);
@@ -1026,7 +1026,7 @@ vtkSlicerPETTumorSegmentationLogic::ScalarImageType::Pointer vtkSlicerPETTumorSe
   size[2] = (int) std::ceil(origSize[2] * origSpacing[2] / minSpacing);
 
   // resample image; default interpolation is linear, which is what we want here
-  typedef itk::ResampleImageFilter<ScalarImageType, ScalarImageType> ResamplerType;
+  using ResamplerType = itk::ResampleImageFilter<ScalarImageType, ScalarImageType>;
   ResamplerType::Pointer resampler = ResamplerType::New();
   resampler->SetInput( petSubVolume );
   resampler->SetSize(size);
@@ -1098,7 +1098,7 @@ void vtkSlicerPETTumorSegmentationLogic::GenerateWatershedImages(vtkMRMLPETTumor
   }
 
   //Generate each watershed and store it locally.  This reduces long term storage while preventing too much recalculation of watershed volumes.
-  typedef itk::WatershedImageFilter<DoubleImageType> WatershedImageFilterType;
+  using WatershedImageFilterType = itk::WatershedImageFilter<DoubleImageType>;
   WatershedImageFilterType::Pointer strongWatershedFilter = WatershedImageFilterType::New();
   strongWatershedFilter->SetInput(invertedImage);
   strongWatershedFilter->SetLevel(0.20); //Level is the peak to barrier difference.  Higher level is more likely to reject more walls
@@ -1127,7 +1127,7 @@ void vtkSlicerPETTumorSegmentationLogic::CreateGraph(vtkMRMLPETTumorSegmentation
   // create graph structure using spherical mesh as initial surface.
 
   // create a spherical mesh to base the graph off of
-  typedef itk::RegularSphereMeshSource<MeshType> RegularSphereMeshSourceType;
+  using RegularSphereMeshSourceType = itk::RegularSphereMeshSource<MeshType>;
   RegularSphereMeshSourceType::Pointer sphereMeshSource = RegularSphereMeshSourceType::New();
   RegularSphereMeshSourceType::PointType sphereCenter;
   sphereCenter[0] = centerpoint[0];  sphereCenter[1] = centerpoint[1];  sphereCenter[2] = centerpoint[2];
@@ -1138,7 +1138,7 @@ void vtkSlicerPETTumorSegmentationLogic::CreateGraph(vtkMRMLPETTumorSegmentation
   sphereMeshSource->SetResolution( meshResolution );
 
   // create OSF graph surface from mesh
-  typedef itk::MeshToOSFGraphFilter<MeshType, OSFGraphType> MeshToOSFGraphFilterType;
+  using MeshToOSFGraphFilterType = itk::MeshToOSFGraphFilter<MeshType, OSFGraphType>;
   MeshToOSFGraphFilterType::Pointer meshToOSFGraphFilter = MeshToOSFGraphFilterType::New();
   meshToOSFGraphFilter->SetInput( sphereMeshSource->GetOutput() );
   meshToOSFGraphFilter->Update();
@@ -1156,8 +1156,8 @@ void vtkSlicerPETTumorSegmentationLogic::BuildColumnForVertex(int vertexId, vtkM
   PointType centerpoint = node->GetCenterpoint();
 
   OSFSurfaceType::Pointer surface =  node->GetOSFGraph()->GetSurface();
-  typedef OSFSurfaceType::CoordinateType Coordinate;
-  typedef OSFSurfaceType::ColumnCoordinatesContainer ColumnCoordinatesContainer;
+  using Coordinate = OSFSurfaceType::CoordinateType;
+  using ColumnCoordinatesContainer = OSFSurfaceType::ColumnCoordinatesContainer;
 
   //Create the new container of appropriate size
   int numberOfSteps = (int) std::ceil(meshSphereRadius); //TODO Should this be meshSphereRadius/columnStepSize? As it is, it assumes columnStepSize==1, which for now it does, but still might be worth modifying for future use.
@@ -1239,14 +1239,14 @@ void vtkSlicerPETTumorSegmentationLogic::MaxFlow(vtkMRMLPETTumorSegmentationPara
 
   OSFSurfaceType::Pointer surface = node->GetOSFGraph()->GetSurface();
   // add smoothness constraints to graph
-  typedef itk::SimpleOSFGraphBuilderFilter<OSFGraphType,OSFGraphType> GraphBuilderType;
+  using GraphBuilderType = itk::SimpleOSFGraphBuilderFilter<OSFGraphType,OSFGraphType>;
   GraphBuilderType::Pointer graphBuilder = GraphBuilderType::New();
   graphBuilder->SetInput( graph );
   graphBuilder->SetSmoothnessConstraint( hardSmoothnessConstraint );
   graphBuilder->SetSoftSmoothnessPenalty( node->GetSplitting() ? softSmoothnessPenaltySplitting : softSmoothnessPenalty );
 
   // run the max flow algorithm to solve the segmentation problem
-  typedef itk::LOGISMOSOSFGraphSolverFilter<OSFGraphType,OSFGraphType> OSFGraphSolverType;
+  using OSFGraphSolverType = itk::LOGISMOSOSFGraphSolverFilter<OSFGraphType,OSFGraphType>;
   OSFGraphSolverType::Pointer osfGraphSolver = OSFGraphSolverType::New();
   osfGraphSolver->SetInput( graphBuilder->GetOutput() );
   osfGraphSolver->Update();
@@ -1264,7 +1264,7 @@ vtkSlicerPETTumorSegmentationLogic::MeshType::Pointer vtkSlicerPETTumorSegmentat
     return nullptr;
 
   // Get resulting surface mesh from osf graph
-  typedef itk::OSFGraphToMeshFilter<OSFGraphType,MeshType> OSFGraphToMeshFilterType;
+  using OSFGraphToMeshFilterType = itk::OSFGraphToMeshFilter<OSFGraphType,MeshType>;
   OSFGraphToMeshFilterType::Pointer osfGraphToMeshFilter = OSFGraphToMeshFilterType::New();
   osfGraphToMeshFilter->SetInput( solvedGraph );
   osfGraphToMeshFilter->Update();
@@ -1284,7 +1284,7 @@ void vtkSlicerPETTumorSegmentationLogic::CalculateThresholdHistogramBased(vtkMRM
   ScalarImageType::Pointer medianPetVolume = nullptr;
   if (node->GetDenoiseThreshold())  //set the medianPetVolume only if needed
   {
-    typedef itk::MedianImageFilter<ScalarImageType, ScalarImageType> MedianFilterType;
+    using MedianFilterType = itk::MedianImageFilter<ScalarImageType, ScalarImageType>;
     MedianFilterType::Pointer medianFilter = MedianFilterType::New();
     medianFilter->SetInput(ExtractPETSubVolume(node, petVolume));
 
@@ -1461,7 +1461,7 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
     return nullptr;
 
   // voxelize mesh
-  typedef itk::TriangleMeshToBinaryImageFilter<MeshType, LabelImageType> MeshToLabelImageFilterType;
+  using MeshToLabelImageFilterType = itk::TriangleMeshToBinaryImageFilter<MeshType, LabelImageType>;
   MeshToLabelImageFilterType::Pointer meshToImage = MeshToLabelImageFilterType::New();
   meshToImage->SetInsideValue(1);
   meshToImage->SetOutsideValue(0);
@@ -1477,7 +1477,7 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
   if (node->GetPaintOver() == false)
   { //remove voxels in other lesions
     short label = node->GetLabel();
-    typedef itk::ImageRegionIterator<LabelImageType> IteratorType;
+    using IteratorType = itk::ImageRegionIterator<LabelImageType>;
     IteratorType labelIt(initialLabelMap, initialLabelMap->GetLargestPossibleRegion());
     IteratorType newIt(segmentation, segmentation->GetLargestPossibleRegion());
     while (!(labelIt.IsAtEnd() || newIt.IsAtEnd()))
@@ -1490,7 +1490,7 @@ vtkSlicerPETTumorSegmentationLogic::LabelImageType::Pointer vtkSlicerPETTumorSeg
   }
 
   // do 6-connected region growing to remove unconnected voxels that may result from the voxelization process
-  typedef itk::ConnectedThresholdImageFilter< LabelImageType, LabelImageType > ConnectedComponentFilterType;
+  using ConnectedComponentFilterType = itk::ConnectedThresholdImageFilter< LabelImageType, LabelImageType >;
   ConnectedComponentFilterType::Pointer connectedComponentFilter = ConnectedComponentFilterType::New();
   connectedComponentFilter->SetInput( segmentation );
   connectedComponentFilter->SetConnectivity(ConnectedComponentFilterType::FaceConnectivity);
@@ -1517,7 +1517,7 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateOutput(vtkMRMLPETTumorSegmentatio
   if (segmentation.IsNull() || initialLabelMap.IsNull() || petVolume.IsNull())
     return;
   // merge segmentation and seal if requested
-  typedef itk::SealingSegmentationMergerImageFilter<LabelImageType, ScalarImageType, LabelImageType> SegmentationMergerType;
+  using SegmentationMergerType =  itk::SealingSegmentationMergerImageFilter<LabelImageType, ScalarImageType, LabelImageType>;
   SegmentationMergerType::Pointer segmentationMerger = SegmentationMergerType::New();
   segmentationMerger->SetInput(segmentation);
   segmentationMerger->SetLabelImage(initialLabelMap);
@@ -1556,7 +1556,7 @@ void vtkSlicerPETTumorSegmentationLogic::UpdateOutput(vtkMRMLPETTumorSegmentatio
       short label = i+1;
 
       // get binary image of current segment
-      typedef itk::BinaryThresholdImageFilter<LabelImageType, LabelImageType> BinaryThresholdImageFilterType;
+      using BinaryThresholdImageFilterType = itk::BinaryThresholdImageFilter<LabelImageType, LabelImageType>;
       BinaryThresholdImageFilterType::Pointer binaryThresholdFilter = BinaryThresholdImageFilterType::New();
       binaryThresholdFilter->SetInput( labelMap );
       binaryThresholdFilter->SetLowerThreshold( label );
@@ -1714,7 +1714,7 @@ vtkSlicerPETTumorSegmentationLogic::convert2ITK(const double* coordinate)
 template <class ITKImageType>
 void vtkSlicerPETTumorSegmentationLogic::writeImage(typename ITKImageType::Pointer itkVolume, char* filename)
 {
-  typedef itk::ImageFileWriter<ITKImageType> WriterType;
+  using WriterType = itk::ImageFileWriter<ITKImageType>;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetInput( itkVolume );
   writer->SetFileName( filename );
@@ -1726,7 +1726,7 @@ void vtkSlicerPETTumorSegmentationLogic::writeImage(typename ITKImageType::Point
 template <class ITKMeshType>
 void vtkSlicerPETTumorSegmentationLogic::writeMesh(typename ITKMeshType::Pointer itkMesh, char* filename)
 {
-  typedef itk::MeshFileWriter<ITKMeshType> WriterType;
+  using WriterType = itk::MeshFileWriter<ITKMeshType>;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetInput( itkMesh );
   writer->SetFileName( filename );
@@ -1739,7 +1739,7 @@ void vtkSlicerPETTumorSegmentationLogic::writeMesh(typename ITKMeshType::Pointer
 template <class ITKImageType, class ITKImage2Type>
 typename ITKImageType::Pointer vtkSlicerPETTumorSegmentationLogic::resampleNN(typename ITKImageType::Pointer image, typename ITKImage2Type::Pointer targetImage)
 {
-  typedef itk::ResampleImageFilter< ITKImageType, ITKImageType > ResampleFilterType;
+  using ResampleFilterType = itk::ResampleImageFilter< ITKImageType, ITKImageType >;
   typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   resampler->SetInput( image );
   resampler->SetOutputParametersFromImage( targetImage );
@@ -1893,7 +1893,7 @@ vtkSlicerPETTumorSegmentationLogic::Clone(OSFGraphType::Pointer graph)
 { //Copy the graph itself for MRML node undo/redo
   if (graph.IsNull())
     return OSFGraphType::Pointer(nullptr);
-  typedef itk::CloneOSFGraphFilter<OSFGraphType> CloneGraphFilterType;
+  using CloneGraphFilterType = itk::CloneOSFGraphFilter<OSFGraphType>;
   CloneGraphFilterType::Pointer cloner = CloneGraphFilterType::New();
   cloner->SetInput(graph);
   cloner->Update();

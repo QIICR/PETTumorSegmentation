@@ -38,20 +38,20 @@ template <class TOutputOSFGraph>
 class ITK_EXPORT OSFGraphSource : public ProcessObject
 {
 public:
-  typedef OSFGraphSource Self;
-  typedef ProcessObject Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = OSFGraphSource;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   ITK_DISALLOW_COPY_AND_ASSIGN(OSFGraphSource);
   
   itkNewMacro( Self );
   itkTypeMacro( OSFGraphSource, ProcessObject );
   
-  /** Some convenient typedefs. */
-  //typedef DataObject::Pointer DataObjectPointer;
-  typedef TOutputOSFGraph OutputOSFGraphType;
-  typedef typename OutputOSFGraphType::Pointer OutputOSFGraphPointer;
+  /** Some convenient type aliases. */
+  //using DataObjectPointer = DataObject::Pointer ;
+  using OutputOSFGraphType = TOutputOSFGraph;
+  using OutputOSFGraphPointer = typename OutputOSFGraphType::Pointer;
   
   /** Get the mesh output of this process object.  */
   OutputOSFGraphType* GetOutput(void);

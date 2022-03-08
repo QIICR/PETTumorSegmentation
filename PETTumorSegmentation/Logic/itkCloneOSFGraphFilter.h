@@ -36,10 +36,10 @@ template <class TOSFGraph>
 class ITK_EXPORT CloneOSFGraphFilter : public OSFGraphToOSFGraphFilter<TOSFGraph,TOSFGraph>
 {
 public:
-  typedef CloneOSFGraphFilter Self;
-  typedef OSFGraphToOSFGraphFilter<TOSFGraph,TOSFGraph> Superclass;
-  typedef SmartPointer< Self > Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  using Self = CloneOSFGraphFilter;
+  using Superclass = OSFGraphToOSFGraphFilter<TOSFGraph,TOSFGraph>;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
   
   ITK_DISALLOW_COPY_AND_ASSIGN(CloneOSFGraphFilter);
 

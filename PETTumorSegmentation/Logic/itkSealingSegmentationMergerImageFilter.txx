@@ -51,11 +51,11 @@ void
 SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
 ::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-  typedef itk::ConstNeighborhoodIterator<InputImageType> InputNeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator<UptakeImageType> UptakeIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  using InputNeighborhoodIteratorType = itk::ConstNeighborhoodIterator<InputImageType>;
+  using UptakeIteratorType = itk::ImageRegionIterator<UptakeImageType>;
+  using OutputIteratorType = itk::ImageRegionIterator<OutputImageType>;
 
-  typedef typename InputNeighborhoodIteratorType::RadiusType InputRadiusType;
+  using InputRadiusType = typename InputNeighborhoodIteratorType::RadiusType;
   InputRadiusType radius;
   radius.Fill(1);
 
