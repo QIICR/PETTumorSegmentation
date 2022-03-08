@@ -48,7 +48,7 @@ public:
   
 protected:
   /** Constructor for use by New() method. */
-  CloneOSFGraphFilter();
+  CloneOSFGraphFilter() = default;
   ~CloneOSFGraphFilter() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   

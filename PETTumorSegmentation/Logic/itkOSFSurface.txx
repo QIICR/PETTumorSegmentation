@@ -25,19 +25,6 @@ namespace itk
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-OSFSurface<TCostType, TSurfaceMeshTraits>
-::OSFSurface()
-{
-  m_VertexColumnCoordinatesContainer = VertexColumnCoordinatesContainer::New();
-  m_VertexColumnCostsContainer = VertexColumnCostsContainer::New();
-  m_VertexInitialPositionIdentifierContainer = VertexPositionIdentifierContainer::New();
-  m_VertexCurrentPositionIdentifierContainer = VertexPositionIdentifierContainer::New();
-  m_CellsContainer = CellsContainer::New();
-  m_VertexNeighborLookupTable = 0;
-}
-
-//----------------------------------------------------------------------------
-template <typename TCostType, typename TSurfaceMeshTraits >
 typename OSFSurface<TCostType, TSurfaceMeshTraits>::VertexIdentifier
 OSFSurface<TCostType, TSurfaceMeshTraits>
 ::GetNumberOfVertices() const

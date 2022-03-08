@@ -24,18 +24,6 @@ limitations under the License.
 
 namespace itk
 {
-
-//----------------------------------------------------------------------------
-template <class TInputOSFGraph, class TOutputOSFGraph>
-SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
-::SimpleOSFGraphBuilderFilter() :
-  m_Infinity( std::numeric_limits<typename TOutputOSFGraph::GraphCosts>::infinity() ),
-  m_ColumnBasedNodeWeight( -1.0 ),
-  m_SmoothnessConstraint( itk::NumericTraits<unsigned int>::max() ),
-  m_SoftSmoothnessPenalty( 0 )
-{
-}
-
 //----------------------------------------------------------------------------
 template <class TInputOSFGraph, class TOutputOSFGraph>
 void

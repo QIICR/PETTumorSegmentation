@@ -56,7 +56,7 @@ public:
   
 protected:
   /** Constructor for use by New() method. */
-  LOGISMOSOSFGraphSolverFilter();
+  LOGISMOSOSFGraphSolverFilter() = default;
   ~LOGISMOSOSFGraphSolverFilter() override;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
@@ -65,8 +65,8 @@ protected:
   typedef typename InputOSFGraphType::GraphCosts CapacityType;
   typedef LOGISMOS::graph<CapacityType> MaxFlowGraphType;
   typedef MaxFlowGraphType* MaxFlowGraphPointer;
-  MaxFlowGraphPointer m_MaxFlowGraph;
-  CapacityType m_FlowValue;
+  MaxFlowGraphPointer m_MaxFlowGraph{ nullptr };
+  CapacityType m_FlowValue{ 0 };
   virtual void BuildMaxFlowGraphGraph();
   virtual void UpdateResult();
   

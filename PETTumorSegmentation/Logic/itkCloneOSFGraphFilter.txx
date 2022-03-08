@@ -27,13 +27,6 @@ namespace itk
 
 //----------------------------------------------------------------------------
 template <class TOSFGraph>
-CloneOSFGraphFilter<TOSFGraph>
-::CloneOSFGraphFilter()
-{
-}
-
-//----------------------------------------------------------------------------
-template <class TOSFGraph>
 void
 CloneOSFGraphFilter<TOSFGraph>
 ::GenerateData()
@@ -42,7 +35,6 @@ CloneOSFGraphFilter<TOSFGraph>
   this->CopyInputOSFGraphToOutputOSFGraphGraph();
   this->GetOutput()->BuildGraphNodeIdentifierLookupTable();
 }
-
 
 //----------------------------------------------------------------------------
 template <class TOSFGraph>

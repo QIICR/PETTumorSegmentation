@@ -116,7 +116,7 @@ public:
 #endif
 
 protected:
-  SealingSegmentationMergerImageFilter();
+  SealingSegmentationMergerImageFilter() = default;
   ~SealingSegmentationMergerImageFilter() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
@@ -124,11 +124,11 @@ protected:
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
-  UptakeImagePixelType m_Threshold;
-  InputImagePixelType m_Label;
-  bool m_Sealing;
-  bool m_PaintOver;
-  bool m_NecroticRegion;
+  UptakeImagePixelType m_Threshold{ 0.0 };
+  InputImagePixelType m_Label{ 1 } ;
+  bool m_Sealing{ false };
+  bool m_PaintOver{ false };
+  bool m_NecroticRegion{ false };
   typename InputImageType::Pointer m_LabelImage;
   typename UptakeImageType::Pointer m_DataImage;
 };

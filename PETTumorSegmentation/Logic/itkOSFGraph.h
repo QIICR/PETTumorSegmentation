@@ -62,10 +62,10 @@ public:
   
   // access to surfaces
   SurfaceIdentifier GetNumberOfSurfaces() const;
-  OSFSurface* GetSurface();
-  const OSFSurface* GetSurface() const;
-  OSFSurface* GetSurface(SurfaceIdentifier surfaceId);
-  const OSFSurface* GetSurface(SurfaceIdentifier surfaceId) const;
+  //OSFSurface* GetSurface();
+  //const OSFSurface* GetSurface() const;
+  OSFSurface* GetSurface(SurfaceIdentifier surfaceId=0);
+  const OSFSurface* GetSurface(SurfaceIdentifier surfaceId=0) const;
   void SetSurface(OSFSurfacePointer surface) {return this->SetSurface(0, surface);};
   void SetSurface(SurfaceIdentifier surfaceId, OSFSurface* surface);
  
@@ -79,28 +79,26 @@ public:
   class GraphNode
   {
     public:
-      GraphNode() :
-        surfaceId(0), vertexId(0), positionId(0), cap_source(0), cap_sink(0) {};
+      GraphNode() = default;
       GraphNode(SurfaceIdentifier surfaceId_, VertexIdentifier vertexId_, ColumnPositionIdentifier positionId_, GraphCosts cap_source_, GraphCosts cap_sink_) :
         surfaceId(surfaceId_), vertexId(vertexId_), positionId(positionId_), cap_source(cap_source_), cap_sink(cap_sink_) {};
-      SurfaceIdentifier surfaceId;
-      VertexIdentifier vertexId;
-      ColumnPositionIdentifier positionId;
-      GraphCosts cap_source;
-      GraphCosts cap_sink;
+      SurfaceIdentifier surfaceId{ 0 };
+      VertexIdentifier vertexId{ 0 };
+      ColumnPositionIdentifier positionId{ 0 };
+      GraphCosts cap_source{ 0 };
+      GraphCosts cap_sink{ 0 };
   };
   
   class GraphEdge
   {
     public:
-      GraphEdge() :
-        startNodeId(0), endNodeId(0), cap(0), rev_cap(0) {};
+      GraphEdge() = default;
       GraphEdge(GraphNodeIdentifier startNodeId_, GraphNodeIdentifier endNodeId_, GraphCosts cap_, GraphCosts rev_cap_) :
         startNodeId(startNodeId_), endNodeId(endNodeId_), cap(cap_), rev_cap(rev_cap_) {};
-      GraphNodeIdentifier startNodeId;
-      GraphNodeIdentifier endNodeId;
-      GraphCosts cap;
-      GraphCosts rev_cap;
+      GraphNodeIdentifier startNodeId{ 0 };
+      GraphNodeIdentifier endNodeId{ 0 };
+      GraphCosts cap{ 0 };
+      GraphCosts rev_cap{ 0 };
   };
   
   typedef VectorContainer< GraphNodeIdentifier, GraphNode > GraphNodesContainer;
@@ -164,13 +162,13 @@ public:
   
 protected:
   /** Constructor for use by New() method. */
-  OSFGraph();
+  OSFGraph() = default;
   ~OSFGraph() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  typename SurfacesContainer::Pointer m_SurfacesContainer;
-  typename GraphNodesContainer::Pointer m_GraphNodesContainer;
-  typename GraphEdgesContainer::Pointer m_GraphEdgesContainer;
+  typename SurfacesContainer::Pointer m_SurfacesContainer{ SurfacesContainer::New() };
+  typename GraphNodesContainer::Pointer m_GraphNodesContainer{ GraphNodesContainer::New() };
+  typename GraphEdgesContainer::Pointer m_GraphEdgesContainer{ GraphEdgesContainer::New() };
   
   std::vector< std::vector< std::vector< GraphNodeIdentifier > > > m_GraphNodeIdentifierLookupTable; // todo: probably not optimal data structure but should be sufficient
   
@@ -184,11 +182,11 @@ protected:
   // RequestedRegion are used to define the currently requested
   // region. The LargestPossibleRegion is always requested region = 0
   // and number of regions = 1;
-  RegionType m_MaximumNumberOfRegions;
-  RegionType m_NumberOfRegions;
-  RegionType m_RequestedNumberOfRegions;
-  RegionType m_BufferedRegion;
-  RegionType m_RequestedRegion;
+  RegionType m_MaximumNumberOfRegions{ 1 };
+  RegionType m_NumberOfRegions{ 1 };
+  RegionType m_RequestedNumberOfRegions{ 0 };
+  RegionType m_BufferedRegion{ -1 };
+  RegionType m_RequestedRegion{ -1 };
   
 private:
   

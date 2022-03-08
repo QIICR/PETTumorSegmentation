@@ -25,48 +25,11 @@ namespace itk
 
 //----------------------------------------------------------------------------
 template <typename TCostType, typename TSurfaceMeshTraits >
-OSFGraph<TCostType, TSurfaceMeshTraits >
-::OSFGraph()
-{
-  m_SurfacesContainer = SurfacesContainer::New();
-  m_GraphNodesContainer = GraphNodesContainer::New();
-  m_GraphEdgesContainer = GraphEdgesContainer::New();
-
-  // If we used unstructured regions instead of structured regions, then
-  // assume this object was created by the user and this is region 0 of
-  // 1 region.
-  m_MaximumNumberOfRegions = 1;
-  m_NumberOfRegions = 1;
-  m_BufferedRegion  = -1;
-  m_RequestedNumberOfRegions = 0;
-  m_RequestedRegion = -1;
-}
-
-//----------------------------------------------------------------------------
-template <typename TCostType, typename TSurfaceMeshTraits >
 typename OSFGraph<TCostType, TSurfaceMeshTraits >::SurfaceIdentifier
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::GetNumberOfSurfaces() const
 {
   return m_SurfacesContainer->Size();
-}
-
-//----------------------------------------------------------------------------
-template <typename TCostType, typename TSurfaceMeshTraits >
-typename OSFGraph<TCostType, TSurfaceMeshTraits >::OSFSurface*
-OSFGraph<TCostType, TSurfaceMeshTraits >
-::GetSurface()
-{
-  return this->GetSurface(0);
-}
-
-//----------------------------------------------------------------------------
-template <typename TCostType, typename TSurfaceMeshTraits >
-const typename OSFGraph<TCostType, TSurfaceMeshTraits >::OSFSurface*
-OSFGraph<TCostType, TSurfaceMeshTraits >
-::GetSurface() const
-{
-  return this->GetSurface(0);
 }
 
 //----------------------------------------------------------------------------

@@ -83,42 +83,11 @@
 
 #include <qSlicerApplication.h>
 
-const int vtkSlicerPETTumorSegmentationLogic::meshResolution = 4;
-const float vtkSlicerPETTumorSegmentationLogic::meshSphereRadius = 60.0;
-const float vtkSlicerPETTumorSegmentationLogic::columnStepSize = 1.0;
-const int vtkSlicerPETTumorSegmentationLogic::hardSmoothnessConstraint = 5;
-const float vtkSlicerPETTumorSegmentationLogic::softSmoothnessPenalty = 0.005;
-const float vtkSlicerPETTumorSegmentationLogic::softSmoothnessPenaltySplitting = 0.05;
-const int vtkSlicerPETTumorSegmentationLogic::minNodeRejections = 3;
-const int vtkSlicerPETTumorSegmentationLogic::maxNodeRefinement = 56;
-const float vtkSlicerPETTumorSegmentationLogic::rejectionValue = 6.0;
-const int vtkSlicerPETTumorSegmentationLogic::numHistogramBins = 100;
-const float vtkSlicerPETTumorSegmentationLogic::centeringRange = 7.0;
-const int vtkSlicerPETTumorSegmentationLogic::templateMatchingHalfLength = 3;
-const float vtkSlicerPETTumorSegmentationLogic::similarityThresholdFactor = 0.05;
-
-
 //----------------------------------------------------------------------------
 /**
 
 */
 vtkStandardNewMacro(vtkSlicerPETTumorSegmentationLogic);
-
-//----------------------------------------------------------------------------
-vtkSlicerPETTumorSegmentationLogic::vtkSlicerPETTumorSegmentationLogic()
-{
-  //Clear local variables
-  volumeFingerPrint.erase();
-  centerFingerPrint.clear();
-  StrongWatershedVolume_saved = nullptr;
-  WeakWatershedVolume_saved = nullptr;
-}
-
-// //----------------------------------------------------------------------------
-// vtkSlicerPETTumorSegmentationLogic::~vtkSlicerPETTumorSegmentationLogic()
-// {
-// }
-
 
 //----------------------------------------------------------------------------
 void vtkSlicerPETTumorSegmentationLogic::Apply(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData)

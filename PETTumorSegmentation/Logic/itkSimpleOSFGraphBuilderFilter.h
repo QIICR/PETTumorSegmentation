@@ -63,7 +63,7 @@ public:
     
 protected:
   /** Constructor for use by New() method. */
-  SimpleOSFGraphBuilderFilter();
+  SimpleOSFGraphBuilderFilter() = default;
   ~SimpleOSFGraphBuilderFilter() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
@@ -79,11 +79,11 @@ protected:
   // note: shanhui said that some people say the value has to be a large negative number
   // but he did not experience any negative effects
   // this behavior may probably depend on the range of the actual cost values
-  const typename OutputOSFGraphType::GraphCosts m_Infinity;
-  const typename OutputOSFGraphType::GraphCosts m_ColumnBasedNodeWeight;
+  const typename OutputOSFGraphType::GraphCosts m_Infinity{ std::numeric_limits<typename TOutputOSFGraph::GraphCosts>::infinity() };
+  const typename OutputOSFGraphType::GraphCosts m_ColumnBasedNodeWeight{ -1 };
   
-  unsigned int m_SmoothnessConstraint;
-  double m_SoftSmoothnessPenalty;
+  unsigned int m_SmoothnessConstraint{ itk::NumericTraits<unsigned int>::max() };
+  double m_SoftSmoothnessPenalty{ 0 };
   
 private:
 }; // end class SimpleOSFGraphBuilderFilter

@@ -26,15 +26,6 @@ namespace itk
 //----------------------------------------------------------------------------
 template <class TInputOSFGraph, class TOutputOSFGraph>
 LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
-::LOGISMOSOSFGraphSolverFilter() :
-  m_MaxFlowGraph(nullptr),
-  m_FlowValue(0)
-{
-}
-
-//----------------------------------------------------------------------------
-template <class TInputOSFGraph, class TOutputOSFGraph>
-LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
 ::~LOGISMOSOSFGraphSolverFilter()
 {
   if (m_MaxFlowGraph!=nullptr)

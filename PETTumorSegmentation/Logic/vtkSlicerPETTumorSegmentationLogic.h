@@ -84,7 +84,7 @@ public:
   void ApplyLocalRefinement(vtkMRMLPETTumorSegmentationParametersNode* node, vtkImageData* labelImageData);
   
 protected:
-  vtkSlicerPETTumorSegmentationLogic();
+  vtkSlicerPETTumorSegmentationLogic() = default;
   ~vtkSlicerPETTumorSegmentationLogic() override = default;
 
   void SetMRMLSceneInternal(vtkMRMLScene* newScene) override;
@@ -260,43 +260,43 @@ private:
   typename ITKImageType::Pointer resampleNN(typename ITKImageType::Pointer image, typename ITKImage2Type::Pointer targetImage); 
   
   /** Determines the density of the spherical mesh.  At density of 4, there are 1026 vertices. */
-  const static int meshResolution;
+  static constexpr int meshResolution = 4;
   
   /** Determines the radius of the spherical mesh.  60 mm is sufficiently large for the vast majority of cases. */
-  const static float meshSphereRadius;
+  static constexpr float meshSphereRadius = 60.0f;
   
   /** Determines the distance between nodes in the column, IE the minimum difference in boundary placement.  1 mm is significantly lower than the lowest voxel dimension encountered. */
-  const static float columnStepSize;
+  static constexpr float columnStepSize = 1.0f;
   
   /** Determines the maximum change in boundary between columns.  5 mm is sufficient to prevent major discontinuity, while allowing oddly-shaped objects with poor center placement. */
-  const static int hardSmoothnessConstraint;
+  static constexpr int hardSmoothnessConstraint = 5;
   
   /** Determines the penalty in cost for a difference in surface between columns in standard mode.  0.005 is low, sufficient mostly for a tiebreaker and minor smoothing for the more oddly shaped lesions that primary tumors tend to be. */
-  const static float softSmoothnessPenalty;
+  static constexpr float softSmoothnessPenalty = 0.005f;
   
   /** Determines the penalty in cost for a difference in surface between columns in splitting mode.  0.05 is much higher, useful for cutting off stray parts to help with the purpose of splitting, as it is typically used for lymph nodes. */
-  const static float softSmoothnessPenaltySplitting;
+  static constexpr float softSmoothnessPenaltySplitting = 0.05f;
   
   /** Determines the first node available as a surface, in order to avoid trivially small objects.  3, paried with 1 mm columnStepSize, is sufficient to be around a voxel in each direction, avoiding single-voxel solutions.*/
-  const static int minNodeRejections;
+  static constexpr int minNodeRejections = 3 ;
   
   /** Maximum node choosable for local refinement.  56 is chosen due to the columnStepSize of 1.0, radius of 60, and templateMatchingHalfLength of 3, so that the comparison array for local refinement never stretches above node 59.*/
-  const static int maxNodeRefinement;
+  static constexpr int maxNodeRefinement = 56;
   
   /** Determines the cost added to reject a node.  6, compared with the typical base cost scaling from 0.0 to 1.0, is sufficient to reject nodes that aren't specifically refined to.*/
-  const static float rejectionValue;
+  static constexpr float rejectionValue = 6.0f;
   
   /** Determines the number of bins for the histogram processing.  100, with typical SUV values from 0 to 10 and at most to somewhere between 20 or 30, gives sufficient density to make a reasonable cost curve. */
-  const static int numHistogramBins;
+  static constexpr int numHistogramBins = 100;
   
   /** Determines the distance to search for a better center point if assist centering is active.  7.0 mm is aroud 2-3 voxels, which is enough to significantly improve consistency on small-to-medium lesions, and somewhat help on large ones, all without much danger of moving to another lesion for small ones.*/
-  const static float centeringRange;
+  static constexpr float centeringRange = 7.0f;
   
   /** Double the value and add 1 to get the number of nodes in a comparison array for local refinement.  A value of 3 makes a total of 7 nodes in the array for comparison.  This is sufficient for comparing approximate threshold and general features near a refinement point. */
-  const static int templateMatchingHalfLength;
+  static constexpr int templateMatchingHalfLength = 3;
   
   /** The portion of the total uptake of the original array a possible refinement array's difference with it must be below to be considered similar.  A higher value makes refinement spread more, a lower value makes it spread less.  0.05 is sufficient to have a strict requirement to reject unlike arrays, but still allow it to spread to similar constructs nearby. */
-  const static float similarityThresholdFactor;
+  static constexpr float similarityThresholdFactor = .05f;
   
   /** The name of the most recent PET volume node.  Stored to recognize when watershed volumes need not be recalculated. */
   std::string volumeFingerPrint;

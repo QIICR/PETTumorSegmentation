@@ -34,15 +34,6 @@ namespace itk
 
 //----------------------------------------------------------------------------
 template <class TInputOSFGraph, class TOutputOSFGraph>
-CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
-::CenterNormalColumnBuilderFilter() :
-   m_StepLength(0),
-   m_NumberOfSteps(0)
-{
-}
-
-//----------------------------------------------------------------------------
-template <class TInputOSFGraph, class TOutputOSFGraph>
 void
 CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 ::GenerateData()

@@ -124,15 +124,15 @@ public:
   
 protected:
   /** Constructor for use by New() method. */
-  OSFSurface();
+  OSFSurface() = default;
   ~OSFSurface() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
-  typename VertexColumnCoordinatesContainer::Pointer m_VertexColumnCoordinatesContainer;
-  typename VertexColumnCostsContainer::Pointer m_VertexColumnCostsContainer;
-  VertexPositionIdentifierContainer::Pointer m_VertexInitialPositionIdentifierContainer;
-  VertexPositionIdentifierContainer::Pointer m_VertexCurrentPositionIdentifierContainer;
-  typename CellsContainer::Pointer m_CellsContainer;
+  typename VertexColumnCoordinatesContainer::Pointer m_VertexColumnCoordinatesContainer{ VertexColumnCoordinatesContainer::New() };
+  typename VertexColumnCostsContainer::Pointer m_VertexColumnCostsContainer{ VertexColumnCostsContainer::New() };
+  VertexPositionIdentifierContainer::Pointer m_VertexInitialPositionIdentifierContainer{ VertexPositionIdentifierContainer::New() };
+  VertexPositionIdentifierContainer::Pointer m_VertexCurrentPositionIdentifierContainer{ VertexPositionIdentifierContainer::New() };
+  typename CellsContainer::Pointer m_CellsContainer{ CellsContainer::New() };
   
   void ReleaseCellsMemory();
   

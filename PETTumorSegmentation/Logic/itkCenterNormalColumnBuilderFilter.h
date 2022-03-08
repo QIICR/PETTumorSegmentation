@@ -63,14 +63,14 @@ public:
 
 protected:
   /** Constructor for use by New() method. */
-  CenterNormalColumnBuilderFilter();
+  CenterNormalColumnBuilderFilter() = default;
   ~CenterNormalColumnBuilderFilter() override = default;
   void PrintSelf(std::ostream& os, Indent indent) const override;
   
   void GenerateData() override;
   
-  float m_StepLength;
-  unsigned int m_NumberOfSteps;
+  float m_StepLength{ 0 };
+  unsigned int m_NumberOfSteps{ 0 };
   
   typedef typename OutputOSFGraphType::OSFSurface OSFSurface;
   typedef typename OSFSurface::VertexIdentifier VertexIdentifier;

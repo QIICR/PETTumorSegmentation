@@ -34,20 +34,6 @@ limitations under the License.
 namespace itk
 {
 
-/**
- * Constructor
- */
-
-template <class TInputImage, class TUptakeImage, class TOutputImage>
-SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
-::SealingSegmentationMergerImageFilter() :
-  m_Threshold(0.0),
-  m_Label(1),
-  m_Sealing(false),
-  m_PaintOver(false)
-{
-}
-
 template <class TInputImage, class TUptakeImage, class TOutputImage>
 void
 SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
