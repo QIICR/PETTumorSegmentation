@@ -348,7 +348,7 @@ OSFSurface<TCostType, TSurfaceMeshTraits>
   for (typename CellsContainer::ConstIterator cellItr=m_CellsContainer->Begin(); cellItr!=m_CellsContainer->End(); cellItr++)
   {
     const CellType* cellPointer = cellItr.Value();
-    unsigned int numberOfPoints = cellPointer->GetNumberOfPoints();
+    unsigned int  numberOfPoints = cellPointer->GetNumberOfPoints();
     if (numberOfPoints>1)
     {
       std::vector<VertexIdentifier> vertexIds(numberOfPoints);

@@ -45,7 +45,7 @@ DataObject::Pointer
 OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 ::MakeOutput(DataObjectPointerArraySizeType)
 {
-  OutputMeshPointer outputMesh = OutputMeshType::New();
+  auto outputMesh = OutputMeshType::New();
   return dynamic_cast< DataObject *>( outputMesh.GetPointer() );
 }
 
@@ -117,7 +117,7 @@ void
 OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 ::CopyInputOSFSurfaceToOutputMeshPoints(typename InputOSFGraphType::OSFSurface::ConstPointer osfSurface, OutputMeshPointer mesh)
 {
-  typename OutputMeshType::PointsContainerPointer points = OutputMeshType::PointsContainer::New();
+  auto points = OutputMeshType::PointsContainer::New();
   points->Reserve( osfSurface->GetNumberOfVertices() );
   typename OutputMeshType::PointsContainer::Iterator pointIterator = points->Begin();
   typename OutputMeshType::PointsContainer::Iterator pointEnd = points->End();
@@ -153,7 +153,7 @@ OSFGraphToMeshFilter<TInputOSFGraph,TOutputMesh>
 
   mesh->SetCellsAllocationMethod( OutputMeshType::CellsAllocatedDynamicallyCellByCell );
 
-  typename OutputCellsContainer::Pointer outputCells = OutputCellsContainer::New();
+  auto outputCells = OutputCellsContainer::New();
   const InputCellsContainer * inputCells = osfSurface->GetCells();
 
   if( inputCells )

@@ -40,8 +40,8 @@ SealingSegmentationMergerImageFilter<TInputImage, TUptakeImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   // create output image
-  InputImagePointer input = this->GetInput();
-  OutputImagePointer output = this->GetOutput();
+  const auto& input = this->GetInput();
+  auto output = this->GetOutput();
   output->CopyInformation(input);
   output->Allocate();
 }

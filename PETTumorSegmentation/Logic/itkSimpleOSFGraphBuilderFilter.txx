@@ -31,7 +31,7 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 ::GenerateData()
 {
   this->CopyInputOSFGraphToOutputOSFGraphSurfaces();
-  OutputOSFGraphPointer output = this->GetOutput();
+  auto output = this->GetOutput();
   
   // create nodes for columns
   for (SurfaceIdentifier surfaceId=0; surfaceId<output->GetNumberOfSurfaces(); surfaceId++)
@@ -69,7 +69,7 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 {
   using GraphNode = typename OutputOSFGraphType::GraphNode;
   
-  OutputOSFGraphPointer output = this->GetOutput();
+  auto output = this->GetOutput();
   typename OSFSurface::ColumnCostsContainer::ConstPointer columnCosts = output->GetSurface(surfaceId)->GetColumnCosts(vertexId);
   typename OSFSurface::ColumnCostsContainer::ConstIterator columnCostsItr = columnCosts->Begin();
   typename OSFSurface::ColumnCostsContainer::ConstIterator columnCostsEnd = columnCosts->End();
@@ -108,7 +108,7 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
   using GraphEdge = typename OutputOSFGraphType::GraphEdge;
   using GraphNodeIdentifier= typename OutputOSFGraphType::GraphNodeIdentifier;
   
-  OutputOSFGraphPointer output = this->GetOutput();
+  auto output = this->GetOutput();
   typename OSFSurface::ColumnPositionIdentifier numColumnPositions = output->GetSurface(surfaceId)->GetNumberOfColumns(vertexId);
   typename OutputOSFGraphType::GraphEdgesContainer::Pointer graphEdges = output->GetEdges();
   typename OutputOSFGraphType::GraphEdgeIdentifier startEdgeIndex = graphEdges->Size();
@@ -132,7 +132,7 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
   using GraphEdge = typename OutputOSFGraphType::GraphEdge;
   using GraphNodeIdentifier = typename OutputOSFGraphType::GraphNodeIdentifier;
   
-  OutputOSFGraphPointer output = this->GetOutput();
+  auto output = this->GetOutput();
   typename OSFSurface::ColumnPositionIdentifier numColumnPositions = output->GetSurface(surfaceId)->GetNumberOfColumns(vertexId);
   typename OSFSurface::VertexIdentifierContainer::ConstPointer neighbors = output->GetSurface(surfaceId)->GetNeighbors(vertexId);
   typename OutputOSFGraphType::GraphEdgesContainer::Pointer graphEdges = output->GetEdges();
@@ -163,10 +163,7 @@ SimpleOSFGraphBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
         graphEdges->InsertElement( graphEdges->Size(), GraphEdge( startNodeId, endNodeId, m_SoftSmoothnessPenalty, m_SoftSmoothnessPenalty) );
       }
     }
-    
-
   }
-  
 }
 
 //----------------------------------------------------------------------------

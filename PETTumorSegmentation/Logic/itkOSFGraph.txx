@@ -331,8 +331,8 @@ void
 OSFGraph<TCostType, TSurfaceMeshTraits >
 ::SetRequestedRegionToLargestPossibleRegion()
 {
-  m_RequestedNumberOfRegions     = 1;
-  m_RequestedRegion           = 0;
+  m_RequestedNumberOfRegions = 1;
+  m_RequestedRegion = 0;
 }
 
 //----------------------------------------------------------------------------

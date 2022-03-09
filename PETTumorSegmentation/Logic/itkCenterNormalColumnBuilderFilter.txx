@@ -78,7 +78,7 @@ CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
 
   //Determine proper direction vector from center to vertex with magnitude 1.
   DirectionVector CenterNormalDirection = GetNormal(vertexId);
-  typename ColumnCoordinatesContainer::Pointer columnPositions = ColumnCoordinatesContainer::New();
+  auto columnPositions = ColumnCoordinatesContainer::New();
   columnPositions->CreateIndex( m_NumberOfSteps-1 );
 
   
@@ -98,7 +98,7 @@ CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
   outputSurface->SetColumnCoordinates( vertexId, columnPositions );
 
   //Apply default costs
-  typename ColumnCostsContainer::Pointer columnCosts = ColumnCostsContainer::New();
+  auto columnCosts = ColumnCostsContainer::New();
   columnCosts->CreateIndex( columnPositions->Size()-1 );
   outputSurface->SetColumnCosts( vertexId, columnCosts );
 
@@ -116,7 +116,7 @@ CenterNormalColumnBuilderFilter<TInputOSFGraph, TOutputOSFGraph>
   direction.Fill(0.0);
   using Point = typename OSFSurface::CoordinateType;
 
-  typename OSFSurface::ConstPointer inputSurface =  this->GetInput()->GetSurface();
+  auto inputSurface =  this->GetInput()->GetSurface();
 
   Point centerPosition;
   centerPosition[0] = m_CenterPoint[0];

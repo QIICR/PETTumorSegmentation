@@ -44,7 +44,6 @@ LOGISMOSOSFGraphSolverFilter<TInputOSFGraph, TOutputOSFGraph>
   this->CopyInputOSFGraphToOutputOSFGraphSurfaces();
   this->CopyInputOSFGraphToOutputOSFGraphGraph();
   InputOSFGraphConstPointer input = this->GetInput();
-
   // build graph
   m_MaxFlowGraph = new MaxFlowGraphType();
 

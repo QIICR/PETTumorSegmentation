@@ -74,8 +74,8 @@ void
 OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
 ::CopyInputOSFGraphToOutputOSFGraphSurfaces()
 {
-  InputOSFGraphConstPointer inputOSFGraph = this->GetInput();
-  OutputOSFGraphPointer outputOSFGraph = this->GetOutput();
+  auto inputOSFGraph = this->GetInput();
+  auto outputOSFGraph = this->GetOutput();
   for (typename OutputOSFGraphType::SurfaceIdentifier surfaceId=0; surfaceId<inputOSFGraph->GetNumberOfSurfaces(); surfaceId++)
   {
     OSFSurfaceConstPointer currentInputSurface = inputOSFGraph->GetSurface(surfaceId);
@@ -145,7 +145,7 @@ OSFGraphToOSFGraphFilter<TInputOSFGraph, TOutputOSFGraph>
   using InputCellsContainer = typename InputOSFGraphType::OSFSurface::CellsContainer;
   using CellAutoPointer = typename OutputOSFGraphType::OSFSurface::CellAutoPointer;
 
-  typename OutputCellsContainer::Pointer outputCells = OutputCellsContainer::New();
+  auto outputCells = OutputCellsContainer::New();
   const InputCellsContainer * inputCells = inputOSFSurface->GetCells();
 
   if( inputCells )

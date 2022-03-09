@@ -102,7 +102,7 @@ void
 MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
 ::GenerateData()
 {
-  OutputOSFGraphPointer outputOSFGraph = this->GetOutput();
+  auto outputOSFGraph = this->GetOutput();
   for (typename OutputOSFGraphType::SurfaceIdentifier surfaceId=0; surfaceId<this->GetNumberOfInputs(); surfaceId++)
   {
     InputMeshConstPointer currentInputSurface = this->GetInput(surfaceId);
@@ -130,11 +130,11 @@ MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
     PointType point = pointIterator.Value();
     
     using ColumnCoordinatesContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCoordinatesContainer;
-    typename ColumnCoordinatesContainerType::Pointer columnCoordinatesContainer = ColumnCoordinatesContainerType::New();
+    auto columnCoordinatesContainer = ColumnCoordinatesContainerType::New();
     columnCoordinatesContainer->InsertElement(0, point );
     osfSurface->SetColumnCoordinates(vertexId, columnCoordinatesContainer);
     using ColumnCostsContainerType = typename OutputOSFGraphType::OSFSurface::ColumnCostsContainer;
-    typename ColumnCostsContainerType::Pointer columnCostsContainer = ColumnCostsContainerType::New();
+    auto columnCostsContainer = ColumnCostsContainerType::New();
     columnCostsContainer->InsertElement(0, 0.0 );
     osfSurface->SetColumnCosts(vertexId,columnCostsContainer);
     osfSurface->SetInitialVertexPositionIdentifier(vertexId,0);
@@ -156,7 +156,7 @@ MeshToOSFGraphFilter<TInputMesh, TOutputOSFGraph>
 
   //outputMesh->SetCellsAllocationMethod( OutputMeshType::CellsAllocatedDynamicallyCellByCell );
 
-  typename OutputCellsContainer::Pointer outputCells = OutputCellsContainer::New();
+  auto outputCells = OutputCellsContainer::New();
   const InputCellsContainer * inputCells = mesh->GetCells();
 
   if( inputCells )
