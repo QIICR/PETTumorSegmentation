@@ -75,16 +75,6 @@ OSFGraphSource<TOutputOSFGraph>
 template <class TOutputOSFGraph>
 void
 OSFGraphSource<TOutputOSFGraph>
-::SetOutput(OutputOSFGraphType *output)
-{
-  itkWarningMacro(<< "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible combination with DisconnectPipeline() instead." );
-  this->ProcessObject::SetNthOutput(0, output);
-}
-
-//----------------------------------------------------------------------------
-template <class TOutputOSFGraph>
-void
-OSFGraphSource<TOutputOSFGraph>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();

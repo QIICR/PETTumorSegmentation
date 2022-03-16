@@ -57,13 +57,13 @@ public:
   OutputOSFGraphType* GetOutput(void);
   OutputOSFGraphType* GetOutput(unsigned int idx);
   
-  /** Set the OSF graph output of this process object. This call is slated
-   * to be removed from ITK. You should GraftOutput() and possible
-   * DataObject::DisconnectPipeline() to properly change the output. */
-  using Superclass::SetOutput;
-  void SetOutput(TOutputOSFGraph *output);
+  /** Graft the specified data object onto this ProcessObject's
+   * output. */
   virtual void GraftOutput(DataObject *output);
   virtual void GraftNthOutput(unsigned int idx, DataObject *output);
+
+  /** Make a DataObject of the correct type to be used as the specified
+   * output. */
   using Superclass::MakeOutput;
   ProcessObject::DataObjectPointer MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
   

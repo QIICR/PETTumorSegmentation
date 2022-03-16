@@ -62,8 +62,6 @@ public:
   
   // access to surfaces
   SurfaceIdentifier GetNumberOfSurfaces() const;
-  //OSFSurface* GetSurface();
-  //const OSFSurface* GetSurface() const;
   OSFSurface* GetSurface(SurfaceIdentifier surfaceId=0);
   const OSFSurface* GetSurface(SurfaceIdentifier surfaceId=0) const;
   void SetSurface(OSFSurfacePointer surface) {return this->SetSurface(0, surface);};
