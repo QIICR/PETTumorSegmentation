@@ -4,12 +4,12 @@ project(PETTumorSegmentation)
 
 #-----------------------------------------------------------------------------
 # Extension meta-information
-set(EXTENSION_HOMEPAGE "http://www.slicer.org/slicerWiki/index.php/Documentation/4.4/Extensions/PETTumorSegmentation")
+set(EXTENSION_HOMEPAGE "https://www.slicer.org/slicerWiki/index.php/Documentation/Nightly/Extensions/PETTumorSegmentation")
 set(EXTENSION_CATEGORY "Segmentation")
 set(EXTENSION_CONTRIBUTORS "Christian Bauer (University of Iowa), Markus van Tol (University of Iowa), Andrey Fedorov (SPL), Ethan Ulrich (University of Iowa), Reinhard Beichel (University of Iowa), John Buatti (University of Iowa)")
 set(EXTENSION_DESCRIPTION "Tumor and lymph node segmentation in PET scans")
 set(EXTENSION_ICONURL "https://raw.githubusercontent.com/QIICR/PETTumorSegmentation/master/PETTumorSegmentation.png")
-set(EXTENSION_SCREENSHOTURLS "http://www.slicer.org/slicerWiki/images/0/04/PETTumorSegmentation_Effect_with_models.png")
+set(EXTENSION_SCREENSHOTURLS "https://www.slicer.org/slicerWiki/images/0/04/PETTumorSegmentation_Effect_with_models.png")
 
 #-----------------------------------------------------------------------------
 # Extension dependencies
